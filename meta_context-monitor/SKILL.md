@@ -40,13 +40,20 @@ Always append after `---` at the end of every response:
 
 ```
 🧠 X% full · ~Xk used / 200k · ~Xk left
+😄 <random IT joke in the user's language>
 ```
 
 Examples:
 - `🧠 38% full · ~76k used / 200k · ~124k left`
 - `🧠 87% full · ~174k used / 200k · ~26k left`
 
-If a threshold is crossed — add the warning on the next line below the status line.
+The joke must be:
+- A different one every response — never repeat
+- IT/programming/tech themed
+- Short — one or two lines max
+- In the same language the user is currently speaking
+
+If a threshold is crossed — add the warning on the next line below the joke.
 
 ### Rules
 
