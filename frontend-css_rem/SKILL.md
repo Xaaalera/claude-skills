@@ -1,3 +1,7 @@
+---
+description: CSS Units — Always use rem for all dimensional values. Apply this rule any time CSS, SCSS, or Tailwind styles are written or reviewed.
+---
+
 # CSS Units — Always Use rem
 
 ## When to Activate
