@@ -34,9 +34,22 @@ Use these thresholds:
 **≥ 95%:**
 > 🔴 Context ~X% full. Do `/compact` or start a new session now — context loss imminent.
 
+### Status line format
+
+Always append after `---` at the end of every response:
+
+```
+🧠 X% full · ~Xk used / 200k · ~Xk left
+```
+
+Examples:
+- `🧠 38% full · ~76k used / 200k · ~124k left`
+- `🧠 87% full · ~174k used / 200k · ~26k left`
+
+If a threshold is crossed — add the warning on the next line below the status line.
+
 ### Rules
 
-- **Always** append a single line at the end of every response — after `---`, no extra words: `context ~X%`
-- If a threshold is crossed — add the warning on the next line after the percentage
+- Show the status line after **every** response, no exceptions
 - Show each warning **once per threshold** — don't repeat until the level rises to the next one
 - Don't explain what tokens are unless the user asks
