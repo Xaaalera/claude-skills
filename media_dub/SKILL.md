@@ -23,7 +23,7 @@ Always use this voice_id for TTS generation unless the user specifies otherwise.
 
 - Source language: auto-detect (usually Russian)
 - Target language: English
-- Voice: Roman's cloned voice (`PdZuKoacuPMa468q42s5`)
+- Voice: `ELEVENLABS_VOICE_ID` env var
 - Preserve timings: yes
 - Output: MP4 in same directory as input, suffix `_english`
 
