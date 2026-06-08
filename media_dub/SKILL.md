@@ -1,15 +1,18 @@
+---
+description: Dubbing and translation with ElevenLabs. Use when the user wants to dub, translate, or voiceover a video or audio file using their cloned voice.
+---
+
 # Dubbing / Translation with ElevenLabs
 
 ## When to Activate
 
-- User says "переведи видео", "озвучь", "дублируй", "сделай английскую версию"
 - User says "translate video", "dub", "voiceover", "make english version"
+- User says "переведи видео", "озвучь", "дублируй", "сделай английскую версию"
 - User wants to translate audio/video from one language to another with their own voice
 
 ## API Key
 
-Stored in environment: `ELEVENLABS_API_KEY`
-Hardcoded fallback: `sk_1ccc386baf506f7bf499eda230fd72966b4cafe793c2ec1b`
+Read from environment: `ELEVENLABS_API_KEY`
 
 ## Voice
 
@@ -112,7 +115,7 @@ print(f"Done: {output_path}")
 ```python
 import os, requests
 
-API_KEY = os.environ.get("ELEVENLABS_API_KEY", "sk_1ccc386baf506f7bf499eda230fd72966b4cafe793c2ec1b")
+API_KEY = os.environ["ELEVENLABS_API_KEY"]
 VOICE_ID = "PdZuKoacuPMa468q42s5"
 
 def generate_voiceover(text: str, output_path: str) -> None:
@@ -135,5 +138,4 @@ def generate_voiceover(text: str, output_path: str) -> None:
 
 - Roman's voice_id: `PdZuKoacuPMa468q42s5` — always use this
 - For best results, use clean audio (minimal background noise)
-- Free plan: limited minutes. Check quota at elevenlabs.io → Usage
 - Supported languages: ru, en, es, fr, de, zh, ja, pt, it, pl, and more

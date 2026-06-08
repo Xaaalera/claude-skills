@@ -26,7 +26,7 @@ My personal Claude Code skill library. I'm a frontend developer — most skills 
 ## Media
 
 <table>
-<tr><td><code>media_dub</code></td><td>Dubbing / Translation with ElevenLabs</td></tr>
+<tr><td><code>media_dub</code></td><td>Dubbing and translation with ElevenLabs. Use when the user wants to dub, translate, or voiceover a video or audio file using their cloned voice.</td></tr>
 <tr><td><code>media_video-editing</code></td><td>AI-assisted video editing workflows for cutting, structuring, and augmenting real footage. Covers the full pipeline from raw capture through FFmpeg, Remotion, ElevenLabs, fal.ai, and final polish in Descript or CapCut. Use when the user wants to edit video, cut footage, create vlogs, or build video content.</td></tr>
 </table>
 
