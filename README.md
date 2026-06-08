@@ -4,6 +4,42 @@ My personal Claude Code skill library. I'm a frontend developer — most skills 
 
 ---
 
+## Setup
+
+### 1. Install skills
+
+```bash
+git clone <this-repo> ~/my-skills
+cp -r ~/my-skills/* ~/.claude/skills/
+```
+
+### 2. Activate passive skills automatically
+
+Add to `~/.claude/CLAUDE.md`:
+
+```markdown
+## Passive Skills — Always Active
+
+After EVERY response, without exception, invoke these skills via the Skill tool:
+- `meta_context-monitor` — check context fill level and show status line with joke
+- `meta_skills-language` — enforce English in all skill/docs files
+```
+
+### 3. Env variables (media skills)
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "ELEVENLABS_API_KEY": "your-key-here",
+    "ELEVENLABS_VOICE_ID": "your-voice-id-here"
+  }
+}
+```
+
+---
+
 ## Frontend — CSS
 
 <table>
