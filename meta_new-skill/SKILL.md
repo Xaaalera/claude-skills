@@ -78,3 +78,9 @@ Use ## sections, code blocks, tables as needed.
 3. Create the directory and write `SKILL.md` using the structure above
 4. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant
 5. If global — no commit needed. If project-local — commit with `chore: add <name> skill`
+
+---
+
+## Improving an existing skill
+
+Use the **`skill-creator` plugin** for iterative improvement with test cases, evals, benchmarks, and description optimization. Invoke it via `/skill-creator` or let it trigger when you say "improve this skill", "optimize skill description", or "run evals on this skill".
