@@ -33,5 +33,6 @@ My personal Claude Code skill library. I'm a frontend developer — most skills 
 ## Meta
 
 <table>
+<tr><td><code>meta_context-monitor</code></td><td>Passive skill — always active. After every response, check context fill level and warn the user when it's high. Suggest /compact or new session at thresholds.</td></tr>
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement.</td></tr>
 </table>
