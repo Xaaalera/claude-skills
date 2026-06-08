@@ -136,6 +136,6 @@ def generate_voiceover(text: str, output_path: str) -> None:
 
 ## Notes
 
-- Roman's voice_id: `PdZuKoacuPMa468q42s5` — always use this
+- Voice ID comes from `ELEVENLABS_VOICE_ID` env var — set it in your `.env` or shell profile
 - For best results, use clean audio (minimal background noise)
 - Supported languages: ru, en, es, fr, de, zh, ja, pt, it, pl, and more
