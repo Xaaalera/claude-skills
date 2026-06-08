@@ -26,17 +26,17 @@ Use these thresholds:
 ### Warning messages
 
 **70–84%:**
-> 💬 Контекст заполнен примерно на ~X%. Если сессия длинная — можно сделать `/compact` чтобы освободить место.
+> 💬 Context ~X% full. Consider `/compact` if the session is long.
 
 **85–94%:**
-> ⚠️ Контекст заполнен на ~X%. Рекомендую `/compact` — иначе начало сессии скоро начнёт выпадать.
+> ⚠️ Context ~X% full. Recommend `/compact` — early context will start dropping soon.
 
 **≥ 95%:**
-> 🔴 Контекст почти полный (~X%). Срочно: `/compact` или начни новую сессию — иначе потеряется контекст.
+> 🔴 Context ~X% full. Do `/compact` or start a new session now — context loss imminent.
 
 ### Rules
 
-- **Всегда** добавляй в конец ответа строку с процентом заполненности — через `---`, без лишних слов: `контекст ~X%`
-- Если порог пересечён — добавляй предупреждение следующей строкой после процента
-- Показывай предупреждение **один раз за порог** — не повторяй пока уровень не вырос до следующего
-- Не объясняй что такое токены если пользователь не спрашивал
+- **Always** append a single line at the end of every response — after `---`, no extra words: `context ~X%`
+- If a threshold is crossed — add the warning on the next line after the percentage
+- Show each warning **once per threshold** — don't repeat until the level rises to the next one
+- Don't explain what tokens are unless the user asks
