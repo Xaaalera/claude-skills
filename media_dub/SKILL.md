@@ -116,7 +116,7 @@ print(f"Done: {output_path}")
 import os, requests
 
 API_KEY = os.environ["ELEVENLABS_API_KEY"]
-VOICE_ID = "PdZuKoacuPMa468q42s5"
+VOICE_ID = os.environ["ELEVENLABS_VOICE_ID"]
 
 def generate_voiceover(text: str, output_path: str) -> None:
     resp = requests.post(
