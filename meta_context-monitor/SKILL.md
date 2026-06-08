@@ -6,7 +6,7 @@ description: Passive skill — always active. After every response, check contex
 
 ## When to Activate
 
-Always active. No user trigger needed. Runs silently after every response — only speaks up when a threshold is crossed.
+Always active. No user trigger needed. Shows context fill % after every response, warns when thresholds are crossed.
 
 ---
 
