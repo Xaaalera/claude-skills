@@ -1,5 +1,5 @@
 ---
-description: Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement.
+description: Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.
 ---
 
 # Create a New Skill
