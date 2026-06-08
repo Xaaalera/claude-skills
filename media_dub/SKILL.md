@@ -16,7 +16,7 @@ Read from environment: `ELEVENLABS_API_KEY`
 
 ## Voice
 
-Roman's cloned voice ID: `PdZuKoacuPMa468q42s5`
+Read from environment: `ELEVENLABS_VOICE_ID`
 Always use this voice_id for TTS generation unless the user specifies otherwise.
 
 ## Default Behavior
