@@ -50,7 +50,7 @@ Add to `~/.claude/settings.json`:
 ## Frontend — React
 
 <table>
-<tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component's structure is reviewed.</td></tr>
+<tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component is edited or reviewed.</td></tr>
 </table>
 
 ## Git
