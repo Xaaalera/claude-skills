@@ -23,7 +23,7 @@ Everything in this skill assumes those two are already in effect.
 
 ## Folder structure
 
-One component = one kebab-case folder containing:
+**Every component — including sub-components — gets its own kebab-case folder** with its own `.tsx`, `.scss`, and `index.ts`. No exceptions.
 
 ```
 component-name/
@@ -32,26 +32,34 @@ component-name/
   index.ts               ← barrel export
 ```
 
-Sub-components (items, rows, cards) live in the same folder:
+Sub-components nest as sibling folders inside the parent folder:
 
 ```
-feature-block/
-  FeatureBlock.tsx
-  FeatureBlockItem.tsx
-  FeatureBlockHeader.tsx
-  feature-block.scss
+sidebar/
+  Sidebar.tsx
+  sidebar.scss
   index.ts
+  sidebar-nav-item/
+    SidebarNavItem.tsx
+    sidebar-nav-item.scss
+    index.ts
+  sidebar-sub-nav-item/
+    SidebarSubNavItem.tsx
+    sidebar-sub-nav-item.scss
+    index.ts
 ```
 
-If a small helper component is shared between siblings, place it as a single
-file directly in the parent `components/` directory without its own folder:
+The parent `index.ts` re-exports everything public from all sub-component folders:
 
+```ts
+// sidebar/index.ts
+export { Sidebar } from './Sidebar';
+export { SidebarNavItem } from './sidebar-nav-item';
+export { SidebarSubNavItem } from './sidebar-sub-nav-item';
+export type { NavItemData, NavSelectionEvent } from './Sidebar';
 ```
-components/
-  SharedIcon.tsx          ← shared, no folder needed
-  feature-a/
-  feature-b/
-```
+
+**No flat sub-components.** A component that has its own styles, state, or props is always a folder — never a bare `.tsx` file sitting alongside the parent.
 
 ---
 
