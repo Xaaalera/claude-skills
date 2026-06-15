@@ -51,6 +51,7 @@ Add to `~/.claude/settings.json`:
 
 <table>
 <tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component is edited or reviewed.</td></tr>
+<tr><td><code>frontend-react_routing-config</code></td><td>Use when adding a new route, adding a nav item to the sidebar, or modifying routing/navigation in the Accounting Seed UI project.</td></tr>
 </table>
 
 ## Git
