@@ -283,5 +283,6 @@ private class UIKpiCardConfigHandlerTest {
 - [ ] No hardcoded Ids; unique usernames for created users
 - [ ] FLS/user-mode code exercised under `System.runAs` + permission set, with a negative-permission test
 - [ ] REST methods mock `RestContext`, cover URI-parsing branches
-- [ ] **Adversarial suite: ≥7 diverse "try to break it" scenarios across distinct break vectors, each asserting a safe/specific failure**
+- [ ] **Adversarial suite exhausts the distinct break vectors that apply (don't stop at a quota; ~7–10 is a floor), one break per method, each asserting a safe/specific failure**
+- [ ] One behavior per test method — no kitchen-sink tests; many small focused tests over one big one (SOLID/DRY/KISS)
 - [ ] Positive + negative + bulk + each branch covered
