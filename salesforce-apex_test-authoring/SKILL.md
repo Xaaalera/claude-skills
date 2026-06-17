@@ -279,4 +279,5 @@ private class UIKpiCardConfigHandlerTest {
 - [ ] No hardcoded Ids; unique usernames for created users
 - [ ] FLS/user-mode code exercised under `System.runAs` + permission set, with a negative-permission test
 - [ ] REST methods mock `RestContext`, cover URI-parsing branches
+- [ ] **Adversarial suite: ≥7 diverse "try to break it" scenarios across distinct break vectors, each asserting a safe/specific failure**
 - [ ] Positive + negative + bulk + each branch covered
