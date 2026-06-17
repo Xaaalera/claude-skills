@@ -24,7 +24,7 @@ These are house rules. Follow them even when the surrounding repo does something
 2. **Always `Assert.*`, never `System.assert*`.** Use `Assert.areEqual(expected, actual, msg)`, `Assert.isTrue`, `Assert.isFalse`, `Assert.isNull`, `Assert.isNotNull`, `Assert.fail(msg)`. Every assertion gets a message explaining what it verifies.
 3. **`@IsTest(SeeAllData=false)`** — always. Never `SeeAllData=true`. Tests create the data they need.
 4. **No hardcoded Ids.** Never type a `001...`/`a0X...` literal. Get Ids from inserted records or `UserInfo.getUserId()`.
-5. **One test method = one behavior.** Name it for the behavior: `saveConfig_deletesCardsNotInPayload`, `getHandler_throwsOnUnknownType`. Don't assert five unrelated things in one method.
+5. **One test method = one behavior — strictly. Many small tests beat one big one.** This is SOLID/DRY/KISS applied to tests: each method verifies exactly ONE observable behavior and is named for it (`saveConfig_deletesCardsNotInPayload`, `getHandler_throwsOnUnknownType`). Never bundle several unrelated checks into a "kitchen-sink" test — if a method asserts two distinct behaviors, split it. A focused test that fails tells you precisely what broke; a big one tells you only that *something* did. Share setup via `@TestSetup` and factory helpers (DRY) so splitting costs nothing; keep each method short and obvious (KISS).
 6. **Structure every test method with these comment markers**, in this order:
    ```apex
    @IsTest
