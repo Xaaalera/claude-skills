@@ -56,7 +56,11 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
    - sets only required fields plus whatever the factory's callers reliably need,
    - takes parameters for the fields tests vary,
    - never hardcodes Ids.
-3. **Where the factory lives:** extend the repo's existing factory when there is one and it fits; otherwise create a focused factory class for the module (e.g. `UIConfigTestDataFactory`). Keep one factory per cohesive area, not one giant method per test.
+3. **Where the factory lives — a dedicated factory folder.** Keep test-data factories together, not scattered among production classes:
+   - Look for an existing dedicated factory folder (e.g. `.../classes/factories/`).
+   - **If none exists, create one** and put new factories there. Every factory we create goes into that folder.
+   - **If factories already exist elsewhere in the repo, propose consolidating them** into that folder (ask before relocating shared/managed ones like `TestDataSuite` — don't silently move code others depend on).
+   - In SFDX source format, Apex classes may live in subdirectories under `classes/`; they deploy the same. Keep one factory per cohesive area, not one giant method per test.
 
 **Factory method shape:**
 ```apex
