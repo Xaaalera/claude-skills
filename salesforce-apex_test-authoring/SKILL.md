@@ -63,24 +63,35 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
    - **If factories already exist elsewhere in the repo, propose consolidating them** into that folder (ask before relocating shared/managed ones like `TestDataSuite` — don't silently move code others depend on).
    - In SFDX source format, Apex classes may live in subdirectories under `classes/`; they deploy the same. Keep one factory per cohesive area, not one giant method per test.
 
-**Factory method shape:**
+**Factory shape — one class per object, base `build` + `buildAndInsert`:**
 ```apex
+// File: classes/factories/UIConfigFactory.cls
 @IsTest
-public class UIConfigTestDataFactory {
-    public static UI_Config__c createKpiConfig() {
-        UI_Config__c config = new UI_Config__c(Name = 'KPI_Cards', Config_Type__c = 'KPI_Cards');
+public class UIConfigFactory {
+    public static UI_Config__c build() {
+        return new UI_Config__c(Name = 'KPI_Cards', Config_Type__c = 'KPI_Cards');
+    }
+    public static UI_Config__c buildAndInsert() {
+        UI_Config__c config = build();
         insert config;
         return config;
     }
+}
 
-    public static UI_KPI_Card__c createKpiCard(Id configId, String kpiType, Integer sortOrder) {
-        UI_KPI_Card__c card = new UI_KPI_Card__c(
+// File: classes/factories/UIKpiCardFactory.cls
+@IsTest
+public class UIKpiCardFactory {
+    public static UI_KPI_Card__c build(Id configId, String kpiType, String timeframe, Integer sortOrder) {
+        return new UI_KPI_Card__c(
             Config__c     = configId,
-            KPI_Id__c     = 'test-' + sortOrder,   // external Id; unique per record
+            KPI_Id__c     = 'test-' + sortOrder,   // external Id; keep unique per record
             KPI_Type__c   = kpiType,
-            Timeframe__c  = 'CURRENT_PERIOD',
+            Timeframe__c  = timeframe,
             Sort_Order__c = sortOrder
         );
+    }
+    public static UI_KPI_Card__c buildAndInsert(Id configId, String kpiType, String timeframe, Integer sortOrder) {
+        UI_KPI_Card__c card = build(configId, kpiType, timeframe, sortOrder);
         insert card;
         return card;
     }
