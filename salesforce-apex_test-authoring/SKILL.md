@@ -109,7 +109,7 @@ public class UIKpiCardFactory {
     private static Integer sequence() { return counter++; }
 }
 ```
-`UIConfigFactory`, `UserTestFactory`, etc. follow the EXACT same shape (constructor defaults → `with*` chain → `build()` / `buildAndInsert()`), so any factory is used the same way.
+`UIConfigFactory`, `UserTestFactory`, etc. follow the EXACT same shape (constructor defaults → `with*` chain → `build()` / `build(true)` / `insertRecord()`), so any factory is used the same way.
 
 ---
 
