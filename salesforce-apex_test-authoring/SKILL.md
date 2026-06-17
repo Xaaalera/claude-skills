@@ -65,7 +65,7 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
        .withConfig(cfg.Id)
        .withKpiType('cash')
        .withSortOrder(1)
-       .buildAndInsert();
+       .build(true);   // build() = in-memory; build(true) or insertRecord() = persist
    ```
 3. **Where the factory lives — a dedicated factory folder.** Keep test-data factories together, not scattered among production classes:
    - Look for an existing dedicated factory folder (e.g. `.../classes/factories/`).
