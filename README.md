@@ -74,6 +74,12 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>meta_skills-language</code></td><td>Passive skill — always active. All content written to ~/.claude/skills/ must be in English only, regardless of the conversation language.</td></tr>
 </table>
 
+## salesforce-apex
+
+<table>
+<tr><td><code>salesforce-apex_test-authoring</code></td><td>Author and maintain Apex unit tests to a strict house standard. Use WHENEVER you create or edit an Apex class (.cls), write or fix an Apex test, or set up Apex test data — every new Apex class must get a matching test class in the same change. Covers data factories, @TestSetup, Assert.* assertions, FLS/user-mode testing, REST resource mocking, and bulk/positive/negative coverage.</td></tr>
+</table>
+
 ## salesforce-dx
 
 <table>
