@@ -97,9 +97,13 @@ public class UIKpiCardFactory {
     public UIKpiCardFactory withTimeframe(String v)   { record.Timeframe__c  = v;        return this; }
     public UIKpiCardFactory withSortOrder(Integer v)  { record.Sort_Order__c = v;        return this; }
 
-    // Terminals.
-    public UI_KPI_Card__c build()          { return record; }
-    public UI_KPI_Card__c buildAndInsert() { insert record; return record; }
+    // Terminals: build (optionally insert via the flag), or insert separately.
+    public UI_KPI_Card__c build() { return build(false); }
+    public UI_KPI_Card__c build(Boolean doInsert) {
+        if (doInsert) { insert record; }
+        return record;
+    }
+    public UI_KPI_Card__c insertRecord() { insert record; return record; }
 
     private static Integer counter = 0;
     private static Integer sequence() { return counter++; }
