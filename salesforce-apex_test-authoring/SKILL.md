@@ -1,0 +1,230 @@
+---
+name: salesforce-apex_test-authoring
+description: Author and maintain Apex unit tests to a strict house standard. Use WHENEVER you create or edit an Apex class (.cls), write or fix an Apex test, or set up Apex test data — every new Apex class must get a matching test class in the same change. Covers data factories, @TestSetup, Assert.* assertions, FLS/user-mode testing, REST resource mocking, and bulk/positive/negative coverage.
+---
+
+# Apex Test Authoring
+
+## When to Activate
+
+- Creating a new Apex class → in the SAME change, create its matching test class. A class without a test is not done.
+- Editing an existing Apex class → update (or create) its test so new branches are covered.
+- Writing, fixing, or running Apex tests.
+- Setting up Apex test data (factories, `@TestSetup`).
+
+To run/deploy the tests against an org, use the **salesforce-dx MCP** (deploy_metadata, run_apex_test) — see the `salesforce-dx_mcp` skill, not raw `sf` CLI.
+
+---
+
+## Non-negotiable rules
+
+These are house rules. Follow them even when the surrounding repo does something else (e.g. a repo where most tests still use `System.assert*` — we use `Assert.*` going forward).
+
+1. **One test class per class, named `{ClassName}Test`.** No underscore. `UIConfigResource` → `UIConfigResourceTest`.
+2. **Always `Assert.*`, never `System.assert*`.** Use `Assert.areEqual(expected, actual, msg)`, `Assert.isTrue`, `Assert.isFalse`, `Assert.isNull`, `Assert.isNotNull`, `Assert.fail(msg)`. Every assertion gets a message explaining what it verifies.
+3. **`@IsTest(SeeAllData=false)`** — always. Never `SeeAllData=true`. Tests create the data they need.
+4. **No hardcoded Ids.** Never type a `001...`/`a0X...` literal. Get Ids from inserted records or `UserInfo.getUserId()`.
+5. **One test method = one behavior.** Name it for the behavior: `saveConfig_deletesCardsNotInPayload`, `getHandler_throwsOnUnknownType`. Don't assert five unrelated things in one method.
+6. **Structure every test method with these comment markers**, in this order:
+   ```apex
+   @IsTest
+   static void methodName_behavior() {
+       // Setup
+       ...
+       // Exercise
+       Test.startTest();
+       ...
+       Test.stopTest();
+       // Verify
+       Assert.areEqual(...);
+   }
+   ```
+7. **Wrap the exercised code in `Test.startTest()` / `Test.stopTest()`** so it gets a fresh set of governor limits and async work flushes.
+8. **Insert only the fields a test requires.** Don't populate fields the behavior under test doesn't read.
+9. **Test data values live in constants** at the top of the test class (`private static final String KPI_TYPE_REVENUE = 'revenue';`). No magic strings scattered through methods.
+
+---
+
+## Data factories — search first, then create
+
+Test data creation belongs in a reusable factory, not copy-pasted into each test.
+
+**Order of operations:**
+1. **Search for an existing factory** before writing data-setup code. Look for `TestDataFactory`, `TestDataSuite`, `*TestData*`, `*Factory*` classes in the repo. (In AccountingCloud the canonical one is `TestDataSuite` — a singleton accessed via `TestDataSuite.getInstance(true)` in `@TestSetup`, `getInstance()` inside tests, with fluent `create*()` builders. Reuse it for core financial objects.)
+2. **If a factory method for the object you're testing does not exist, create one.** Every SObject a test touches should have a factory method — `createUiConfig()`, `createKpiCard(config, kpiType, sortOrder)`, etc. The factory:
+   - returns the inserted record(s) (or an unsaved record via a `build*` variant when the test needs to tweak before insert),
+   - sets only required fields plus whatever the factory's callers reliably need,
+   - takes parameters for the fields tests vary,
+   - never hardcodes Ids.
+3. **Where the factory lives:** extend the repo's existing factory when there is one and it fits; otherwise create a focused factory class for the module (e.g. `UIConfigTestDataFactory`). Keep one factory per cohesive area, not one giant method per test.
+
+**Factory method shape:**
+```apex
+@IsTest
+public class UIConfigTestDataFactory {
+    public static UI_Config__c createKpiConfig() {
+        UI_Config__c config = new UI_Config__c(Name = 'KPI_Cards', Config_Type__c = 'KPI_Cards');
+        insert config;
+        return config;
+    }
+
+    public static UI_KPI_Card__c createKpiCard(Id configId, String kpiType, Integer sortOrder) {
+        UI_KPI_Card__c card = new UI_KPI_Card__c(
+            Config__c     = configId,
+            KPI_Id__c     = 'test-' + sortOrder,   // external Id; unique per record
+            KPI_Type__c   = kpiType,
+            Timeframe__c  = 'CURRENT_PERIOD',
+            Sort_Order__c = sortOrder
+        );
+        insert card;
+        return card;
+    }
+}
+```
+
+---
+
+## @TestSetup — shared pre-setup data
+
+When several test methods need the same baseline data, create it once in a `@TestSetup` method instead of rebuilding it per method. `@TestSetup` data is rolled back to its post-setup state before each test, so tests stay isolated.
+
+```apex
+@TestSetup
+static void setup() {
+    // Build the baseline every test starts from — via the factory.
+    UIConfigTestDataFactory.createTestUserWithEditPerm();
+}
+```
+
+Guidelines:
+- Use `@TestSetup` only for data that is genuinely shared and read-only-ish across methods. Data a single test mutates in a method-specific way is better created in that method's `// Setup`.
+- `@TestSetup` runs as the test-context user. Create users/permission-set assignments here so methods can `System.runAs` them.
+- Re-query records inside the test method (don't rely on Ids captured at setup time across the rollback boundary — re-SELECT them).
+
+---
+
+## FLS / user mode (`WITH USER_MODE`, `as user`)
+
+Code that uses `WITH USER_MODE` queries or `... as user` DML enforces the running user's FLS and object permissions. A test running as the system context won't exercise that enforcement. So:
+
+- Create a **test user** with a minimal profile and assign the **permission set** the feature ships with (e.g. `UI_KpiCardConfig_Edit`). Do this in the factory / `@TestSetup`.
+- Run the exercised code inside `System.runAs(testUser) { ... }`.
+- Add at least one **negative permission test**: run as a user WITHOUT the permission set and assert the expected `System.QueryException` / `DmlException` / `NoAccessException` is thrown.
+
+```apex
+User u = UIConfigTestDataFactory.createUserWithPermSet('UI_KpiCardConfig_Edit');
+System.runAs(u) {
+    Test.startTest();
+    new UIKpiCardConfigHandler().saveConfig(payloadJson);
+    Test.stopTest();
+}
+```
+
+Create users with a unique username (append a UUID/timestamp) to avoid `DUPLICATE_USERNAME` across parallel test runs — and never hardcode the username.
+
+---
+
+## REST resource tests (`@RestResource`)
+
+Mock the REST context by hand, then call the method directly and assert on `RestContext.response`.
+
+```apex
+// Setup
+RestRequest req = new RestRequest();
+RestResponse res = new RestResponse();
+req.requestURI = '/services/apexrest/AcctSeed/ui/config/KPI_Cards'; // namespaced path when the org has a namespace
+req.httpMethod = 'GET';
+RestContext.request = req;
+RestContext.response = res;
+
+// Exercise
+Test.startTest();
+UIConfigResource.getConfig();
+Test.stopTest();
+
+// Verify
+Assert.areEqual(200, RestContext.response.statusCode, 'GET should succeed');
+Object body = JSON.deserializeUntyped(RestContext.response.responseBody.toString());
+Assert.isNotNull(body, 'response body should be JSON');
+```
+
+For POST/PATCH set `req.requestBody = Blob.valueOf(jsonString)`. Cover URI-parsing branches explicitly: type-only URI (`/config/KPI_Cards`) vs type+itemId (`/config/KPI_Cards/<id>`), and the namespace-prefixed variant.
+
+---
+
+## Coverage checklist for each class under test
+
+Aim for behavior coverage, not a % number — but every public/exposed method needs:
+
+- [ ] **Positive** path — normal input, asserts the real result (not just "no exception").
+- [ ] **Negative** path — bad/empty input, missing permission, unknown key → assert the specific exception or empty/`null` result. Use a try/catch + `Assert.fail()` pattern, or assert on the returned error shape.
+- [ ] **Bulk** — exercise with a list of records (≈200 where the code does DML in a loop or aggregates) to catch governor-limit and partial-processing bugs. Where the domain uses small fixed datasets, match that, but still loop rather than asserting a single record.
+- [ ] **Boundary/branch** — each `if`/early-return in the method (e.g. empty saved config → falls back to defaults; blank external Id → generates one; item found vs not found).
+
+**Asserting an expected exception:**
+```apex
+// Exercise + Verify
+Test.startTest();
+try {
+    UIConfigHandlerFactory.getHandler('Nope');
+    Assert.fail('Expected UIConfigException for unknown config type');
+} catch (UIConfigHandlerFactory.UIConfigException e) {
+    Assert.isTrue(e.getMessage().contains('Unknown config type'), 'message names the bad type');
+}
+Test.stopTest();
+```
+
+---
+
+## Skeleton — full test class
+
+```apex
+@IsTest(SeeAllData=false)
+private class UIKpiCardConfigHandlerTest {
+
+    private static final String KPI_TYPE_REVENUE = 'revenue';
+    private static final String TIMEFRAME_PERIOD = 'CURRENT_PERIOD';
+
+    @TestSetup
+    static void setup() {
+        UIConfigTestDataFactory.createUserWithPermSet('UI_KpiCardConfig_Edit');
+    }
+
+    @IsTest
+    static void getConfig_returnsDefaultsWhenNoSavedCards() {
+        // Setup
+        User u = [SELECT Id FROM User WHERE Alias = 'uicfg01' LIMIT 1];
+        // Exercise
+        Object result;
+        System.runAs(u) {
+            Test.startTest();
+            result = new UIKpiCardConfigHandler().getConfig();
+            Test.stopTest();
+        }
+        // Verify
+        List<Object> cards = (List<Object>) result;
+        Assert.areEqual(4, cards.size(), 'should fall back to the 4 default CMDT cards');
+    }
+}
+```
+
+---
+
+## Workflow
+
+1. Write/extend the **factory** for every object the class touches.
+2. Write the **test class** (`{ClassName}Test`) following the rules above.
+3. **Deploy + run** via the salesforce-dx MCP (`deploy_metadata`, then `run_apex_test` with `RunSpecifiedTests`, `codeCoverage: true`). See the `salesforce-dx_mcp` skill.
+4. On failure, re-run with `verbose: true`, read the real assertion/stack, fix, repeat. Never weaken an assertion just to make it pass.
+
+## Final checklist
+
+- [ ] Test class named `{ClassName}Test`, `@IsTest(SeeAllData=false)`
+- [ ] Only `Assert.*` assertions, each with a message
+- [ ] `// Setup` / `// Exercise` / `// Verify` markers in every method, exercise wrapped in `Test.startTest/stopTest`
+- [ ] Data built via a factory (reused or newly created — one method per object)
+- [ ] Shared baseline in `@TestSetup`; constants for test values
+- [ ] No hardcoded Ids; unique usernames for created users
+- [ ] FLS/user-mode code exercised under `System.runAs` + permission set, with a negative-permission test
+- [ ] REST methods mock `RestContext`, cover URI-parsing branches
+- [ ] Positive + negative + bulk + each branch covered
