@@ -42,6 +42,7 @@ These are house rules. Follow them even when the surrounding repo does something
 7. **Wrap the exercised code in `Test.startTest()` / `Test.stopTest()`** so it gets a fresh set of governor limits and async work flushes.
 8. **Insert only the fields a test requires.** Don't populate fields the behavior under test doesn't read.
 9. **Test data values live in constants** at the top of the test class (`private static final String KPI_TYPE_REVENUE = 'revenue';`). No magic strings scattered through methods.
+10. **Every test class includes a dedicated adversarial suite of at least 7 diverse "try to break it" scenarios.** Positive tests prove the happy path; they don't prove the code fails *safely*. See **Adversarial / negative testing** below — this is mandatory, not optional.
 
 ---
 
