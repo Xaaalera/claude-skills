@@ -1,4 +1,5 @@
 ---
+name: salesforce-dx_mcp
 description: Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with any Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query an org, run tests, or push/pull metadata.
 ---
 
