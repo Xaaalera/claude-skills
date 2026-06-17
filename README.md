@@ -77,5 +77,5 @@ Add to `~/.claude/settings.json`:
 ## salesforce-dx
 
 <table>
-<tr><td><code>salesforce-dx_mcp</code></td><td>Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with a Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query the org, run tests, or push/pull metadata.</td></tr>
+<tr><td><code>salesforce-dx_mcp</code></td><td>Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with any Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query an org, run tests, or push/pull metadata.</td></tr>
 </table>
