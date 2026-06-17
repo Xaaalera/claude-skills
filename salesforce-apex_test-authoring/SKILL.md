@@ -54,8 +54,8 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
 2. **One factory CLASS per SObject, written as a fluent builder — every factory has the SAME shape.** Each object a test touches gets its OWN factory class named `<Object>Factory` (e.g. `UIConfigFactory` for `UI_Config__c`, `UIKpiCardFactory` for `UI_KPI_Card__c`, `UserTestFactory` for `User`). Do NOT lump several objects into one factory class. Because they all share one shape, they read alike and chain naturally:
    - **Constructor** seeds all **required** fields with sensible defaults, so a bare `new <Object>Factory().build()` is already valid.
    - A **`with<FieldName>(value)`** setter for each field a test may vary — it mutates the in-progress record and `return this;` so calls chain.
-   - Terminal **`build()`** → returns the **in-memory** record (no DML).
-   - Terminal **`buildAndInsert()`** → `insert` then return the record.
+   - **`build()`** → returns the **in-memory** record (no DML). **`build(Boolean doInsert)`** inserts first when `true`.
+   - **`insertRecord()`** → separate terminal that inserts the built record and returns it (Apex reserves `insert`, so the method can't be named `insert`).
    - Optional **bulk** helper (e.g. `static List<SObject> buildAndInsert(Integer count, ...)`) for governor-limit tests.
    - Never hardcode Ids. Extend with more `with*`/helpers over time, but one object's creation logic stays in that one factory.
 
