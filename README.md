@@ -73,3 +73,9 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.</td></tr>
 <tr><td><code>meta_skills-language</code></td><td>Passive skill — always active. All content written to ~/.claude/skills/ must be in English only, regardless of the conversation language.</td></tr>
 </table>
+
+## salesforce-dx
+
+<table>
+<tr><td><code>salesforce-dx_mcp</code></td><td>Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with a Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query the org, run tests, or push/pull metadata.</td></tr>
+</table>
