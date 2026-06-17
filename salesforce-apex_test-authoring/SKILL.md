@@ -51,11 +51,12 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
 
 **Order of operations:**
 1. **Search for an existing factory** before writing data-setup code. Look for `TestDataFactory`, `TestDataSuite`, `*TestData*`, `*Factory*` classes in the repo. (In AccountingCloud the canonical one is `TestDataSuite` — a singleton accessed via `TestDataSuite.getInstance(true)` in `@TestSetup`, `getInstance()` inside tests, with fluent `create*()` builders. Reuse it for core financial objects.)
-2. **If a factory method for the object you're testing does not exist, create one.** Every SObject a test touches should have a factory method — `createUiConfig()`, `createKpiCard(config, kpiType, sortOrder)`, etc. The factory:
-   - returns the inserted record(s) (or an unsaved record via a `build*` variant when the test needs to tweak before insert),
-   - sets only required fields plus whatever the factory's callers reliably need,
-   - takes parameters for the fields tests vary,
-   - never hardcodes Ids.
+2. **One factory CLASS per SObject — not a grab-bag.** Each object a test touches gets its OWN factory class named `<Object>Factory` (e.g. `UIConfigFactory` for `UI_Config__c`, `UIKpiCardFactory` for `UI_KPI_Card__c`, `UserTestFactory` for `User`). Do NOT lump several objects into one factory class. Each per-object factory exposes these BASE methods, then grows new methods as tests need them:
+   - `build(...)` — returns an **in-memory** record (no DML) with required fields defaulted, for tweaking before insert.
+   - `buildAndInsert(...)` — `build` + `insert`, returns the inserted record.
+   - a **bulk** helper returning a `List<SObject>` (e.g. `buildAndInsert(Integer count, ...)`) for governor-limit tests.
+   - Each variant takes parameters for the fields tests vary; otherwise sets only required fields; never hardcodes Ids.
+   Extend a factory with extra methods over time — but the creation logic for one object stays in that one object's factory.
 3. **Where the factory lives — a dedicated factory folder.** Keep test-data factories together, not scattered among production classes:
    - Look for an existing dedicated factory folder (e.g. `.../classes/factories/`).
    - **If none exists, create one** and put new factories there. Every factory we create goes into that folder.
