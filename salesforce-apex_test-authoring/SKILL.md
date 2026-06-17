@@ -183,13 +183,17 @@ For POST/PATCH set `req.requestBody = Blob.valueOf(jsonString)`. Cover URI-parsi
 
 ---
 
-## Adversarial / negative testing — mandatory, ≥7 diverse scenarios
+## Adversarial / negative testing — mandatory, exhaust the failure modes
 
-Happy-path tests tell you the code works when everything is right. They tell you nothing about what happens when a caller sends garbage, a user lacks rights, or a record is missing — which is exactly where real defects and security holes live. So **every test class must include an adversarial suite that actively tries to break the class under test, with at least 7 scenarios drawn from DIFFERENT break vectors below.** Seven variations of the same idea (e.g. seven malformed strings) do not count — diversity is the point; each vector exercises a distinct failure mode.
+Happy-path tests tell you the code works when everything is right. They tell you nothing about what happens when a caller sends garbage, a user lacks rights, or a record is missing — which is exactly where real defects and security holes live. So **every test class must include an adversarial suite that genuinely tries to break the class under test, across as many distinct failure modes as actually apply to it.**
+
+**Don't limit yourself to a number, and don't stop at 1–2 scenarios.** Walk the break-vector list below, ask for each "can this class fail this way?", and if yes, write a test for it. The goal is to exhaust the *distinct* ways this specific class can break — not to hit a quota. Seven near-identical variations of one idea (e.g. seven malformed strings) is worse than seven tests across seven different vectors: diversity is the whole point. Treat ~7–10 as a floor that signals "you've probably only just started"; a rich class (a handler with seven public methods, a REST resource with four verbs) warrants many more.
+
+**One scenario = one test method** (rule 5). Each adversarial test breaks the class in exactly one way and asserts exactly one safe failure — never a single test that throws five kinds of bad input. Many small, sharply-named break tests are far more useful than one big one: when it goes red you know instantly *which* abuse the code stopped handling.
 
 For each scenario, assert the code fails *safely and specifically*: it throws the **expected** typed exception (not a bare `Exception` you forgot to scope), or returns a defined empty/`null`/zero result — never silently corrupts data or swallows the error. Prefer `try { ...; Assert.fail('why this should have thrown'); } catch (TheSpecificException e) { Assert.isTrue(e.getMessage().contains(...), ...); }` so a *missing* throw also fails the test.
 
-**Break vectors — pick ≥7 across distinct categories (more if the class warrants it):**
+**Break vectors — cover every one that applies to the class (these are categories, not a checklist to stop at):**
 
 1. **Unknown / unsupported key** — an unregistered type, enum value, or lookup key (e.g. `getHandler('Nope')`). Assert the specific exception names the bad value.
 2. **Malformed input** — invalid JSON, or valid JSON of the wrong shape (an object where a list is expected, a string where a number is). Assert it throws rather than persisting half-parsed data.
