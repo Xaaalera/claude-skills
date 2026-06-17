@@ -73,40 +73,39 @@ Test data creation belongs in a reusable factory, not copy-pasted into each test
    - **If factories already exist elsewhere in the repo, propose consolidating them** into that folder (ask before relocating shared/managed ones like `TestDataSuite` — don't silently move code others depend on).
    - In SFDX source format, Apex classes may live in subdirectories under `classes/`; they deploy the same. Keep one factory per cohesive area, not one giant method per test.
 
-**Factory shape — one class per object, base `build` + `buildAndInsert`:**
+**Factory shape — one fluent-builder class per object:**
 ```apex
-// File: classes/factories/UIConfigFactory.cls
-@IsTest
-public class UIConfigFactory {
-    public static UI_Config__c build() {
-        return new UI_Config__c(Name = 'KPI_Cards', Config_Type__c = 'KPI_Cards');
-    }
-    public static UI_Config__c buildAndInsert() {
-        UI_Config__c config = build();
-        insert config;
-        return config;
-    }
-}
-
 // File: classes/factories/UIKpiCardFactory.cls
 @IsTest
 public class UIKpiCardFactory {
-    public static UI_KPI_Card__c build(Id configId, String kpiType, String timeframe, Integer sortOrder) {
-        return new UI_KPI_Card__c(
-            Config__c     = configId,
-            KPI_Id__c     = 'test-' + sortOrder,   // external Id; keep unique per record
-            KPI_Type__c   = kpiType,
-            Timeframe__c  = timeframe,
-            Sort_Order__c = sortOrder
+    private final UI_KPI_Card__c record;
+
+    public UIKpiCardFactory() {
+        // Constructor seeds all REQUIRED fields with valid defaults.
+        record = new UI_KPI_Card__c(
+            KPI_Id__c     = 'test-' + sequence(),  // unique external Id; never hardcoded
+            KPI_Type__c   = 'revenue',
+            Timeframe__c  = 'CURRENT_PERIOD',
+            Sort_Order__c = 0
         );
     }
-    public static UI_KPI_Card__c buildAndInsert(Id configId, String kpiType, String timeframe, Integer sortOrder) {
-        UI_KPI_Card__c card = build(configId, kpiType, timeframe, sortOrder);
-        insert card;
-        return card;
-    }
+
+    // One with<Field>() per varied field — each returns `this` to chain.
+    public UIKpiCardFactory withConfig(Id configId)   { record.Config__c     = configId; return this; }
+    public UIKpiCardFactory withKpiId(String v)       { record.KPI_Id__c     = v;        return this; }
+    public UIKpiCardFactory withKpiType(String v)     { record.KPI_Type__c   = v;        return this; }
+    public UIKpiCardFactory withTimeframe(String v)   { record.Timeframe__c  = v;        return this; }
+    public UIKpiCardFactory withSortOrder(Integer v)  { record.Sort_Order__c = v;        return this; }
+
+    // Terminals.
+    public UI_KPI_Card__c build()          { return record; }
+    public UI_KPI_Card__c buildAndInsert() { insert record; return record; }
+
+    private static Integer counter = 0;
+    private static Integer sequence() { return counter++; }
 }
 ```
+`UIConfigFactory`, `UserTestFactory`, etc. follow the EXACT same shape (constructor defaults → `with*` chain → `build()` / `buildAndInsert()`), so any factory is used the same way.
 
 ---
 
