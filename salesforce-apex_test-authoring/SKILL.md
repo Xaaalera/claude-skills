@@ -206,7 +206,7 @@ For each scenario, assert the code fails *safely and specifically*: it throws th
 9. **Bulk / governor limits** — feed ≥200 records to any method that does DML or queries in a loop. Assert it completes within limits and processes every record (catches SOQL-in-loop and partial-commit bugs).
 10. **Wrong protocol shape (REST/Aura)** — for `@RestResource`: a URI missing the expected segment, extra trailing segments, or a method with no body. Assert the parser resolves correctly or fails cleanly.
 
-Spread the ≥7 across the test classes for a feature so each layer is probed where it matters (e.g. permission + malformed-body at the REST resource, unknown-type + sharing at the handler). Name each test for the abuse: `saveConfig_throwsWhenUserLacksObjectAccess`, `getConfig_uriWithoutConfigSegmentResolvesNoTypeAndThrows`, `saveConfig_rejectsMalformedJson`, `getConfig_otherUsersConfigIsNotVisible`.
+Spread these across the test classes for a feature so each layer is probed where it matters (e.g. permission + malformed-body at the REST resource, unknown-type + sharing at the handler) — a vector caught at one layer still needs covering at the others it can reach. One break per method, named for the abuse: `saveConfig_throwsWhenUserLacksObjectAccess`, `getConfig_uriWithoutConfigSegmentResolvesNoTypeAndThrows`, `saveConfig_rejectsMalformedJson`, `getConfig_otherUsersConfigIsNotVisible`.
 
 ## Coverage checklist for each class under test
 
