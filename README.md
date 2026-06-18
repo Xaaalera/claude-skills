@@ -72,9 +72,7 @@ Add to `~/.claude/settings.json`:
 ## Meta
 
 <table>
-<tr><td><code>meta_context-monitor</code></td><td>Passive skill — always active. After every response, check context fill level and warn the user when it's high. Suggest /compact or new session at thresholds.</td></tr>
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.</td></tr>
-<tr><td><code>meta_skills-language</code></td><td>Passive skill — always active. All content written to ~/.claude/skills/ must be in English only, regardless of the conversation language.</td></tr>
 </table>
 
 ## salesforce-apex
