@@ -53,7 +53,7 @@ Add to `~/.claude/settings.json`:
 ## frontend-js
 
 <table>
-<tr><td><code>frontend-js_conventions</code></td><td>House JS/TS coding style and LWC-specific rules. Use whenever writing or editing JavaScript, TypeScript, Lightning Web Components (LWC), or Aura — applies to React/Node and Salesforce frontend code alike.</td></tr>
+<tr><td><code>frontend-js_conventions</code></td><td>House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions. Use whenever writing or editing JavaScript or TypeScript (React, Node, or any JS/TS).</td></tr>
 </table>
 
 ## Frontend — React
