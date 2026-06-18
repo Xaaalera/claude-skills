@@ -92,3 +92,9 @@ Add to `~/.claude/settings.json`:
 <table>
 <tr><td><code>salesforce-dx_mcp</code></td><td>Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with any Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query an org, run tests, or push/pull metadata.</td></tr>
 </table>
+
+## salesforce-lwc
+
+<table>
+<tr><td><code>salesforce-lwc_development</code></td><td>House rules for developing Salesforce Lightning Web Components (LWC) and Aura. Use whenever creating or editing an LWC/Aura bundle — a component .js controller, .html template, or .js-meta.xml — or any Salesforce-side frontend JS. Covers DOM access and styling conventions.</td></tr>
+</table>
