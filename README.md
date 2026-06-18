@@ -1,41 +1,44 @@
 # Claude Code Skills
 
-My personal Claude Code skill library. I'm a frontend developer — most skills here are about React, CSS, and UI tooling, with a few extras for git workflow and media.
+My personal Claude Code skill library — the single source of truth for my skills.
+I'm a frontend developer, so most skills are React/CSS/UI, plus a few for Salesforce, git, and media.
+
+These flat skill folders are the only files I hand-edit. `sync-skills.sh` regenerates
+`README.md` and a plugin **marketplace** (`.claude-plugin/marketplace.json` + `plugins/`) from them,
+then commits and pushes. Projects pull skills from the marketplace instead of copying folders.
 
 ---
 
-## Setup
+## Use globally (all my projects)
 
-### 1. Install skills
+These folders live at `~/.claude/skills/` and load as user-scope skills in every project automatically.
 
-```bash
-git clone <this-repo> ~/my-skills
-cp -r ~/my-skills/* ~/.claude/skills/
+## Pull into a specific project (and share with teammates)
+
+Add to the project's committed `.claude/settings.json`, then run `/plugin install` or `/reload-plugins`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "personal-skills": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
+  },
+  "enabledPlugins": {
+    "frontend@personal-skills": true,
+    "salesforce@personal-skills": true,
+    "git@personal-skills": true
+  }
+}
 ```
 
-### 2. Activate passive skills automatically
+Plugin skills are namespaced (e.g. `frontend:react_component-structure`), so they never collide
+with a project's own skills (project skills win).
 
-Add to `~/.claude/CLAUDE.md`:
-
-```markdown
-## Passive Skills — Always Active
-
-After EVERY response, without exception, invoke these skills via the Skill tool:
-- `meta_context-monitor` — check context fill level and show status line with joke
-- `meta_skills-language` — enforce English in all skill/docs files
-```
-
-### 3. Env variables (media skills)
+### Env variables (media skills)
 
 Add to `~/.claude/settings.json`:
 
 ```json
-{
-  "env": {
-    "ELEVENLABS_API_KEY": "your-key-here",
-    "ELEVENLABS_VOICE_ID": "your-voice-id-here"
-  }
-}
+{ "env": { "ELEVENLABS_API_KEY": "your-key-here", "ELEVENLABS_VOICE_ID": "your-voice-id-here" } }
 ```
 
 ---

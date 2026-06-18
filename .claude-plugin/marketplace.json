@@ -1,0 +1,54 @@
+{
+  "name": "personal-skills",
+  "owner": {
+    "name": "Xaaalera"
+  },
+  "metadata": null,
+  "plugins": [
+    {
+      "name": "frontend",
+      "description": "Personal frontend skills — CSS units, SCSS modules, React component structure.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend",
+      "category": "personal"
+    },
+    {
+      "name": "git",
+      "description": "Personal Git workflow skills — atomic commit splitting.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/git",
+      "category": "personal"
+    },
+    {
+      "name": "media",
+      "description": "Personal media skills — dubbing and video editing.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/media",
+      "category": "personal"
+    },
+    {
+      "name": "meta",
+      "description": "Personal meta skills — authoring new skills.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/meta",
+      "category": "personal"
+    },
+    {
+      "name": "salesforce",
+      "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/salesforce",
+      "category": "personal"
+    }
+  ]
+}
