@@ -1,13 +1,11 @@
 ---
 name: frontend-js_conventions
-description: House JS/TS coding style and LWC-specific rules. Use whenever writing or editing JavaScript, TypeScript, Lightning Web Components (LWC), or Aura — applies to React/Node and Salesforce frontend code alike.
+description: House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions. Use whenever writing or editing JavaScript or TypeScript (React, Node, or any JS/TS).
 ---
 
-# JS / TS / LWC Conventions
+# JS / TS Conventions
 
-House style for all JavaScript and TypeScript. Apply on every JS/TS/LWC edit.
-
-## General JS / TS
+House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
 
 - Prefer **arrow functions** wherever possible.
 - Use **single quotes** for strings.
@@ -20,10 +18,5 @@ House style for all JavaScript and TypeScript. Apply on every JS/TS/LWC edit.
   - extract helper functions with descriptive names instead of long inline logic;
   - avoid clever one-liners when a readable multi-line form is clearer.
 
-## LWC-specific (Lightning Web Components / Aura)
-
-- Do **NOT** access the global DOM (`document`, `body`, etc.).
-- Use `this.template` and the component APIs to query and manipulate the DOM.
-
-> These LWC rules do not apply to React — in React use the framework's normal
-> patterns (refs, state) rather than `this.template`.
+For Salesforce LWC / Aura-specific rules (DOM access, styling) see
+`salesforce-lwc_development`.
