@@ -1,5 +1,5 @@
 ---
-description: Use this skill any time styles are written or modified: creating a new component, writing CSS/SCSS, refactoring existing styles.
+description: Use this skill any time styles are written or modified — creating a new component, writing CSS/SCSS, or refactoring existing styles.
 ---
 
 # CSS / SCSS — Modules, Colors, and Structure

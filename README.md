@@ -47,7 +47,7 @@ Add to `~/.claude/settings.json`:
 
 <table>
 <tr><td><code>frontend-css_rem</code></td><td>CSS Units — Always use rem for all dimensional values. Apply this rule any time CSS, SCSS, or Tailwind styles are written or reviewed.</td></tr>
-<tr><td><code>frontend-css_scss-modules</code></td><td>Use this skill any time styles are written or modified: creating a new component, writing CSS/SCSS, refactoring existing styles.</td></tr>
+<tr><td><code>frontend-css_scss-modules</code></td><td>Use this skill any time styles are written or modified — creating a new component, writing CSS/SCSS, or refactoring existing styles.</td></tr>
 </table>
 
 ## frontend-js
