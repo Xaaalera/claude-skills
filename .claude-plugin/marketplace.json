@@ -3,7 +3,10 @@
   "owner": {
     "name": "Roman"
   },
-  "metadata": null,
+  "metadata": {
+    "description": "Roman's personal Claude Code skills, grouped by domain. Auto-generated from the flat skill folders by sync-skills.sh.",
+    "version": "1.0.0"
+  },
   "plugins": [
     {
       "name": "frontend",
