@@ -50,6 +50,12 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>frontend-css_scss-modules</code></td><td>Use this skill any time styles are written or modified: creating a new component, writing CSS/SCSS, refactoring existing styles.</td></tr>
 </table>
 
+## frontend-js
+
+<table>
+<tr><td><code>frontend-js_conventions</code></td><td>House JS/TS coding style and LWC-specific rules. Use whenever writing or editing JavaScript, TypeScript, Lightning Web Components (LWC), or Aura — applies to React/Node and Salesforce frontend code alike.</td></tr>
+</table>
+
 ## Frontend — React
 
 <table>
