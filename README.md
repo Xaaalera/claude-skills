@@ -20,7 +20,7 @@ Add to the project's committed `.claude/settings.json`, then run `/plugin instal
 ```json
 {
   "extraKnownMarketplaces": {
-    "personal-skills": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
+    "xaaaalera-skils": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
   },
   "enabledPlugins": {
     "frontend@personal-skills": true,
