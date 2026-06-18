@@ -60,6 +60,7 @@ Add to `~/.claude/settings.json`:
 
 <table>
 <tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component is edited or reviewed.</td></tr>
+<tr><td><code>frontend-react_ockham</code></td><td>Apply Occam's razor when creating ANY new file, component, folder, hook, util, abstraction, prop, layer, or top-level category — do not multiply entities beyond necessity. Activate before adding structure of any kind.</td></tr>
 </table>
 
 ## Git
