@@ -23,9 +23,9 @@ Add to the project's committed `.claude/settings.json`, then run `/plugin instal
     "xaaaalera-skils": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
   },
   "enabledPlugins": {
-    "frontend@personal-skills": true,
-    "salesforce@personal-skills": true,
-    "git@personal-skills": true
+    "frontend@xaaaalera-skils": true,
+    "salesforce@xaaaalera-skils": true,
+    "git@xaaaalera-skils": true
   }
 }
 ```
