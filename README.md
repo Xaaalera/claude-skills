@@ -20,12 +20,12 @@ Add to the project's committed `.claude/settings.json`, then run `/plugin instal
 ```json
 {
   "extraKnownMarketplaces": {
-    "xaaaalera-skils": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
+    "xaaalera": { "source": { "source": "github", "repo": "Xaaalera/claude-skills" } }
   },
   "enabledPlugins": {
-    "frontend@xaaaalera-skils": true,
-    "salesforce@xaaaalera-skils": true,
-    "git@xaaaalera-skils": true
+    "frontend@xaaalera": true,
+    "salesforce@xaaalera": true,
+    "git@xaaalera": true
   }
 }
 ```
