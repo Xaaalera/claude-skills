@@ -60,7 +60,6 @@ Add to `~/.claude/settings.json`:
 
 <table>
 <tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component is edited or reviewed.</td></tr>
-<tr><td><code>frontend-react_ockham</code></td><td>Apply Occam's razor when creating ANY new file, component, folder, hook, util, abstraction, prop, layer, or top-level category — do not multiply entities beyond necessity. Activate before adding structure of any kind.</td></tr>
 </table>
 
 ## Git
@@ -80,6 +79,7 @@ Add to `~/.claude/settings.json`:
 
 <table>
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.</td></tr>
+<tr><td><code>meta_ockham</code></td><td>The Razor. Invoke before creating ANY new entity — file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category — in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.</td></tr>
 </table>
 
 ## salesforce-apex
