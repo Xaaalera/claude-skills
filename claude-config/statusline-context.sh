@@ -27,7 +27,7 @@ used=$(printf '%s' "$input" | jq -r '.context_window.total_input_tokens // empty
 total=$(printf '%s' "$input" | jq -r '.context_window.context_window_size // 200000')
 
 if [ -z "$pct" ] || [ "$pct" = "null" ]; then
-  printf '🧠 context: warming up…'
+  printf '🧠 context: warming up…%s' "$skills_line"
   exit 0
 fi
 
