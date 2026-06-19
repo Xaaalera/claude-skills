@@ -45,4 +45,4 @@ elif [ "$pct_rounded" -ge 70 ]; then
   marker=" 💬 consider /compact"
 fi
 
-printf '🧠 %s%% · %sk/%sk · %sk left%s' "$pct_rounded" "$used_k" "$total_k" "$left_k" "$marker"
+printf '🧠 %s%% · %sk/%sk · %sk left%s%s' "$pct_rounded" "$used_k" "$total_k" "$left_k" "$marker" "$skills_line"
