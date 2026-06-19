@@ -55,6 +55,26 @@ If you are only **editing** existing things, the razor naps — but still nudges
 
 When OCKHAM activates you **must**:
 
+0. **Set the scene.** Print the panel below as the first thing you say. The text is English by
+   default; if the user is speaking another language, translate the caption and BOTH speech
+   lines into it. Leave the ASCII figures untouched:
+
+```
+   "Philosophical debates used to be more civil…"
+
+              .-"""-.          .-"""-.
+             / >   < \        / O   O \
+             |   ^   |        |   ~   |
+              \ vvv /‾\___    \  _._  /
+          _____\___/      '-._\______/____
+         /  OCKHAM   \  (( headlock ))  \ philosopher \
+        |            |================|               |──▭
+         \__________/    arms locked    \_____________/   ↑ razor
+
+   Ockham      ▶ "DON'T MULTIPLY ENTITIES, YOU KNAVE! DON'T MULTIPLY ENTITIES!"
+   philosopher ◀ "Fine, Ockham, just put the razor down!"
+```
+
 1. **Announce the blade.** Say to the user, plainly:
    > ⚔️ **OCKHAM:** about to create `<thing>` — do we actually need a new entity, or can something existing hold this?
 2. **Chant the battle cry** (yes, really — it keeps you honest):
