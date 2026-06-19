@@ -7,6 +7,21 @@
 
 input=$(cat)
 
+# Active skills invoked this session. The PostToolUse "Skill" hook appends each
+# invoked skill name to /tmp/claude-skills-<session_id>.log; SessionStart truncates it.
+# Deduped + length-capped so the bar stays readable. Zero model context.
+skills_line=""
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
+if [ -n "$sid" ] && [ -f "/tmp/claude-skills-$sid.log" ]; then
+  skills=$(awk 'NF && !seen[$0]++' "/tmp/claude-skills-$sid.log")
+  if [ -n "$skills" ]; then
+    count=$(printf '%s\n' "$skills" | wc -l | tr -d ' ')
+    list=$(printf '%s\n' "$skills" | paste -sd ',' -)
+    if [ "${#list}" -gt 60 ]; then list="${list:0:57}…"; fi
+    skills_line=" · 🛠 ${count}: ${list}"
+  fi
+fi
+
 pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
 used=$(printf '%s' "$input" | jq -r '.context_window.total_input_tokens // empty')
 total=$(printf '%s' "$input" | jq -r '.context_window.context_window_size // 200000')
