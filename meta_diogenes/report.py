@@ -59,6 +59,16 @@ def est_tokens(chars: int) -> int:
     return chars // 4  # rough: ~4 chars per token
 
 
+def skill_load_tokens(name: str, fallback_chars: int) -> int:
+    # The skill body is the whole SKILL.md, injected on load. Its tiny tool_result
+    # ("Launching skill…") understates it, so measure the file on disk instead.
+    path = os.path.join(os.path.expanduser("~/.claude/skills"), name, "SKILL.md")
+    try:
+        return est_tokens(os.path.getsize(path))
+    except OSError:
+        return est_tokens(fallback_chars)
+
+
 def human(n: float) -> str:
     if n >= 1_000_000:
         return f"{n / 1_000_000:.1f}M"
