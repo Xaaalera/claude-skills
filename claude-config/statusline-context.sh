@@ -7,18 +7,9 @@
 
 input=$(cat)
 
-# Active skills invoked this session. The PostToolUse "Skill" hook appends each
-# invoked skill name to /tmp/claude-skills-<session_id>.log; SessionStart truncates it.
-# We show only a deduped COUNT (the truncated name list was noise), plus a teaser
-# pointing at the meta_diogenes token-spend report. Zero model context.
-skills_line=" · 🛢 /meta_diogenes"
-sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
-if [ -n "$sid" ] && [ -f "/tmp/claude-skills-$sid.log" ]; then
-  count=$(awk 'NF && !seen[$0]++' "/tmp/claude-skills-$sid.log" | wc -l | tr -d ' ')
-  if [ "$count" -gt 0 ] 2>/dev/null; then
-    skills_line=" · 🛠 ${count} · 🛢 /meta_diogenes"
-  fi
-fi
+# Teaser pointing at the diogenes token-spend report. Short and static — the old
+# truncated skill-name list and the skill count were noise. Zero model context.
+skills_line=" · 🛢 /diogenes токены"
 
 pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
 used=$(printf '%s' "$input" | jq -r '.context_window.total_input_tokens // empty')
