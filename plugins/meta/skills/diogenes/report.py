@@ -141,7 +141,7 @@ def main() -> None:
         res_by_id[tid] = res_by_id.get(tid, 0) + size
     skill_rows = []
     for name, load_turn, tid in skills:
-        load_tok = est_tokens(res_by_id.get(tid, 0))
+        load_tok = skill_load_tokens(name, res_by_id.get(tid, 0))
         alive = max(0, turns - load_turn)
         skill_rows.append((name, load_tok, alive, load_tok * alive))
     skill_rows.sort(key=lambda r: r[3], reverse=True)
