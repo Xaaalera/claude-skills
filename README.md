@@ -61,6 +61,7 @@ Add to `~/.claude/settings.json`:
 <table>
 <tr><td><code>frontend-react_component-placement</code></td><td>Entry point BEFORE creating ANY React component, in any React codebase — search for an existing one first, decide placement (primitive / feature / layout / page-local), then route to the matching per-type skill. Framework-agnostic: governs component ARCHITECTURE, not any specific UI or styling library. Activate whenever about to add, scaffold, or hand-roll a component, panel, card, widget, or control.</td></tr>
 <tr><td><code>frontend-react_component-structure</code></td><td>Use this skill any time a new React component is created or an existing component is edited or reviewed.</td></tr>
+<tr><td><code>frontend-react_ui-primitive-reuse</code></td><td>Before creating ANY shared/reusable UI primitive in a React codebase (button, input, checkbox, radio, switch, select, textarea, dialog, tooltip, dropdown, badge, card, separator…), search the project's primitive library first to avoid duplicates — reuse or extend what exists; build new only when truly absent. Framework-agnostic (no specific UI or styling library assumed). Activate whenever about to add or hand-roll a reusable field/control/primitive.</td></tr>
 </table>
 
 ## Git
