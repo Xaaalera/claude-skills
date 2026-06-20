@@ -15,6 +15,8 @@ Usage:  python3 report.py [transcript.jsonl]
         (no arg -> newest transcript for the current working directory)
 """
 
+from __future__ import annotations
+
 import json
 import os
 import sys
