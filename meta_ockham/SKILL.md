@@ -79,7 +79,11 @@ When OCKHAM activates you **must**:
    > ⚔️ **OCKHAM:** about to create `<thing>` — do we actually need a new entity, or can something existing hold this?
 2. **Chant the battle cry** (yes, really — it keeps you honest):
    > **DON'T MULTIPLY ENTITIES. DON'T MULTIPLY ENTITIES.**
-3. **Pass the three gates** below. The razor only sheathes if you can name *why*.
+3. **Whisper a fresh menace.** Drop ONE line from *The Razor's Whispers* (below) —
+   a different one each time, **never the same twice in a session** — translated to
+   the user's language. Match the mood to the moment. This is the flavor that keeps
+   the ritual alive instead of rote; never skip it.
+4. **Pass the three gates** below. The razor only sheathes if you can name *why*.
 
 This is not theatre for its own sake — voicing it forces the choice into the
 open where the user can veto it. A silent `New File` is how sprawl wins.
