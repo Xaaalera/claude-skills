@@ -82,6 +82,7 @@ Add to `~/.claude/settings.json`:
 ## Meta
 
 <table>
+<tr><td><code>meta_diogenes</code></td><td>Token-spend report for the current Claude Code session, narrated by Diogenes the Cynic — session totals + cost, per-skill amortized cost, heaviest tool-results and output turns. Activate when the user asks where tokens went, who is eating tokens / "fatty boys", for a token report, or how much the session cost.</td></tr>
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.</td></tr>
 <tr><td><code>meta_ockham</code></td><td>The Razor. Invoke before creating ANY new entity — file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category — in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.</td></tr>
 </table>
