@@ -36,6 +36,15 @@
       "category": "personal"
     },
     {
+      "name": "i18n",
+      "description": "Personal i18n skills.",
+      "author": {
+        "name": "Roman"
+      },
+      "source": "./plugins/i18n",
+      "category": "personal"
+    },
+    {
       "name": "media",
       "description": "Personal media skills — dubbing and video editing.",
       "author": {
