@@ -78,6 +78,12 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>git_commit</code></td><td>Use this skill whenever the user asks to commit, create a commit, push changes, or says something like "commit this", "let's commit", "make a commit". Splits all uncommitted changes into atomic logical commits — one logical concern per commit, each describing at most 2-3 actions.</td></tr>
 </table>
 
+## i18n
+
+<table>
+<tr><td><code>i18n_ui-strings</code></td><td>Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text — labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy — in any project and any stack.</td></tr>
+</table>
+
 ## Media
 
 <table>
