@@ -84,6 +84,12 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>i18n_ui-strings</code></td><td>Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text — labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy — in any project and any stack.</td></tr>
 </table>
 
+## jira
+
+<table>
+<tr><td><code>jira_comment-style</code></td><td>Use whenever writing or posting a comment on a Jira issue/ticket — a status update, decision note, handoff, or "what's done / what's left" note, including via the Atlassian MCP addCommentToJiraIssue tool. Keeps comments short, essence-first, and understandable on the first read.</td></tr>
+</table>
+
 ## Media
 
 <table>

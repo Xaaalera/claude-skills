@@ -45,6 +45,15 @@
       "category": "personal"
     },
     {
+      "name": "jira",
+      "description": "Personal jira skills.",
+      "author": {
+        "name": "Roman"
+      },
+      "source": "./plugins/jira",
+      "category": "personal"
+    },
+    {
       "name": "media",
       "description": "Personal media skills — dubbing and video editing.",
       "author": {
