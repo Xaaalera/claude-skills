@@ -63,13 +63,15 @@ Then act on the answer (Step 3 if yes; otherwise stop).
 
 - If the repo exposes a Storybook MCP, call its `get-storybook-story-instructions`
   first and treat it as the source of truth for imports and patterns.
-- **Colocate**: `<Component>.stories.tsx` next to the component.
-- **Self-contained, abstract data.** A component is generic (prop-driven), so its
-  stories must be too. NEVER import the app's runtime or domain mock-data into a story
-  (that nails an abstract component to one concrete use). Define the sample data INSIDE
-  the story file — or, if large/shared, a sibling `<Component>.mock.ts` — and name it
-  after the component, e.g. `const <componentName>StorybookMock = …`. Make the values
-  illustrative and neutral ("Metric — rising"), not domain-specific ("Revenue").
+- **Placement — a `stories/` folder inside the component's folder (STRICT).** Keep the
+  story AND its data together there, e.g.
+  `…/<component-folder>/stories/<Component>.stories.tsx`.
+- **Mock data ALWAYS lives in its own file — never inline in the story (STRICT).**
+  Create `stories/<Component>.mock.ts` exporting `<componentName>StorybookMock`, and
+  import it into the story. NEVER import the app's runtime or domain mock-data (that
+  nails a generic component to one concrete use). Keep the values abstract and neutral
+  ("Metric — rising"), not domain-specific ("Revenue") — the component is generic, so
+  its fixtures stay generic.
 - Cover the **distinct states/variants** the component can reach (default, empty,
   error, loading, key prop/role variations) — not redundant duplicates. Use realistic
   or mock props.
