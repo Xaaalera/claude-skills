@@ -85,4 +85,5 @@ Then act on the answer (Step 3 if yes; otherwise stop).
 - [ ] Read `CLAUDE.md` for the recorded `Storybook stories:` preference
 - [ ] If absent: explained Storybook, asked the user, recorded `yes`/`no` in `CLAUDE.md`
 - [ ] If `yes`: wrote a colocated story covering the key states; surfaced the preview URL
+- [ ] Story data is self-contained abstract fixtures — no app/domain mock-data imported
 - [ ] If `no`: skipped story creation silently
