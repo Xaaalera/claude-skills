@@ -104,6 +104,7 @@ Add to `~/.claude/settings.json`:
 <tr><td><code>meta_lean-writing</code></td><td>When writing a spec/design doc or presenting a brainstorming result, write terse — short plain sentences, bullets over prose, no filler. Caveman-simple but technically precise. Applies to spec files and brainstorming/exploration summaries, NOT to normal conversation.</td></tr>
 <tr><td><code>meta_new-skill</code></td><td>Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement. For iterative creation with evals and testing, use the skill-creator plugin instead.</td></tr>
 <tr><td><code>meta_ockham</code></td><td>The Razor. Invoke before creating ANY new entity — file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category — in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.</td></tr>
+<tr><td><code>meta_wittgenstein</code></td><td>Clarity gate for spec/design docs and implementation plans. After a spec or plan is written or edited (e.g. under docs/superpowers/specs or docs/superpowers/plans, or any design doc), audit it so an average non-technical manager grasps every section's point and nothing is a bloated wall — then fix it in place. A reviewer persona, not a writing guide. NOT for normal chat, code, or comments.</td></tr>
 </table>
 
 ## salesforce-apex
