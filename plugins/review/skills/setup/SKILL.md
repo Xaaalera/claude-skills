@@ -16,18 +16,20 @@ offer to set it up: *"This repo has no review config — want me to install the 
 
 ## Install (one command)
 
-From the repo root, run the plugin's self-locating installer:
+From the root of the target repo, with no prior setup (needs the GitHub CLI, `gh auth login`):
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/install.sh"
+bash <(gh api repos/Xaaalera/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
 ```
 
-If `CLAUDE_PLUGIN_ROOT` is unset, locate the installed `review` plugin (under the Claude plugin cache,
-path containing `plugins/review`) and run its `install.sh` with the repo root as the argument.
+`bootstrap.sh` shallow-clones this marketplace and runs `install.sh` against the repo. If the plugin is
+already installed, you can run its installer directly instead: `bash "${CLAUDE_PLUGIN_ROOT}/install.sh"`.
 
 This vendors into the repo: `scripts/review/*` (harness + `package.json`), `.husky/pre-push`,
 `.github/workflows/review-gate.yml`, `.claude/review.config.schema.json`, and a seeded
-`.claude/review.config.json` (only if absent — an existing one is never clobbered).
+`.claude/review.config.json` (only if absent — an existing one is never clobbered). It also **merges**
+the marketplace + `review@<marketplace>` into the repo's committed `.claude/settings.json`, so teammates
+get the plugin on a one-time trust/approve prompt.
 
 ## Finish the setup
 
