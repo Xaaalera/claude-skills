@@ -4,6 +4,23 @@ My personal [Claude Code](https://claude.com/claude-code) skill library, publish
 **marketplace**. Each domain is a plugin; skills live inside it and are pulled via the marketplace —
 no copied folders, no duplication.
 
+## Plugins at a glance
+
+| Plugin | Skills |
+|---|---|
+| `diogenes` | `diogenes` |
+| `frontend-css` | `rem`, `scss-modules` |
+| `frontend-js` | `conventions` |
+| `frontend-react` | `component-placement`, `component-structure`, `feature-components`, `hooks-registry`, `layout-components`, `storybook-stories`, `ui-primitive-reuse` |
+| `git` | `commit` |
+| `i18n` | `ui-strings` |
+| `jira` | `comment-style` |
+| `meta` | `lean-writing`, `new-skill`, `ockham`, `wittgenstein` |
+| `review` | `setup` |
+| `salesforce` | `apex_test-authoring`, `dx_mcp`, `lwc_development`, `security_review-rules` |
+
+Full per-skill descriptions are in [Skills](#skills) below.
+
 ## Model
 
 `plugins/<domain>/` is hand-edited source. There is **no generator** — `plugins/`, this `README.md`,
