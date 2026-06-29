@@ -4,6 +4,20 @@ My personal [Claude Code](https://claude.com/claude-code) skill library, publish
 **marketplace**. Each domain is a plugin; skills live inside it and are pulled via the marketplace —
 no copied folders, no duplication.
 
+## Adopt the review gate in your repo
+
+One command, from the root of the repo you want to protect (needs the GitHub CLI, `gh auth login`):
+
+```bash
+bash <(gh api repos/Xaaalera/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
+```
+
+It vendors the gate (`scripts/review/*`, `.husky/pre-push`, `.github/workflows/review-gate.yml`), seeds
+`.claude/review.config.json`, and wires this marketplace + `review@xaaalera` into the repo's committed
+`.claude/settings.json`. Then commit, `(cd scripts/review && npm i)` + `npm i -D husky && npx husky init`
+to arm the local hook, and make **`review-gate`** a required status check in branch protection (the real
+enforcer). Tailor `.claude/review.config.json` per the `review:setup` skill.
+
 ## Plugins at a glance
 
 | Plugin | Skills |
