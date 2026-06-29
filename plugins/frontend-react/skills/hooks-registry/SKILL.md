@@ -1,5 +1,5 @@
 ---
-name: frontend-react_hooks-registry
+name: frontend-react:hooks-registry
 description: Before creating any custom React hook, check docs/hooks-registry.md to reuse an existing one; after adding/renaming/moving/removing a hook, update that registry in the same change. Activate whenever about to add or hand-roll a use* hook.
 ---
 
@@ -33,7 +33,7 @@ hook in the app.
 - **Library** → `src/lib/<area>/` — internal to one lib module.
 - **Local** → next to the feature/page — ONLY while it has a single consumer. The
   moment a second page/feature uses it, **promote it to `src/hooks/` and generalize**
-  (strip page-specific assumptions). This mirrors `frontend-react_component-placement`.
+  (strip page-specific assumptions). This mirrors `frontend-react:component-placement`.
 
 > Stores live in `src/stores/` and are NOT hooks — do not add them to the registry.
 

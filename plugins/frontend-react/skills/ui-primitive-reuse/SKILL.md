@@ -34,7 +34,7 @@ One-off, page-specific control → lighter (step 4), but still check the library
      following the existing wrapper conventions — whatever headless library and
      styling system the repo already uses. Match the stack; don't introduce a new one.
    - **One-off, page-specific →** keep it in that page's folder per
-     `frontend:react_component-structure`.
+     `frontend-react:component-structure`.
    - Prefer **wrapping an accessible headless primitive** (if the project uses one)
      over hand-rolling DOM — accessibility comes for free.
 5. If the project has a docs-retrieval step for its UI library, follow it before

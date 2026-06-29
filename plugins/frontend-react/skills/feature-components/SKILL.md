@@ -1,5 +1,5 @@
 ---
-description: Rules for FEATURE components in a React codebase — domain-coupled blocks that compose primitives and hold business logic/data. Activate when building or editing a domain feature (a panel/table/editor tied to your business data), or adding a new domain area. Framework-agnostic. Reached via frontend:react_component-placement.
+description: Rules for FEATURE components in a React codebase — domain-coupled blocks that compose primitives and hold business logic/data. Activate when building or editing a domain feature (a panel/table/editor tied to your business data), or adding a new domain area. Framework-agnostic. Reached via frontend-react:component-placement.
 ---
 
 # Feature Components — domain blocks built from primitives
@@ -15,7 +15,7 @@ primitives, never instead of them.
 
 Building or editing a domain-coupled block, or adding a new domain area. If the
 thing is generic and domain-agnostic, stop — it's a primitive
-(`frontend:react_ui-primitive-reuse`).
+(`frontend-react:ui-primitive-reuse`).
 
 ## Rules
 
@@ -23,13 +23,13 @@ thing is generic and domain-agnostic, stop — it's a primitive
    top-level domain only when it fits no existing one (⚔️ `meta:ockham` — prefer
    nesting under an existing domain).
 2. **Compose, don't re-implement.** Build UI from the project's primitives. Missing
-   a control? That's a primitive task first (`frontend:react_ui-primitive-reuse`) —
+   a control? That's a primitive task first (`frontend-react:ui-primitive-reuse`) —
    don't hand-roll it inside the feature.
 3. **Data through the project's data layer.** Fetch via the app's data hooks/client,
    never ad hoc inside the component and never bypassing the layer.
 4. **Business logic lives here, not in primitives.** State, derivations, and domain
    rules belong in the feature; primitives stay dumb and reusable.
-5. **Structure + i18n.** Follow `frontend:react_component-structure`; route
+5. **Structure + i18n.** Follow `frontend-react:component-structure`; route
    user-visible strings through the project's i18n setup.
 
 ## Checklist

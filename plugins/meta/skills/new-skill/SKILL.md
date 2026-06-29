@@ -33,7 +33,7 @@ In use, skills are **namespaced by domain**: `<domain>:<skill-name>`.
 
 | Domain (plugin) | Skill folder | Used as |
 |---|---|---|
-| `frontend` | `css_rem`, `react_component-structure` | `frontend:css_rem`, `frontend:react_component-structure` |
+| `frontend` | `css_rem`, `react_component-structure` | `frontend-css:rem`, `frontend-react:component-structure` |
 | `git` | `commit` | `git:commit` |
 | `meta` | `new-skill`, `ockham` | `meta:new-skill`, `meta:ockham` |
 | `media` | `dub`, `video-editing` | `media:dub`, `media:video-editing` |
