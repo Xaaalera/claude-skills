@@ -33,13 +33,14 @@ In use, skills are **namespaced by domain**: `<domain>:<skill-name>`.
 
 | Domain (plugin) | Skill folder | Used as |
 |---|---|---|
-| `frontend` | `css_rem`, `react_component-structure` | `frontend-css:rem`, `frontend-react:component-structure` |
+| `frontend-css` | `rem`, `scss-modules` | `frontend-css:rem`, `frontend-css:scss-modules` |
+| `frontend-react` | `component-placement`, `hooks-registry` | `frontend-react:component-placement`, `frontend-react:hooks-registry` |
 | `git` | `commit` | `git:commit` |
 | `meta` | `new-skill`, `ockham` | `meta:new-skill`, `meta:ockham` |
-| `media` | `dub`, `video-editing` | `media:dub`, `media:video-editing` |
 
-Within a domain the short name is fine (`commit`, `dub`) — the `<domain>:` namespace disambiguates, so
-it never collides with a project's own skill.
+Within a domain the short name is fine (`commit`, `rem`) — the `<domain>:` namespace disambiguates, so
+it never collides with a project's own skill. Split a broad domain into finer plugins
+(`frontend-css`, `frontend-react`, `frontend-js`) when you want to enable subsets independently.
 
 ---
 
