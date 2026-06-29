@@ -1,10 +1,10 @@
 {
   "name": "xaaalera",
   "owner": {
-    "name": "Roman"
+    "name": "Xaaalera"
   },
   "metadata": {
-    "description": "Roman's personal Claude Code skills, grouped by domain. Auto-generated from the flat skill folders by sync-skills.sh.",
+    "description": "Xaaalera personal Claude Code skills, grouped by domain. marketplace.json is generated from plugins/<domain>/plugin.json; plugins/ and README.md are hand-edited.",
     "version": "1.0.0"
   },
   "plugins": [
@@ -12,7 +12,7 @@
       "name": "diogenes",
       "description": "Personal diogenes skills.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/diogenes",
       "category": "personal"
@@ -21,7 +21,7 @@
       "name": "frontend",
       "description": "Personal frontend skills — CSS units, SCSS modules, React component structure.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/frontend",
       "category": "personal"
@@ -30,7 +30,7 @@
       "name": "git",
       "description": "Personal Git workflow skills — atomic commit splitting.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/git",
       "category": "personal"
@@ -39,7 +39,7 @@
       "name": "i18n",
       "description": "Personal i18n skills.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/i18n",
       "category": "personal"
@@ -48,7 +48,7 @@
       "name": "jira",
       "description": "Personal jira skills.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/jira",
       "category": "personal"
@@ -57,7 +57,7 @@
       "name": "media",
       "description": "Personal media skills — dubbing and video editing.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/media",
       "category": "personal"
@@ -66,16 +66,25 @@
       "name": "meta",
       "description": "Personal meta skills — authoring new skills.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/meta",
+      "category": "personal"
+    },
+    {
+      "name": "review",
+      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/review",
       "category": "personal"
     },
     {
       "name": "salesforce",
       "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
       "author": {
-        "name": "Roman"
+        "name": "Xaaalera"
       },
       "source": "./plugins/salesforce",
       "category": "personal"
