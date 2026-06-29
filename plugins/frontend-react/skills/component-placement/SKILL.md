@@ -35,16 +35,16 @@ Invoke `meta:ockham`. The cheapest component is the one that already exists.
 ## Step 2 — Decide placement (decision tree)
 | The component is… | → conceptually a | → follow skill |
 |---|---|---|
-| Generic, reusable, **no** domain knowledge / business logic (button, input, badge, dialog…) | **primitive** | `frontend:react_ui-primitive-reuse` |
-| **Domain-coupled** (knows your business objects/flows), composes primitives, holds data/logic | **feature** | `frontend:react_feature-components` |
-| App chrome — shell, navigation, top bar, sidebar, global overlays | **layout** | `frontend:react_layout-components` |
-| Used by **one** page only, not reused | **page-local** | `frontend:react_component-structure` |
+| Generic, reusable, **no** domain knowledge / business logic (button, input, badge, dialog…) | **primitive** | `frontend-react:ui-primitive-reuse` |
+| **Domain-coupled** (knows your business objects/flows), composes primitives, holds data/logic | **feature** | `frontend-react:feature-components` |
+| App chrome — shell, navigation, top bar, sidebar, global overlays | **layout** | `frontend-react:layout-components` |
+| Used by **one** page only, not reused | **page-local** | `frontend-react:component-structure` |
 
 Unsure primitive vs feature? Does it import anything domain-specific (a business
 model, a data hook, another feature)? Yes → feature. No → primitive.
 
 ## Step 3 — Structure
-Once placed, `frontend:react_component-structure` governs the folder shape. Match
+Once placed, `frontend-react:component-structure` governs the folder shape. Match
 the project's existing styling and i18n approach — don't introduce a new one.
 
 ## Step 4 — Catalog it (if the project has one)

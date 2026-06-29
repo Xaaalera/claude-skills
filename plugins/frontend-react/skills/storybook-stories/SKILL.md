@@ -12,7 +12,7 @@ decision instead of a guess made fresh every time.
 
 Right after creating (or finishing) ANY new React component, in ANY project —
 the moment you would otherwise just move on from a fresh `.tsx`. Pairs with
-`frontend:react_component-placement`: its "catalog it" step routes here.
+`frontend-react:component-placement`: its "catalog it" step routes here.
 
 ---
 

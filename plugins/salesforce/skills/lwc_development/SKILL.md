@@ -9,7 +9,7 @@ House standard for working with Lightning Web Components and Aura.
 
 General JS/TS style applies here too (arrow functions, single quotes, full
 variable names, braces for all control structures, small readable functions) —
-see `frontend-js_conventions`. This skill adds the LWC-specific rules.
+see `frontend-js:conventions`. This skill adds the LWC-specific rules.
 
 ## DOM access
 
@@ -22,7 +22,7 @@ see `frontend-js_conventions`. This skill adds the LWC-specific rules.
 
 - Do **not** use SCSS in LWC. Style through the component's own CSS file and use
   CSS custom properties (`var(--token)`) for shared values.
-- Plain-web / React styling (SCSS, modules) lives in `frontend-css_scss-modules`.
+- Plain-web / React styling (SCSS, modules) lives in `frontend-css:scss-modules`.
 
 ## Related architecture
 

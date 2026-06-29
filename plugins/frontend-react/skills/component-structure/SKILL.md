@@ -14,8 +14,8 @@ Any time a new React component is created, or an existing component is edited or
 
 Before writing any component code or styles, activate both of these skills and apply their rules throughout:
 
-1. **Activate `frontend-css_scss-modules` skill** — governs colors, spacing, file extension, variables
-2. **Activate `frontend-css_rem` skill** — governs all dimensional values
+1. **Activate `frontend-css:scss-modules` skill** — governs colors, spacing, file extension, variables
+2. **Activate `frontend-css:rem` skill** — governs all dimensional values
 
 Everything in this skill assumes those two are already in effect.
 
@@ -111,10 +111,10 @@ $item-height: 2.5rem;
 }
 ```
 
-Follow `frontend-css_scss-modules` skill for: colors (`$color-*` / `var(--color-*)`),
+Follow `frontend-css:scss-modules` skill for: colors (`$color-*` / `var(--color-*)`),
 spacing (`$space-*`, `$radius-*`), and file extension (`.scss` only).
 
-Follow `frontend-css_rem` skill for: all dimensional values in rem except
+Follow `frontend-css:rem` skill for: all dimensional values in rem except
 border-width, box-shadow offsets, and SVG attributes.
 
 ---
@@ -223,9 +223,9 @@ export type { FeatureBlockItemData } from './FeatureBlockItem';
 - [ ] `index.ts` barrel exports the component and its public types
 - [ ] BEM: block matches folder name, elements use `&__`, modifiers use `&--`
 - [ ] No inline `onMouseEnter`/`onMouseLeave` — hover states are in SCSS
-- [ ] Colors from `$color-*` or `var(--color-*)` (see `frontend-css_scss-modules`)
-- [ ] Spacing from `$space-*` / `$radius-*` (see `frontend-css_scss-modules`)
-- [ ] All sizes in rem (see `frontend-css_rem`)
+- [ ] Colors from `$color-*` or `var(--color-*)` (see `frontend-css:scss-modules`)
+- [ ] Spacing from `$space-*` / `$radius-*` (see `frontend-css:scss-modules`)
+- [ ] All sizes in rem (see `frontend-css:rem`)
 - [ ] All user-visible strings use `useTranslation` — no hardcoded text in JSX
 - [ ] Translation keys added to the correct JSON file in `src/i18n/locales/en/`
 - [ ] New page namespace registered in `src/i18n/index.ts` (if applicable)

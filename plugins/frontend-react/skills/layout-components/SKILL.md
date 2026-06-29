@@ -1,5 +1,5 @@
 ---
-description: Rules for LAYOUT / app-chrome components in a React codebase — the shell, top bar, sidebar, command palette, and global overlays that frame every page. Activate when editing or adding app chrome. Framework-agnostic. Reached via frontend:react_component-placement.
+description: Rules for LAYOUT / app-chrome components in a React codebase — the shell, top bar, sidebar, command palette, and global overlays that frame every page. Activate when editing or adding app chrome. Framework-agnostic. Reached via frontend-react:component-placement.
 ---
 
 # Layout Components — the frame around every page
@@ -15,7 +15,7 @@ domain.
 
 Editing or adding app chrome (shell, top bar, sidebar, command palette, global
 overlays). If the component renders/edits domain data, it's a feature, not layout
-(`frontend:react_feature-components`).
+(`frontend-react:feature-components`).
 
 ## Rules
 
@@ -28,7 +28,7 @@ overlays). If the component renders/edits domain data, it's a feature, not layou
 4. **Routing & nav through config.** Any route / nav item / section / guard change
    goes through the project's routing configuration (the source of truth), not ad
    hoc inside a layout component.
-5. **Structure + i18n.** Follow `frontend:react_component-structure`; route strings
+5. **Structure + i18n.** Follow `frontend-react:component-structure`; route strings
    through the project's i18n setup.
 
 ## Checklist

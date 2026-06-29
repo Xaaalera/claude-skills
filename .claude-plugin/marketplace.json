@@ -18,12 +18,30 @@
       "category": "personal"
     },
     {
-      "name": "frontend",
-      "description": "Personal frontend skills — CSS units, SCSS modules, React component structure.",
+      "name": "frontend-css",
+      "description": "Personal frontend CSS skills — rem units, SCSS modules.",
       "author": {
         "name": "Xaaalera"
       },
-      "source": "./plugins/frontend",
+      "source": "./plugins/frontend-css",
+      "category": "personal"
+    },
+    {
+      "name": "frontend-js",
+      "description": "Personal JavaScript/TypeScript style conventions.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend-js",
+      "category": "personal"
+    },
+    {
+      "name": "frontend-react",
+      "description": "Personal frontend React skills — component placement/structure, hooks registry, primitive reuse, layout, stories.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend-react",
       "category": "personal"
     },
     {

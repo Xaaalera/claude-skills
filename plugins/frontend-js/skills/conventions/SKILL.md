@@ -1,5 +1,5 @@
 ---
-name: frontend-js_conventions
+name: frontend-js:conventions
 description: House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions. Use whenever writing or editing JavaScript or TypeScript (React, Node, or any JS/TS).
 ---
 
