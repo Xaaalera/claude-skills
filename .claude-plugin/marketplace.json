@@ -4,7 +4,7 @@
     "name": "Xaaalera"
   },
   "metadata": {
-    "description": "Xaaalera's personal Claude Code skills, grouped by domain. Auto-generated from the flat skill folders by sync-skills.sh.",
+    "description": "Xaaalera personal Claude Code skills, grouped by domain. marketplace.json is generated from plugins/<domain>/plugin.json; plugins/ and README.md are hand-edited.",
     "version": "1.0.0"
   },
   "plugins": [
@@ -69,6 +69,15 @@
         "name": "Xaaalera"
       },
       "source": "./plugins/meta",
+      "category": "personal"
+    },
+    {
+      "name": "review",
+      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/review",
       "category": "personal"
     },
     {
