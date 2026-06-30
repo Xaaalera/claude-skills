@@ -33,9 +33,14 @@ const parseHunkStart = (line: string): number => {
 /**
  * Scan a unified diff for secret candidates on ADDED lines, tracking the real file and
  * new-file line number. A candidate is skipped only when its matched VALUE looks like a
- * documented example/placeholder.
+ * documented example/placeholder — either via the built-in ALLOWLIST or a project marker
+ * from `extraAllowlist` (the repo's `secretAllowlist` config, matched as a substring of
+ * the value).
  */
-export const scanForSecrets = (diffText: string): SecretFinding[] => {
+export const scanForSecrets = (diffText: string, extraAllowlist: string[] = []): SecretFinding[] => {
+  const allowed = (value: string): boolean =>
+    ALLOWLIST.test(value) ||
+    extraAllowlist.some((marker) => value.toLowerCase().includes(marker.toLowerCase()));
   const findings: SecretFinding[] = [];
   let currentFile = '';
   let newLine = 0;
@@ -63,7 +68,7 @@ export const scanForSecrets = (diffText: string): SecretFinding[] => {
           return;
         }
         const value = match[1] ?? match[0];
-        if (ALLOWLIST.test(value)) {
+        if (allowed(value)) {
           return;
         }
         findings.push({ pattern: pattern.name, file: currentFile, line: newLine, excerpt: content.trim().slice(0, 80) });
