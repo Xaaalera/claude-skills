@@ -1,11 +1,13 @@
 import { hashDiff, getCumulativeDiff, resolveBase } from './diffHash';
 import { readAttestation, isAttestationValid, type Attestation } from './attestation';
 import { scanForSecrets, type SecretFinding } from './secretScan';
+import { loadConfig } from './config';
 
 export interface GateInput {
   hash: string;
   attestation: Attestation | null;
   diff: string;
+  secretAllowlist?: string[];
 }
 
 export interface GateResult {
@@ -17,7 +19,7 @@ export interface GateResult {
 /** Pure decision: valid passing attestation for this hash AND no secret candidates. */
 export const evaluateGate = (input: GateInput): GateResult => {
   const attestationOk = isAttestationValid(input.attestation, input.hash);
-  const secrets = scanForSecrets(input.diff);
+  const secrets = scanForSecrets(input.diff, input.secretAllowlist ?? []);
   return { ok: attestationOk && secrets.length === 0, attestationOk, secrets };
 };
 
@@ -33,16 +35,17 @@ export const runGate = (): GateResult => {
   const base = baseArgIndex >= 0 ? process.argv[baseArgIndex + 1] : resolveBase();
   const secretsOnly = process.argv.includes('--secrets-only');
   const diff = getCumulativeDiff(base);
+  const { secretAllowlist } = loadConfig();
 
   if (secretsOnly) {
-    const secrets = scanForSecrets(diff);
+    const secrets = scanForSecrets(diff, secretAllowlist);
     return { ok: secrets.length === 0, attestationOk: true, secrets };
   }
 
   // Hash the SAME diff we scanned (honors --base) so the hash and the attestation always
   // agree on the base — no second, divergent base resolution.
   const hash = hashDiff(diff);
-  return evaluateGate({ hash, attestation: readAttestation(), diff });
+  return evaluateGate({ hash, attestation: readAttestation(), diff, secretAllowlist });
 };
 
 const printReport = (result: GateResult): void => {
@@ -71,9 +74,10 @@ const printReport = (result: GateResult): void => {
       console.error(`         ${finding.excerpt}`);
     });
     console.error('     → Remove the secret (use env / a secret store). If it is a false');
-    console.error('       positive (test fixture / docs example), make the value match the');
-    console.error('       allowlist (EXAMPLE/PLACEHOLDER/…) or build it so the literal is not');
-    console.error('       in source.');
+    console.error('       positive (test fixture / docs example), add a marker to');
+    console.error('       `secretAllowlist` in .claude/review.config.json (matched as a substring');
+    console.error('       of the value), make it match EXAMPLE/PLACEHOLDER/…, or keep the literal');
+    console.error('       out of source.');
     console.error('');
   }
 

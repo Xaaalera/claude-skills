@@ -19,6 +19,10 @@ describe('smoke', () => {
     expect(scanForSecrets(clean)).toHaveLength(0);
   });
 
+  it('a secretAllowlist marker suppresses a matching planted value', () => {
+    expect(scanForSecrets(planted, ['AKIA0000000000000000'])).toHaveLength(0);
+  });
+
   it('gate blocks when a secret is present even with a valid attestation', () => {
     const hash = 'abc';
     const attestation = { diffHash: hash, perAgent: {}, overall: 'PASS' as const, timestamp: 't' };

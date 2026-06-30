@@ -1,18 +1,32 @@
 ---
-description: Run the configured pre-push reviewer agents over the cumulative diff, score it, and on all-pass write the review attestation.
+description: Run the configured pre-push reviewer agents + secret scan over the cumulative diff, always print a results table, and on all-pass write the review attestation.
 ---
 
 Run the mandatory pre-push review.
 
 1. Resolve the base and the change set. Base: `npx tsx -e "import('./scripts/review/diffHash.ts').then((m) => process.stdout.write(m.resolveBase()))"`. Then run `git diff <base>..HEAD` and `git diff --name-only <base>..HEAD`. If the diff is empty, tell the user there is nothing to review and stop.
 
-2. Load the active reviewer set: `npx tsx -e "import('./scripts/review/config.ts').then((m) => process.stdout.write(JSON.stringify(m.loadConfig().agents.filter((a) => a.enabled))))"`. Dispatch ALL enabled reviewers IN PARALLEL (a single message with one Agent tool call each). Give each agent: the cumulative diff, the changed-file list, and its config block (`zones`, `skills`, `rules`, `pairedDocs`, `threshold`, `extensionSkill`). Each returns its JSON verdict object `{ agent, score, verdict, hasBlocker, findings[], advisories[] }`.
+2. Run the deterministic secret scan over the SAME change set: `npx tsx scripts/review/gate.ts --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the agent scores.
 
-3. Apply ALL-PASS: the change set passes only if EVERY dispatched agent has `verdict: "PASS"` (its `score >= threshold` AND `hasBlocker: false`), using each agent's configured threshold.
+3. Load the active reviewer set: `npx tsx -e "import('./scripts/review/config.ts').then((m) => process.stdout.write(JSON.stringify(m.loadConfig().agents.filter((a) => a.enabled))))"`. Dispatch ALL enabled reviewers IN PARALLEL (a single message with one Agent tool call each). Give each agent: the cumulative diff, the changed-file list, and its config block (`zones`, `skills`, `rules`, `pairedDocs`, `threshold`, `extensionSkill`). Each returns its JSON verdict object `{ agent, score, verdict, hasBlocker, findings[], advisories[] }`.
 
-4. On any FAIL: print a report grouped by agent — `agent: score/threshold verdict`, then each finding as `severity  file:line — problem -> fix`, advisories listed separately. Do NOT write an attestation. Do NOT edit code (reviewers report only). Stop here.
+4. Compute the OVERALL verdict: PASS only if EVERY agent has `verdict: "PASS"` (its `score >= threshold` AND `hasBlocker: false`, using each agent's configured threshold) AND the secret scan found ZERO secrets. Otherwise FAIL. A failing check is FAIL, never PASS — do not report PASS when any agent failed or any secret was found.
 
-5. On all-pass: build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` from the results and write the attestation:
+5. ALWAYS print, regardless of outcome, a results table FIRST — one row per agent, then a secret-scan row, then a bold OVERALL row:
+
+   | # | Agent | Score | Threshold | Verdict |
+   |---|-------|:-----:|:---------:|:-------:|
+   | 1 | conventions | 10 | 7 | PASS |
+   | 2 | architecture | 9 | 8 | PASS |
+   | ... | ... | ... | ... | ... |
+   | - | secret-scan | - | - | CLEAN  /  N found |
+   | - | **OVERALL** | - | - | **PASS  /  FAIL** |
+
+   Then a **Recommendations** section: for each agent that has any, list its `findings` as `severity  file:line - problem -> fix` and its `advisories`. List each secret finding as `pattern  file:line`. Omit agents that returned nothing.
+
+6. On OVERALL FAIL: do NOT write an attestation and do NOT edit code (reviewers report only). State plainly that the gate is RED, then stop (the table + recommendations are already printed).
+
+7. On OVERALL PASS: build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` and write the attestation:
    `npx tsx scripts/review/writeAttestation.ts '<perAgentJson>'`
    This writes `.review/attestation.json`. Then commit it:
    `git add .review/attestation.json && git commit -m "chore: review attestation"`
