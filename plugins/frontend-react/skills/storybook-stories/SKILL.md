@@ -75,6 +75,11 @@ Then act on the answer (Step 3 if yes; otherwise stop).
 - Cover the **distinct states/variants** the component can reach (default, empty,
   error, loading, key prop/role variations) — not redundant duplicates. Use realistic
   or mock props.
+- **If the component has a colocated skeleton** (`<Component>Skeleton`): don't give the
+  skeleton its own story file — treat it as a *state*. In each story/case render the
+  real component with its skeleton **stacked directly below it** (normal on top), so
+  the two compare at a glance; a shared decorator across the states keeps it DRY. See
+  the `skeleton-components` skill.
 - Match the project's existing story conventions (framework import path, test helpers,
   decorators) — don't introduce a new style.
 - After writing, surface the **preview URL(s)** (Storybook MCP `preview-stories`, or the
