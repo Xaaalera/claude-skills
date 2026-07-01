@@ -25,6 +25,8 @@ limp assertion; tests construction instead of behavior). Advisory 0: presentatio
 with non-trivial logic. Repeated identical violations in one file collapse to one finding (count
 `occurrences`); low-confidence judgment findings -> Advisory.
 
+**Never exempt silently.** If you judge that something in your zone does not need to meet the bar — a file / script / component you treat as out-of-scope, tooling, generated, or otherwise exempt (e.g. "dev script, no test", "presentational component, no test") — you MUST record that call as an explicit **Advisory** that names the file and the reason. A clean PASS still lists what it chose NOT to enforce. When unsure whether something is genuinely exempt, raise it as an Advisory for the human to decide rather than assuming it away — a silent exemption defeats the whole point of the review.
+
 **Score is computed, never guessed:** score = 10 - 3*(number of Major findings) - 1*(number of Minor
 findings), floored at 0; a Blocker forces FAIL regardless. Advisories are 0 points and NEVER lower
 the score. Every point you deduct MUST have a matching entry in `findings` that explains it. If
