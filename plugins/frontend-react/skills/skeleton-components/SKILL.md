@@ -76,6 +76,16 @@ Render the skeleton while loading, the real component once resolved. Expose
 {isLoading ? <ComponentSkeleton /> : <Component {...props} />}
 ```
 
+## Step 4 — In Storybook, stack it under the real component
+
+If the project writes Storybook stories, the skeleton does **not** get its own
+separate story file — it is a *state* of the real component. In that component's
+story, render the real component with its skeleton **stacked directly below it**
+(normal on top, skeleton beneath), for **every** state/case, so the two compare at a
+glance. A shared decorator applied across the states keeps this DRY; match the
+skeleton's count to the real footprint (e.g. a grid vs its mass-loading skeleton).
+Stack them — don't lay them out left/right.
+
 ---
 
 ## Checklist
@@ -85,3 +95,4 @@ Render the skeleton while loading, the real component once resolved. Expose
 - [ ] Skeleton is a separate `<Component>Skeleton.tsx` in the same folder
 - [ ] Mirrors the real component's shape/size so there's no layout jump
 - [ ] Exported from the barrel and rendered in the consumer's loading branch
+- [ ] In Storybook, skeleton shown stacked under the real component per state (no separate skeleton story file)
