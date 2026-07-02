@@ -15,7 +15,7 @@ These live in auto-activating skills (zero context cost until the relevant work
 starts) — do not duplicate them here:
 
 - Apex / Apex tests → skill `salesforce:apex_test-authoring`
-- Apex error handling / error codes → skill `salesforce:apex_error-handling`
+- Error handling / error codes (any layer) → skill `meta:error-handling`
 - JS / TS style → skill `frontend-js:conventions`
 - Salesforce LWC / Aura → skill `salesforce:lwc_development`
 
