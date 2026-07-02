@@ -137,10 +137,6 @@ Project skills win over plugin skills on a name clash.
   a secret-scan + attestation git/CI gate, all driven by a per-project `.claude/review.config.json`.
 
 ### `salesforce`
-- **`salesforce:apex_error-handling`** — Uniform package error-code contract: central normalizer
-  (`ApiErrors` pattern), camelCase envelope `{ codeNumber, name, detail, debug? }`, and a
-  `docs/ERROR_CODES.md` registry. Activate when adding or handling any Apex error path — throwing
-  from a controller/REST resource/Canvas bridge, or when a raw platform error leaks to a client.
 - **`salesforce:apex_test-authoring`** — Author and maintain Apex unit tests to a strict house standard:
   per-object fluent-builder factories, `@TestSetup`, `Assert.*`, FLS/user-mode, and bulk + positive +
   negative coverage. Every new Apex class gets a matching test class in the same change.
