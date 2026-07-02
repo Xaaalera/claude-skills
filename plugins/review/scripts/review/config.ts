@@ -27,6 +27,7 @@ export interface AgentConfig {
 export interface ReviewConfig {
   base?: string;
   secretAllowlist: string[];
+  persona: 'twitch' | 'plain';
   agents: AgentConfig[];
 }
 
@@ -44,6 +45,7 @@ const agentDefault = (name: string, threshold: number): AgentConfig => ({
 
 export const DEFAULT_CONFIG: ReviewConfig = {
   secretAllowlist: [],
+  persona: 'twitch',
   agents: [
     agentDefault('conventions', 7),
     agentDefault('architecture', 8),
@@ -78,6 +80,7 @@ export const loadConfig = (cwd: string = process.cwd()): ReviewConfig => {
   return {
     base: parsed.base ?? DEFAULT_CONFIG.base,
     secretAllowlist: parsed.secretAllowlist ?? DEFAULT_CONFIG.secretAllowlist,
+    persona: parsed.persona ?? DEFAULT_CONFIG.persona,
     agents: [...agents, ...extra],
   };
 };
