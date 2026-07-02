@@ -30,7 +30,7 @@ enforcer). Tailor `.claude/review.config.json` per the `review:setup` skill.
 | `git` | `commit` |
 | `i18n` | `ui-strings` |
 | `jira` | `comment-style` |
-| `meta` | `lean-writing`, `new-skill`, `ockham`, `wittgenstein` |
+| `meta` | `error-handling`, `lean-writing`, `new-skill`, `ockham`, `wittgenstein` |
 | `review` | `setup` |
 | `salesforce` | `apex_error-handling`, `apex_test-authoring`, `dx_mcp`, `lwc_development`, `security_review-rules`, `sf-deploy-test`, `sf-run` |
 
