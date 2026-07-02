@@ -13,9 +13,9 @@ regardless of where it came from.
 ```json
 { "error": { "code": 403, "status": "PERMISSION_DENIED", "message": "…",
     "details": [
-      { "@type": "type.googleapis.com/google.rpc.ErrorInfo", "reason": "INSUFFICIENT_ACCESS",
+      { "@type": "ErrorInfo", "reason": "INSUFFICIENT_ACCESS",
         "domain": "…", "metadata": { } },
-      { "@type": "type.googleapis.com/google.rpc.DebugInfo", "detail": "…", "stackEntries": ["…"] }
+      { "@type": "DebugInfo", "detail": "…", "stackEntries": ["…"] }
     ] } }
 ```
 
