@@ -23,6 +23,7 @@ enforcer). Tailor `.claude/review.config.json` per the `review:setup` skill.
 | Plugin | Skills |
 |---|---|
 | `diogenes` | `diogenes` |
+| `frontend` | `fe-check` |
 | `frontend-css` | `rem`, `scss-modules` |
 | `frontend-js` | `conventions` |
 | `frontend-react` | `component-placement`, `component-structure`, `feature-components`, `hooks-registry`, `layout-components`, `storybook-stories`, `ui-primitive-reuse` |
