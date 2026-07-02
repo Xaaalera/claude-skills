@@ -135,6 +135,15 @@ Project skills win over plugin skills on a name clash.
 - **`review:setup`** — Install and target the stack-agnostic pre-push review framework in a repo:
   5 reviewer agents (security, architecture, conventions, tests, docs), the `/review` orchestrator, and
   a secret-scan + attestation git/CI gate, all driven by a per-project `.claude/review.config.json`.
+- **`review-scavenger` agent** — Cruft & Reuse reviewer (threshold 8/10). Blocks when a diff introduces
+  duplicate files/hooks/services/utils or raw re-implementations of existing transports. Whole-repo aware
+  but gates only on the diff. Pre-existing cruft → Advisory only, never a blocker. Supports a `persona`
+  toggle (`twitch` / `plain`) for voice; verdict and scores are identical either way.
+- **`/scavenge` command** — On-demand full-app hunt (not pre-push). Sweeps `src/` and `server/` for dead
+  files, unused exports, unused dependencies, duplicated logic, and consolidatable services. Appends a
+  deduped `🐀 Scavenger` section to `docs/superpowers/BACKLOG.md`; re-running never duplicates bullets.
+  Prints an atmospheric Twitch report (ASCII rat + plague-rat narration) when `persona: twitch`, or a
+  plain table when `persona: plain`.
 
 ### `salesforce`
 - **`salesforce:apex_test-authoring`** — Author and maintain Apex unit tests to a strict house standard:
