@@ -8,7 +8,7 @@ Run the mandatory pre-push review.
 
 2. Run the deterministic secret scan over the SAME change set: `npx tsx scripts/review/gate.ts --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the agent scores.
 
-3. Load the active reviewer set: `npx tsx -e "import('./scripts/review/config.ts').then((m) => process.stdout.write(JSON.stringify(m.loadConfig().agents.filter((a) => a.enabled))))"`. Dispatch ALL enabled reviewers IN PARALLEL (a single message with one Agent tool call each). Give each agent: the cumulative diff, the changed-file list, and its config block (`zones`, `skills`, `rules`, `pairedDocs`, `threshold`, `extensionSkill`). Each returns its JSON verdict object `{ agent, score, verdict, hasBlocker, findings[], advisories[] }`.
+3. Load the active reviewer set: `npx tsx -e "import('./scripts/review/config.ts').then((m) => process.stdout.write(JSON.stringify(m.loadConfig())))"`. Dispatch ALL enabled reviewers IN PARALLEL (a single message with one Agent tool call each). Give each agent: the cumulative diff, the changed-file list, and its config block (`zones`, `skills`, `rules`, `pairedDocs`, `threshold`, `extensionSkill`, and the top-level `persona` from the loaded config). Each returns its JSON verdict object `{ agent, score, verdict, hasBlocker, findings[], advisories[] }`.
 
 4. Compute the OVERALL verdict: PASS only if EVERY agent has `verdict: "PASS"` (its `score >= threshold` AND `hasBlocker: false`, using each agent's configured threshold) AND the secret scan found ZERO secrets. Otherwise FAIL. A failing check is FAIL, never PASS — do not report PASS when any agent failed or any secret was found.
 

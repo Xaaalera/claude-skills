@@ -5,6 +5,12 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "persona": {
+      "type": "string",
+      "enum": ["twitch", "plain"],
+      "default": "twitch",
+      "description": "Voice/flavor toggle for reviewer agents that support it (e.g. scavenger). 'twitch' = themed Twitch plague-rat voice; 'plain' = neutral prose. Substance (verdict/findings) is identical either way."
+    },
     "base": {
       "type": "string",
       "description": "Git base ref for the cumulative diff. Defaults to the branch upstream, else origin/main."
