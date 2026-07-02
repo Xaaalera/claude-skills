@@ -17,3 +17,9 @@ starts) — do not duplicate them here:
 - Apex / Apex tests → skill `salesforce:apex_test-authoring`
 - JS / TS style → skill `frontend-js:conventions`
 - Salesforce LWC / Aura → skill `salesforce:lwc_development`
+
+## Runtime dev harness (prefer these over hand-rolled commands)
+
+- Run anonymous Apex / SOQL on an org → skill `salesforce:sf-run`
+- Deploy Apex/metadata + run tests → skill `salesforce:sf-deploy-test`
+- Typecheck + run frontend tests → skill `frontend:fe-check`
