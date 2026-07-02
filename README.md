@@ -118,6 +118,10 @@ Project skills win over plugin skills on a name clash.
   one-line bullets, understandable on the first read. Use before posting any ticket comment.
 
 ### `meta`
+- **`meta:error-handling`** — One error format everywhere: the Google AIP-193 / `google.rpc.Status`
+  envelope on every layer (Apex, BFF, client). Activate when adding an error path, throwing from a
+  service/route/controller, mapping an upstream failure, or reading an error on the client. If the
+  package has no error-code registry, create one.
 - **`meta:lean-writing`** — Write specs, design docs, and brainstorm summaries terse: short plain
   sentences, bullets over prose, no filler — caveman-simple but technically precise.
 - **`meta:new-skill`** — How to author a new skill in the plugin model: naming, `SKILL.md` structure,
