@@ -1,5 +1,4 @@
 ---
-name: frontend-react:hooks-registry
 description: Before creating any custom React hook, check docs/hooks-registry.md to reuse an existing one; after adding/renaming/moving/removing a hook, update that registry in the same change. Activate whenever about to add or hand-roll a use* hook.
 ---
 

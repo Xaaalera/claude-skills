@@ -1,5 +1,4 @@
 ---
-name: salesforce-security_review-rules
 description: Security rules for reviewing changes — secret leakage, BFF route auth, client token boundary, injection, and the Salesforce Security Review bar for Apex. Activate when reviewing a diff for security or writing security-sensitive code (BFF routes, Apex REST, auth, SOQL).
 ---
 

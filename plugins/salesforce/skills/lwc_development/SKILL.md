@@ -1,5 +1,4 @@
 ---
-name: salesforce-lwc_development
 description: House rules for developing Salesforce Lightning Web Components (LWC) and Aura. Use whenever creating or editing an LWC/Aura bundle — a component .js controller, .html template, or .js-meta.xml — or any Salesforce-side frontend JS. Covers DOM access and styling conventions.
 ---
 
