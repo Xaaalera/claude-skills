@@ -85,7 +85,8 @@ Use ## sections, code blocks, tables as needed.
 2. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
 3. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 4. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
-   (`{name, description, author:{name:"Xaaalera"}}`), add the domain to `.claude-plugin/marketplace.json`
+   (`{name, description, version, keywords, author:{name:"Xaaalera"}}` — `version` is semver,
+   `keywords` an array for marketplace discovery), add the domain to `.claude-plugin/marketplace.json`
    (hand-maintained), and enable `<domain>@xaaalera` in `~/.claude/settings.json → enabledPlugins`.
    Adding a skill to an existing domain needs no manifest change.
 5. Editing anything under `~/.claude/skills/` auto-commits + pushes via the PostToolUse hook — no manual
