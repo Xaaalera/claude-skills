@@ -1,6 +1,14 @@
 {
   "name": "frontend-css",
   "description": "Personal frontend CSS skills — rem units, SCSS modules.",
+  "version": "1.0.0",
+  "keywords": [
+    "css",
+    "scss",
+    "rem",
+    "css-modules",
+    "styling"
+  ],
   "author": {
     "name": "Xaaalera"
   }

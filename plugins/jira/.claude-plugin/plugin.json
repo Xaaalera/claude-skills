@@ -1,6 +1,13 @@
 {
   "name": "jira",
   "description": "Personal jira skills.",
+  "version": "1.0.0",
+  "keywords": [
+    "jira",
+    "comments",
+    "workflow",
+    "atlassian"
+  ],
   "author": {
     "name": "Xaaalera"
   }

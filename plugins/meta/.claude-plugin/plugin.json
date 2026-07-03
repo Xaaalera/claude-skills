@@ -1,6 +1,16 @@
 {
   "name": "meta",
   "description": "Personal meta skills — authoring new skills.",
+  "version": "1.0.0",
+  "keywords": [
+    "meta",
+    "skill-authoring",
+    "ockham",
+    "wittgenstein",
+    "solid",
+    "error-handling",
+    "lean-writing"
+  ],
   "author": {
     "name": "Xaaalera"
   }
