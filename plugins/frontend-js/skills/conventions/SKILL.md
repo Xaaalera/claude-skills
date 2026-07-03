@@ -18,5 +18,16 @@ House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
   - extract helper functions with descriptive names instead of long inline logic;
   - avoid clever one-liners when a readable multi-line form is clearer.
 
+## Imports — prefer aliases over relative paths
+
+- **A registered path alias always beats a relative import.** Never climb with
+  `../../../` when an alias exists — use it. Absolute (alias) > relative, always.
+- **Register a central alias for every shared / top-level directory**, then import
+  through it. Wire each alias in BOTH the bundler (e.g. Vite `resolve.alias`) AND the
+  tsconfig `paths` (with `baseUrl`) — for EVERY tsconfig, client and server, so
+  type-check and runtime agree.
+- Standard alias set: `@` (src root), `@shared`, `@components`, `@configs`, `@i18n`,
+  `@lib`, `@stores`, `@types`. Add the alias the moment you create the directory.
+
 For Salesforce LWC / Aura-specific rules (DOM access, styling) see
 `salesforce-lwc_development`.
