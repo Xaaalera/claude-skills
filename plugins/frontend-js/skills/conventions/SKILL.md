@@ -26,8 +26,10 @@ House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
   through it. Wire each alias in BOTH the bundler (e.g. Vite `resolve.alias`) AND the
   tsconfig `paths` (with `baseUrl`) — for EVERY tsconfig, client and server, so
   type-check and runtime agree.
-- Standard alias set: `@` (src root), `@shared`, `@components`, `@configs`, `@i18n`,
-  `@lib`, `@stores`, `@types`. Add the alias the moment you create the directory.
+- Register one alias per top-level dir (e.g. `@` = src root, `@shared`, `@components`, `@lib`,
+  `@stores`, `@config`, `@i18n`, `@hooks`, `@pages`, `@requests`, `@utils`) — add it the moment
+  you create the directory. **Avoid `@types`**: it collides with TypeScript's built-in `@types/`
+  (DefinitelyTyped) resolution — alias the types dir through the base `@/types` instead.
 
 For Salesforce LWC / Aura-specific rules (DOM access, styling) see
 `salesforce-lwc_development`.
