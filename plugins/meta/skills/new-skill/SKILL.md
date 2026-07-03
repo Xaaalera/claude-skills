@@ -42,6 +42,11 @@ Within a domain the short name is fine (`commit`, `rem`) — the `<domain>:` nam
 it never collides with a project's own skill. Split a broad domain into finer plugins
 (`frontend-css`, `frontend-react`, `frontend-js`) when you want to enable subsets independently.
 
+**No `name:` frontmatter field.** The skill folder name is authoritative and the callable id is derived
+as `<domain>:<folder>` (e.g. folder `new-skill` in plugin `meta` → `meta:new-skill`). Do not add a
+`name:` key — it is redundant, and a colon form (`meta:new-skill`) is invalid there anyway (the field
+allows only `[a-z0-9-]`). Frontmatter is just `description:`.
+
 ---
 
 ## SKILL.md structure

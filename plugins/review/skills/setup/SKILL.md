@@ -1,5 +1,4 @@
 ---
-name: review-setup
 description: Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.
 ---
 
