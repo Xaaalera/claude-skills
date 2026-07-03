@@ -136,68 +136,15 @@ onMouseEnter={(e) => (e.currentTarget.style.background = '#eee')}
 
 ## i18n — all user-visible strings must use translations
 
-**Never hardcode user-visible text** in JSX or component logic. All strings go through `react-i18next`.
+**Never hardcode user-visible text** in JSX or component logic — route every string through
+`react-i18next` (`const { t } = useTranslation('pages/<page>' | 'common')`). Page components use the
+`pages/<page-name>` namespace, shared ones use `common`; add keys to the matching JSON under
+`src/i18n/locales/en/` (register a new page namespace in `src/i18n/index.ts`). User-visible = labels,
+titles, buttons, placeholders, `aria-label`, error/empty/loading messages. NOT translated = internal
+constants, enum values, log/dev messages, and dynamic API data.
 
-### Which namespace to use
-
-| Component location | Namespace |
-|---|---|
-| `src/pages/<page-name>/` | `pages/<page-name>` |
-| `src/lib/` or `src/components/` (shared) | `common` |
-
-### Usage pattern
-
-```tsx
-import { useTranslation } from 'react-i18next';
-
-export function MyComponent() {
-  const { t } = useTranslation('pages/billing'); // or 'common'
-
-  return <h1>{t('title')}</h1>;
-}
-```
-
-### Adding new keys
-
-When adding user-visible text to a component:
-
-1. Add the key to the corresponding JSON file in `src/i18n/locales/en/`:
-   - Page component → `src/i18n/locales/en/pages/<page-name>.json`
-   - Shared component → `src/i18n/locales/en/common.json`
-2. If creating a **new** page namespace: also register it in `src/i18n/index.ts`
-3. Use nested keys to group related strings by component or section:
-
-```json
-{
-  "header": {
-    "title": "Billing",
-    "description": "Invoices and billing management"
-  },
-  "table": {
-    "emptyState": "No invoices found",
-    "columns": {
-      "date": "Date",
-      "amount": "Amount"
-    }
-  }
-}
-```
-
-### What counts as user-visible text
-
-- Labels, titles, descriptions
-- Button text
-- Placeholder text
-- `aria-label` attributes
-- Error and empty-state messages
-- Loading indicators
-- Any string the user reads or hears
-
-### What does NOT need translation
-
-- Internal constants, enum values, CSS class names
-- Log messages, developer-facing error messages
-- Dynamic data coming from the API (names, amounts, dates)
+Namespace table, usage + nested-key examples, and the full "counts / doesn't count" lists →
+`references/i18n.md`. See also the `i18n:ui-strings` skill.
 
 ---
 

@@ -50,67 +50,11 @@ These are house rules. Follow them even when the surrounding repo does something
 
 Test data creation belongs in a reusable factory, not copy-pasted into each test.
 
-**Order of operations:**
-1. **Search for an existing factory** before writing data-setup code. Look for `TestDataFactory`, `TestDataSuite`, `*TestData*`, `*Factory*` classes in the repo. (In AccountingCloud the canonical one is `TestDataSuite` — a singleton accessed via `TestDataSuite.getInstance(true)` in `@TestSetup`, `getInstance()` inside tests, with fluent `create*()` builders. Reuse it for core financial objects.)
-2. **One factory CLASS per SObject, written as a fluent builder — every factory has the SAME shape.** Each object a test touches gets its OWN factory class named `<Object>Factory` (e.g. `UIConfigFactory` for `UI_Config__c`, `UIKpiCardFactory` for `UI_KPI_Card__c`, `UserTestFactory` for `User`). Do NOT lump several objects into one factory class. Because they all share one shape, they read alike and chain naturally:
-   - **Constructor** seeds all **required** fields with sensible defaults, so a bare `new <Object>Factory().build()` is already valid.
-   - A **`with<FieldName>(value)`** setter for each field a test may vary — it mutates the in-progress record and `return this;` so calls chain.
-   - **`build()`** → returns the **in-memory** record (no DML). **`build(Boolean doInsert)`** inserts first when `true`.
-   - **`insertRecord()`** → separate terminal that inserts the built record and returns it (Apex reserves `insert`, so the method can't be named `insert`).
-   - Optional **bulk** helper (e.g. `static List<SObject> buildAndInsert(Integer count, ...)`) for governor-limit tests.
-   - Never hardcode Ids. Extend with more `with*`/helpers over time, but one object's creation logic stays in that one factory.
+- **Search first** for an existing factory (`TestDataFactory`, `TestDataSuite`, `*Factory*`) and reuse it. In AccountingCloud reuse `TestDataSuite` for core financial objects.
+- **One fluent-builder class per SObject**, named `<Object>Factory` — constructor seeds all required fields (a bare `new <Object>Factory().build()` is valid); a `with<Field>(v)` setter per varied field returns `this` to chain; terminals `build()` (in-memory) / `build(true)` / `insertRecord()` persist. Never hardcode Ids. Don't lump several objects into one factory class.
+- **Live in a dedicated `classes/factories/` folder** — create it if absent; propose consolidating scattered factories there (ask before moving shared/managed ones like `TestDataSuite`).
 
-   Usage reads like a sentence:
-   ```apex
-   UI_KPI_Card__c card = new UIKpiCardFactory()
-       .withConfig(cfg.Id)
-       .withKpiType('cash')
-       .withSortOrder(1)
-       .build(true);   // build() = in-memory; build(true) or insertRecord() = persist
-   ```
-3. **Where the factory lives — a dedicated factory folder.** Keep test-data factories together, not scattered among production classes:
-   - Look for an existing dedicated factory folder (e.g. `.../classes/factories/`).
-   - **If none exists, create one** and put new factories there. Every factory we create goes into that folder.
-   - **If factories already exist elsewhere in the repo, propose consolidating them** into that folder (ask before relocating shared/managed ones like `TestDataSuite` — don't silently move code others depend on).
-   - In SFDX source format, Apex classes may live in subdirectories under `classes/`; they deploy the same. Keep one factory per cohesive area, not one giant method per test.
-
-**Factory shape — one fluent-builder class per object:**
-```apex
-// File: classes/factories/UIKpiCardFactory.cls
-@IsTest
-public class UIKpiCardFactory {
-    private final UI_KPI_Card__c record;
-
-    public UIKpiCardFactory() {
-        // Constructor seeds all REQUIRED fields with valid defaults.
-        record = new UI_KPI_Card__c(
-            KPI_Id__c     = 'test-' + sequence(),  // unique external Id; never hardcoded
-            KPI_Type__c   = 'revenue',
-            Timeframe__c  = 'CURRENT_PERIOD',
-            Sort_Order__c = 0
-        );
-    }
-
-    // One with<Field>() per varied field — each returns `this` to chain.
-    public UIKpiCardFactory withConfig(Id configId)   { record.Config__c     = configId; return this; }
-    public UIKpiCardFactory withKpiId(String v)       { record.KPI_Id__c     = v;        return this; }
-    public UIKpiCardFactory withKpiType(String v)     { record.KPI_Type__c   = v;        return this; }
-    public UIKpiCardFactory withTimeframe(String v)   { record.Timeframe__c  = v;        return this; }
-    public UIKpiCardFactory withSortOrder(Integer v)  { record.Sort_Order__c = v;        return this; }
-
-    // Terminals: build (optionally insert via the flag), or insert separately.
-    public UI_KPI_Card__c build() { return build(false); }
-    public UI_KPI_Card__c build(Boolean doInsert) {
-        if (doInsert) { insert record; }
-        return record;
-    }
-    public UI_KPI_Card__c insertRecord() { insert record; return record; }
-
-    private static Integer counter = 0;
-    private static Integer sequence() { return counter++; }
-}
-```
-`UIConfigFactory`, `UserTestFactory`, etc. follow the EXACT same shape (constructor defaults → `with*` chain → `build()` / `build(true)` / `insertRecord()`), so any factory is used the same way.
+Full builder shape + code example → `references/factories.md`.
 
 ---
 
@@ -135,78 +79,27 @@ Guidelines:
 
 ## FLS / user mode (`WITH USER_MODE`, `as user`)
 
-Code that uses `WITH USER_MODE` queries or `... as user` DML enforces the running user's FLS and object permissions. A test running as the system context won't exercise that enforcement. So:
+Code using `WITH USER_MODE` queries or `as user` DML enforces the running user's FLS — the system context won't exercise it. Create a minimal-profile test user, assign the **shipped permission set** (not a System Admin), run the code inside `System.runAs(u)`, and add a **negative-permission test** (no permission set → assert `QueryException` / `DmlException` / `NoAccessException`). Universally-required fields have no separate FLS. Use a unique username per created user.
 
-- Create a **test user** with a minimal profile and assign the **permission set** the feature ships with (e.g. `UI_KpiCardConfig_Edit`). Do this in the factory / `@TestSetup`. A minimal profile + the shipped permission set is enough — do NOT reach for a System Administrator user to dodge FLS.
-- **Universally-required fields have no separate FLS.** Salesforce always grants access to a required custom field and you cannot assign `fieldPermissions` to it — so a permission set covering such fields legitimately has only `objectPermissions`. If every field the code touches is required, object-level access is all the running user needs for `WITH USER_MODE` / `as user`. Only worry about field FLS for *optional* fields.
-- Run the exercised code inside `System.runAs(testUser) { ... }`.
-- Add at least one **negative permission test**: run as a user WITHOUT the permission set and assert the expected `System.QueryException` / `DmlException` / `NoAccessException` is thrown.
-
-```apex
-User u = UIConfigTestDataFactory.createUserWithPermSet('UI_KpiCardConfig_Edit');
-System.runAs(u) {
-    Test.startTest();
-    new UIKpiCardConfigHandler().saveConfig(payloadJson);
-    Test.stopTest();
-}
-```
-
-Create users with a unique username (append a UUID/timestamp) to avoid `DUPLICATE_USERNAME` across parallel test runs — and never hardcode the username.
+Setup patterns + the required-field nuance → `references/fls-and-rest.md`.
 
 ---
 
 ## REST resource tests (`@RestResource`)
 
-Mock the REST context by hand, then call the method directly and assert on `RestContext.response`.
+Mock `RestContext` by hand: build `RestRequest`/`RestResponse`, set `requestURI` + `httpMethod`, call the method directly, and assert on `RestContext.response`. Use the namespaced URI (`/services/apexrest/AcctSeed/...`) and cover the URI-parsing branches (type-only vs type+itemId).
 
-```apex
-// Setup
-RestRequest req = new RestRequest();
-RestResponse res = new RestResponse();
-req.requestURI = '/services/apexrest/AcctSeed/ui/config/KPI_Cards'; // namespaced path when the org has a namespace
-req.httpMethod = 'GET';
-RestContext.request = req;
-RestContext.response = res;
-
-// Exercise
-Test.startTest();
-UIConfigResource.getConfig();
-Test.stopTest();
-
-// Verify
-Assert.areEqual(200, RestContext.response.statusCode, 'GET should succeed');
-Object body = JSON.deserializeUntyped(RestContext.response.responseBody.toString());
-Assert.isNotNull(body, 'response body should be JSON');
-```
-
-For POST/PATCH set `req.requestBody = Blob.valueOf(jsonString)`. Cover URI-parsing branches explicitly: type-only URI (`/config/KPI_Cards`) vs type+itemId (`/config/KPI_Cards/<id>`), and the namespace-prefixed variant.
+Full example → `references/fls-and-rest.md`.
 
 ---
 
-## Adversarial / negative testing — mandatory, exhaust the failure modes
+## Adversarial / negative testing — mandatory
 
-Happy-path tests tell you the code works when everything is right. They tell you nothing about what happens when a caller sends garbage, a user lacks rights, or a record is missing — which is exactly where real defects and security holes live. So **every test class must include an adversarial suite that genuinely tries to break the class under test, across as many distinct failure modes as actually apply to it.**
+Happy-path tests only prove the code works when everything is right; real defects and security holes live where callers send garbage, users lack rights, or records are missing. **Every test class MUST include an adversarial suite that genuinely tries to break the class across every distinct failure mode that applies** — don't anchor on a count (~7–10 is a floor, not a ceiling); diversity of vectors beats repetition. One break per method (rule 5), each named for the abuse, each asserting a *safe, specific* failure (the expected typed exception, or a defined empty/`null` result) — never a swallowed error or corrupted data. Use `try { ...; Assert.fail('should have thrown'); } catch (TheSpecificException e) { ... }` so a missing throw also fails.
 
-**Don't limit yourself to a number, and don't stop at 1–2 scenarios.** Walk the break-vector list below, ask for each "can this class fail this way?", and if yes, write a test for it. The goal is to exhaust the *distinct* ways this specific class can break — not to hit a quota. Seven near-identical variations of one idea (e.g. seven malformed strings) is worse than seven tests across seven different vectors: diversity is the whole point. Treat ~7–10 as a floor that signals "you've probably only just started"; a rich class (a handler with seven public methods, a REST resource with four verbs) warrants many more.
+The full break-vector catalog (unknown key · malformed/null input · not-found · permission/FLS · cross-user sharing · boundary/overflow · idempotency · bulk/governor · wrong protocol shape) + the assert-exception pattern → `references/adversarial-testing.md`.
 
-**One scenario = one test method** (rule 5). Each adversarial test breaks the class in exactly one way and asserts exactly one safe failure — never a single test that throws five kinds of bad input. Many small, sharply-named break tests are far more useful than one big one: when it goes red you know instantly *which* abuse the code stopped handling.
-
-For each scenario, assert the code fails *safely and specifically*: it throws the **expected** typed exception (not a bare `Exception` you forgot to scope), or returns a defined empty/`null`/zero result — never silently corrupts data or swallows the error. Prefer `try { ...; Assert.fail('why this should have thrown'); } catch (TheSpecificException e) { Assert.isTrue(e.getMessage().contains(...), ...); }` so a *missing* throw also fails the test.
-
-**Break vectors — cover every one that applies to the class (these are categories, not a checklist to stop at):**
-
-1. **Unknown / unsupported key** — an unregistered type, enum value, or lookup key (e.g. `getHandler('Nope')`). Assert the specific exception names the bad value.
-2. **Malformed input** — invalid JSON, or valid JSON of the wrong shape (an object where a list is expected, a string where a number is). Assert it throws rather than persisting half-parsed data.
-3. **Null / blank / empty input** — `null` body, empty string, empty list, blank required field. Distinguish "empty list = delete all" (defined behavior) from "null = error".
-4. **Missing / not-found target** — read, update, delete, or reorder an Id that doesn't exist. Assert the defined result (`null`, `count = 0`) and that nothing else is touched.
-5. **Permission denied / FLS** — run as a user WITHOUT the permission set, on BOTH a read and a write path (not just one method). Assert `QueryException` / `DmlException` / `NoAccessException`. A feature is only as safe as its least-tested entry point — cover every layer (handler, controller, REST resource), not just the innermost one.
-6. **Cross-user / sharing isolation** — user A creates a record; assert user B cannot read or mutate it. Catches broken `with sharing` / OwnerId scoping that happy-path tests never reach.
-7. **Boundary / overflow** — value out of allowed range, oversized string past field length, negative/huge numbers, duplicate external-Id collision. Assert the validation fires (or the upsert dedupes) rather than throwing an unhandled DML error to the user.
-8. **Idempotency / double-op** — run the same destructive op twice (delete already-deleted, save same external Id twice). Assert the second call is a safe no-op / clean upsert, not a duplicate or crash.
-9. **Bulk / governor limits** — feed ≥200 records to any method that does DML or queries in a loop. Assert it completes within limits and processes every record (catches SOQL-in-loop and partial-commit bugs).
-10. **Wrong protocol shape (REST/Aura)** — for `@RestResource`: a URI missing the expected segment, extra trailing segments, or a method with no body. Assert the parser resolves correctly or fails cleanly.
-
-Spread these across the test classes for a feature so each layer is probed where it matters (e.g. permission + malformed-body at the REST resource, unknown-type + sharing at the handler) — a vector caught at one layer still needs covering at the others it can reach. One break per method, named for the abuse: `saveConfig_throwsWhenUserLacksObjectAccess`, `getConfig_uriWithoutConfigSegmentResolvesNoTypeAndThrows`, `saveConfig_rejectsMalformedJson`, `getConfig_otherUsersConfigIsNotVisible`.
+---
 
 ## Coverage checklist for each class under test
 
@@ -217,52 +110,11 @@ Aim for behavior coverage, not a % number — but every public/exposed method ne
 - [ ] **Bulk** — exercise with a list of records (≈200 where the code does DML in a loop or aggregates) to catch governor-limit and partial-processing bugs. Where the domain uses small fixed datasets, match that, but still loop rather than asserting a single record.
 - [ ] **Boundary/branch** — each `if`/early-return in the method (e.g. empty saved config → falls back to defaults; blank external Id → generates one; item found vs not found).
 
-**Asserting an expected exception:**
-```apex
-// Exercise + Verify
-Test.startTest();
-try {
-    UIConfigHandlerFactory.getHandler('Nope');
-    Assert.fail('Expected UIConfigException for unknown config type');
-} catch (UIConfigHandlerFactory.UIConfigException e) {
-    Assert.isTrue(e.getMessage().contains('Unknown config type'), 'message names the bad type');
-}
-Test.stopTest();
-```
-
 ---
 
 ## Skeleton — full test class
 
-```apex
-@IsTest(SeeAllData=false)
-private class UIKpiCardConfigHandlerTest {
-
-    private static final String KPI_TYPE_REVENUE = 'revenue';
-    private static final String TIMEFRAME_PERIOD = 'CURRENT_PERIOD';
-
-    @TestSetup
-    static void setup() {
-        UIConfigTestDataFactory.createUserWithPermSet('UI_KpiCardConfig_Edit');
-    }
-
-    @IsTest
-    static void getConfig_returnsDefaultsWhenNoSavedCards() {
-        // Setup
-        User u = [SELECT Id FROM User WHERE Alias = 'uicfg01' LIMIT 1];
-        // Exercise
-        Object result;
-        System.runAs(u) {
-            Test.startTest();
-            result = new UIKpiCardConfigHandler().getConfig();
-            Test.stopTest();
-        }
-        // Verify
-        List<Object> cards = (List<Object>) result;
-        Assert.areEqual(4, cards.size(), 'should fall back to the 4 default CMDT cards');
-    }
-}
-```
+A complete `@IsTest` class (constants, `@TestSetup`, a `runAs` behavior test with Setup/Exercise/Verify markers) → `references/skeleton.md`.
 
 ---
 
@@ -272,6 +124,8 @@ private class UIKpiCardConfigHandlerTest {
 2. Write the **test class** (`{ClassName}Test`) following the rules above.
 3. **Deploy + run** via the salesforce-dx MCP (`deploy_metadata`, then `run_apex_test` with `RunSpecifiedTests`, `codeCoverage: true`). See the `salesforce-dx_mcp` skill.
 4. On failure, re-run with `verbose: true`, read the real assertion/stack, fix, repeat. Never weaken an assertion just to make it pass.
+
+---
 
 ## Final checklist
 
