@@ -1,6 +1,14 @@
 {
   "name": "diogenes",
   "description": "Personal diogenes skills.",
+  "version": "1.0.0",
+  "keywords": [
+    "diogenes",
+    "token-report",
+    "cost",
+    "session",
+    "cynic"
+  ],
   "author": {
     "name": "Xaaalera"
   }

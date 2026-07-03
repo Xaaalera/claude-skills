@@ -1,6 +1,14 @@
 {
   "name": "frontend-react",
   "description": "Personal frontend React skills — component placement/structure, hooks registry, primitive reuse, layout, stories.",
+  "version": "1.0.0",
+  "keywords": [
+    "react",
+    "components",
+    "hooks",
+    "storybook",
+    "skeleton"
+  ],
   "author": {
     "name": "Xaaalera"
   }
