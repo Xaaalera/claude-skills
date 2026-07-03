@@ -94,6 +94,21 @@ Use ## sections, code blocks, tables as needed.
 
 ---
 
+## Quality & best practices
+
+The deep, tested methodology for writing a good skill lives in **`superpowers:writing-skills`** — read it
+before authoring anything non-trivial. Do not duplicate it here. The house-enforced essentials:
+
+- **`description` = when, not what.** Triggering conditions only (ideally "Use when…"). Never summarize the
+  workflow in the description — an agent that reads it will skip the body (tested anti-pattern).
+- **Keep the body short; use `references/`.** Push deep tables/examples into `plugins/<domain>/skills/<name>/references/`
+  and link one level deep — the SKILL.md stays an overview + quick-reference.
+- **One excellent example beats five mediocre ones.** Show the canonical case fully; don't enumerate.
+- **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
+  rationalization table ("thought → reality"); otherwise give a positive recipe.
+
+---
+
 ## Improving an existing skill
 
 Use the **`skill-creator` plugin** for iterative improvement with test cases, evals, benchmarks, and
