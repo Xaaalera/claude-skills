@@ -1,11 +1,5 @@
 ---
-description: >
-  Use whenever spawning subagents or authoring a Workflow script — BEFORE any Agent call, any
-  workflow with agent()/parallel()/pipeline(), or when writing/editing an agent definition
-  frontmatter. Every agent gets an EXPLICIT model tier: expensive head models only for a bounded
-  set of judges/synthesizers; mid-tier for judgment work (review, verify, hunt); cheap tier for
-  mechanical sweeps. Activate even if the user never mentions models or cost — an omitted model
-  silently inherits the expensive session model.
+description: "Use whenever the plan is to spawn, fan out, or parallelize agents \u2014 ANY multi-agent work, not just when models are mentioned. Triggers: \"spawn/kick off subagents\", \"a bunch of agents in parallel\", fleets that audit/comb/sweep/hunt across files, verify or skeptic stages, reviewer fan-outs, loop-until-done runs, authoring or editing a Workflow script (agent()/parallel()/pipeline()), or writing agent-definition frontmatter. Every spawned agent must get an EXPLICIT model tier assigned BEFORE it launches: reserve expensive head models for a small bounded set of final judges/synthesizers; mid-tier for judgment (review, verify, hunt); cheap tier for mechanical sweeps (grep, list, count, rename). Activate even when the user says nothing about models or cost \u2014 an omitted model silently inherits the pricey session model, and fan-out multiplies that waste by the agent count."
 ---
 
 # Model Routing — the right model for every agent
@@ -36,8 +30,36 @@ each head agent needs a one-line justification.
    does NOT converge with creative models — they always invent something.
 4. **Dedup by location, not by title.** Agents rephrase the same finding every round; title-string
    dedup lets the fan-out snowball.
-5. **Announce scale before launch:** tell the user the expected agent count and tier mix BEFORE
-   invoking Workflow.
+5. **Measure one, then announce scale — as a table, BEFORE launch.** For any multi-instance run
+   (workflow fan-out, eval probes, agent fleets): run ONE representative unit capturing real usage
+   (`--output-format json` → `usage` + `total_cost_usd`, or the task-notification `total_tokens`),
+   never estimate from gut feeling. Then show the user this table and wait for the go-ahead when
+   the spend is non-trivial:
+
+   Metrics as ROWS, one row per token class; the share column is the CURRENT 5-hour session
+   window (the quota that actually gates right-now work):
+
+   | Metric | Per 1 unit | × N units | ≈ % of 5h session window |
+   |---|---|---|---|
+   | input | measured | multiplied | price-weighted share |
+   | cache-write | measured | multiplied | price-weighted share |
+   | cache-read | measured | multiplied | price-weighted share |
+   | output | measured | multiplied | price-weighted share |
+   | **Total** | sum | sum | **the headline number** |
+
+   NO raw dollar figures in the user-facing table — window percentages only (dollars stay an
+   internal conversion step). Calibrate window capacity from the user's `/usage` panel
+   (approximate and machine-local — mark shares with ≈; refresh the calibration pair in memory
+   whenever the user shows a fresh panel). If the window is already saturated, say so and
+   propose waiting for the reset instead of launching into throttling.
+
+## Eval spend protocol (skill-description evals)
+
+- **New skill** → full rich loop right away (e.g. runs 3 × 3 iterations, ≈25% of a window) —
+  a skill ships good from day one; the spend is a one-off.
+- **Bulk eval of the existing fleet** → cheap triage first (runs 2, 1 iteration, ≈5.5%/skill),
+  then the optimization loop ONLY for skills that failed triage (runs 2, 2 iterations,
+  ≈11%/skill). Never run the full loop across the whole fleet.
 
 ## Agent definitions (`.claude/agents/*.md`)
 
