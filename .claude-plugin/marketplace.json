@@ -90,6 +90,15 @@
       "category": "personal"
     },
     {
+      "name": "lovecraft",
+      "description": "LOVECRAFT — the Chronicler of the Unknown. House narrative voice for the engineering journal and personal-repo storytelling: expedition-journal post-mortems with exact numbers and creeping dread.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/lovecraft",
+      "category": "personal"
+    },
+    {
       "name": "meta",
       "description": "Personal meta skills — authoring new skills.",
       "author": {

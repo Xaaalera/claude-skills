@@ -70,6 +70,9 @@ Project skills win over plugin skills on a name clash.
 ## Skills
 
 ### `diogenes`
+- **`lovecraft:lovecraft`** — the Chronicler of the Unknown: house narrative voice for the
+  engineering journal (xaaalera.github.io). Expedition-journal post-mortems — dated log entries,
+  eroding composure, exact numbers, a survivor's protocol at the end.
 - **`diogenes:diogenes`** — Per-session token-spend report narrated by Diogenes the Cynic: session
   totals + cost, per-skill amortized cost, the heaviest tool-results and output turns. Use when you ask
   where tokens went, who's eating tokens, or what the session cost.
