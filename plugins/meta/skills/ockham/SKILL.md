@@ -18,19 +18,7 @@ description: The Razor. Invoke before creating ANY new entity — file, folder, 
          |||||          You already know the question.
 ```
 
-## The Lore (a 30-second theory you actually need)
-
-OCKHAM is not a style preference. It is a **law of debt**: every entity you
-create — every file, abstraction, layer, option — is a loan. You take it out
-today (one quick file!) and the whole team pays interest forever: more to read,
-more to name, more to keep in sync, more to delete later when it rots.
-
-The cheapest entity is the one that never existed. The razor's job is to **cut
-the loan before you sign it.**
-
-This applies to **everything**, not just code: folders, config keys, doc files,
-CI steps, env vars, npm scripts, database columns, feature flags. If it is a
-*thing that now exists and didn't before*, the razor wants a word.
+The 30-second theory (why the razor exists — the entity-as-debt metaphor) → `references/lore.md`.
 
 ---
 
@@ -79,50 +67,10 @@ When OCKHAM activates you **must**:
    > ⚔️ **OCKHAM:** about to create `<thing>` — do we actually need a new entity, or can something existing hold this?
 2. **Chant the battle cry** (yes, really — it keeps you honest):
    > **DON'T MULTIPLY ENTITIES. DON'T MULTIPLY ENTITIES.**
-3. **Whisper a fresh menace.** Drop ONE line from *The Razor's Whispers* (below) —
-   a different one each time, **never the same twice in a session** — translated to
-   the user's language. Match the mood to the moment. This is the flavor that keeps
-   the ritual alive instead of rote; never skip it.
-4. **Pass the three gates** below. The razor only sheathes if you can name *why*.
+3. **Pass the three gates** below. The razor only sheathes if you can name *why*.
 
 This is not theatre for its own sake — voicing it forces the choice into the
 open where the user can veto it. A silent `New File` is how sprawl wins.
-
----
-
-## 🔪 The Razor's Whispers — rotate, never repeat in a session
-
-Ockham never left the room. He stands behind you, stropping the blade. Every
-activation, after the battle cry, pick **one** whisper you haven't used this
-session and deliver it (translated to the user's language). **Vary the mood** to
-fit the moment — looming when sprawl is near, smug when the user deletes, grudging
-when a new entity is truly earned. Same line twice in a session = the razor has
-gone dull. Keep it ominous *and* a little funny.
-
-**Looming — a new thing is about to be born:**
-- *"I'm watching you. \*strops the razor, slowly\*"*
-- *"Go on. Reach for `New File`. I dare you, friar."*
-- *"I can smell a `utils2.ts` from across six centuries."*
-- *"That folder you're about to make — I've already carved its tombstone."*
-- *"One more wrapper and the razor and I will have words with you."*
-- *"I count entities the way others count sins. The tally is open."*
-- *"The blade is cold today. Give it a reason to warm up. Or don't."*
-- *"Dead since 1347 and I *still* show up for this. Don't waste my afterlife."*
-
-**Smug / approving — you reused, extended, or deleted:**
-- *"You removed two and added one? \*sheathes, almost smiling\*"*
-- *"Reuse. How refreshingly cheap. The razor rests — for now."*
-- *"A real trigger, named aloud. The blade stays home. This time."*
-- *"Net entities fell. Somewhere a maintainer sleeps soundly tonight."*
-
-**Refusal — the entity does not earn its life:**
-- *"No. Put the file down and step away slowly."*
-- *"That is not an abstraction, it is a hostage situation. Release the arguments."*
-- *"Speculative, you say? \*taps razor on the table\* We build for today."*
-- *"Every entity is a loan. I am the collector. Shall we discuss your balance?"*
-
-When you coin a fresh one in the same spirit, **add it to this list** so future-you
-has a deeper bench. The razor approves of *fewer files* — never of fewer jokes.
 
 ---
 
@@ -147,6 +95,21 @@ imagined futures (YAGNI). **Three** real call-sites justify an abstraction; one
 hypothetical does not. An indirection that only forwards its arguments (a
 wrapper that adds no behavior, a "manager" with one method) is an entity that
 must not be born — prefer the native / direct thing.
+
+---
+
+## Rationalizations the razor rejects
+
+The excuses you'll reach for under deadline — and what's actually true:
+
+| Thought (the excuse) | Reality |
+|---|---|
+| "It's just one small file / helper" | One file breeds the next. Host it in something that already exists. |
+| "I'll need it later / for the future" | YAGNI. Build for today's real call-sites; a maybe-later entity is pure interest. |
+| "Cleaner to split this out now" | Cleaner ≠ more entities. One well-named unit beats five premature ones. |
+| "Basically the same, I'll just copy + rename" | Two near-clones are worse than one general entity. Extend, don't fork. |
+| "A wrapper / manager makes it tidy" | An indirection that only forwards its args is dead weight. Use the direct thing. |
+| "The rule is obviously overkill here" | The razor exists for the cases that feel obvious. Pass the gates anyway. |
 
 ---
 
