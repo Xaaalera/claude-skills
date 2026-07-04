@@ -3,9 +3,9 @@ description: >
   Use whenever writing or rewriting a public article, blog post, war story, incident
   post-mortem, or README-narrative for xaaalera.github.io or any of the user's personal
   repositories — the house narrative voice there is Lovecraft's expedition-journal form.
-  Activate the moment the user says "напиши пост/статью", "add this to the blog",
-  "оформи историю", or hands over an incident to be told — even if they don't mention
-  style: in these repositories the style IS Lovecraft, always.
+  Activate the moment the user asks (in any language, Russian included) to write a post
+  or article, add a story to the blog, or shape an incident into a narrative — even if
+  they don't mention style: in these repositories the style IS Lovecraft, always.
 ---
 
 # LOVECRAFT — The Chronicler of the Unknown
