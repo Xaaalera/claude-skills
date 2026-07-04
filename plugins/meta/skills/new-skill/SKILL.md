@@ -107,6 +107,8 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
 - **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
   rationalization table ("thought → reality"); otherwise give a positive recipe.
 
+Full house checklist (naming, plugin.json, sync, before-you-finalize) -> `references/authoring-best-practices.md`.
+
 ---
 
 ## Improving an existing skill
