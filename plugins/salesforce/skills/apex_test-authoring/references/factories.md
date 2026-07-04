@@ -63,3 +63,20 @@ public class UIKpiCardFactory {
 }
 ```
 `UIConfigFactory`, `UserTestFactory`, etc. follow the EXACT same shape (constructor defaults → `with*` chain → `build()` / `build(true)` / `insertRecord()`), so any factory is used the same way.
+
+## @TestSetup — shared pre-setup data
+
+When several test methods need the same baseline data, create it once in a `@TestSetup` method instead of rebuilding it per method. `@TestSetup` data is rolled back to its post-setup state before each test, so tests stay isolated.
+
+```apex
+@TestSetup
+static void setup() {
+    // Build the baseline every test starts from — via the factory.
+    UIConfigTestDataFactory.createTestUserWithEditPerm();
+}
+```
+
+Guidelines:
+- Use `@TestSetup` only for data that is genuinely shared and read-only-ish across methods. Data a single test mutates in a method-specific way is better created in that method's `// Setup`.
+- `@TestSetup` runs as the test-context user. Create users/permission-set assignments here so methods can `System.runAs` them.
+- Re-query records inside the test method (don't rely on Ids captured at setup time across the rollback boundary — re-SELECT them).

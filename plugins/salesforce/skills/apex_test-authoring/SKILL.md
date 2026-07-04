@@ -50,29 +50,18 @@ These are house rules. Follow them even when the surrounding repo does something
 Test data creation belongs in a reusable factory, not copy-pasted into each test.
 
 - **Search first** for an existing factory (`TestDataFactory`, `TestDataSuite`, `*Factory*`) and reuse it. In AccountingCloud reuse `TestDataSuite` for core financial objects.
-- **One fluent-builder class per SObject**, named `<Object>Factory` — constructor seeds all required fields (a bare `new <Object>Factory().build()` is valid); a `with<Field>(v)` setter per varied field returns `this` to chain; terminals `build()` (in-memory) / `build(true)` / `insertRecord()` persist. Never hardcode Ids. Don't lump several objects into one factory class.
+- **One fluent-builder class per SObject**, named `<Object>Factory` — constructor seeds required fields; `with<Field>(v)` setters chain; terminals `build()` / `build(true)` / `insertRecord()`. Never hardcode Ids. Don't lump several objects into one factory class.
 - **Live in a dedicated `classes/factories/` folder** — create it if absent; propose consolidating scattered factories there (ask before moving shared/managed ones like `TestDataSuite`).
 
-Full builder shape + code example → `references/factories.md`.
+Full order of operations, builder shape + code example → `references/factories.md`.
 
 ---
 
 ## @TestSetup — shared pre-setup data
 
-When several test methods need the same baseline data, create it once in a `@TestSetup` method instead of rebuilding it per method. `@TestSetup` data is rolled back to its post-setup state before each test, so tests stay isolated.
+Baseline data shared by several test methods is built ONCE in a `@TestSetup` method (rolled back before each test); method-specific data stays in that method's `// Setup`. Create users/permission-set assignments there for `System.runAs`, and re-query records inside each test method (Ids don't survive the rollback boundary — re-SELECT).
 
-```apex
-@TestSetup
-static void setup() {
-    // Build the baseline every test starts from — via the factory.
-    UIConfigTestDataFactory.createTestUserWithEditPerm();
-}
-```
-
-Guidelines:
-- Use `@TestSetup` only for data that is genuinely shared and read-only-ish across methods. Data a single test mutates in a method-specific way is better created in that method's `// Setup`.
-- `@TestSetup` runs as the test-context user. Create users/permission-set assignments here so methods can `System.runAs` them.
-- Re-query records inside the test method (don't rely on Ids captured at setup time across the rollback boundary — re-SELECT them).
+Full guidelines + example → `references/factories.md` (§@TestSetup).
 
 ---
 
@@ -94,9 +83,25 @@ Full example → `references/fls-and-rest.md`.
 
 ## Adversarial / negative testing — mandatory
 
-Happy-path tests only prove the code works when everything is right; real defects and security holes live where callers send garbage, users lack rights, or records are missing. **Every test class MUST include an adversarial suite that genuinely tries to break the class across every distinct failure mode that applies** — don't anchor on a count (~7–10 is a floor, not a ceiling); diversity of vectors beats repetition. One break per method (rule 5), each named for the abuse, each asserting a *safe, specific* failure (the expected typed exception, or a defined empty/`null` result) — never a swallowed error or corrupted data. Use `try { ...; Assert.fail('should have thrown'); } catch (TheSpecificException e) { ... }` so a missing throw also fails.
+**Every test class MUST include an adversarial suite that genuinely tries to break the class across every distinct failure mode that applies** — don't anchor on a count (~7–10 is a floor, not a ceiling); diversity of vectors beats repetition. One break per method (rule 5), each named for the abuse, each asserting a *safe, specific* failure (the expected typed exception, or a defined empty/`null` result) — never a swallowed error or corrupted data. Use `try { ...; Assert.fail('should have thrown'); } catch (TheSpecificException e) { ... }` so a missing throw also fails.
 
-The full break-vector catalog (unknown key · malformed/null input · not-found · permission/FLS · cross-user sharing · boundary/overflow · idempotency · bulk/governor · wrong protocol shape) + the assert-exception pattern → `references/adversarial-testing.md`.
+Why happy-path is not enough + the full break-vector catalog (unknown key · malformed/null input · not-found · permission/FLS · cross-user sharing · boundary/overflow · idempotency · bulk/governor · wrong protocol shape) + the assert-exception pattern → `references/adversarial-testing.md`.
+
+---
+
+## Rationalizations this standard rejects
+
+The shortcuts that feel reasonable under pressure — and why they fail:
+
+| Thought | Reality |
+|---|---|
+| "Happy path passes — tests are done" | Defects and security holes live in garbage input / missing perms / not-found. The adversarial suite is mandatory. |
+| "Wrote ~7 break tests, that's enough" | 7–10 is a FLOOR, not a ceiling. Enumerate every distinct vector THIS class allows, then cover each. |
+| "Assertion fails — I'll relax it to green" | Never weaken an assertion to pass. Read the real failure, fix the code. |
+| "One method can check these few things at once" | Kitchen-sink tests hide what broke. One observable behavior per method. |
+| "System.assert works and the repo uses it" | House rule: `Assert.*` only, every assertion with a message. |
+| "Trivial class, skip the test" | A class without a matching test is not done — same change. |
+| "I'll hardcode this Id, it's just a test" | No hardcoded Ids ever. Derive from inserted records / `UserInfo`. |
 
 ---
 
