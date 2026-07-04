@@ -1,0 +1,15 @@
+{
+  "name": "cicero",
+  "description": "CICERO — the house voice. A SessionStart hook that injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) and shows a start banner.",
+  "version": "1.0.0",
+  "keywords": [
+    "communication",
+    "house-voice",
+    "session-start",
+    "hook",
+    "writing-style"
+  ],
+  "author": {
+    "name": "Xaaalera"
+  }
+}
