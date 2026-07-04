@@ -1,111 +1,120 @@
 {
- "name": "xaaalera",
- "owner": {
-  "name": "Xaaalera"
- },
- "metadata": {
-  "description": "Xaaalera personal Claude Code skills, grouped by domain. marketplace.json is generated from plugins/<domain>/plugin.json; plugins/ and README.md are hand-edited.",
-  "version": "1.0.0"
- },
- "plugins": [
-  {
-   "name": "diogenes",
-   "description": "Personal diogenes skills.",
-   "author": {
+  "name": "xaaalera",
+  "owner": {
     "name": "Xaaalera"
-   },
-   "source": "./plugins/diogenes",
-   "category": "personal"
   },
-  {
-   "name": "frontend-css",
-   "description": "Personal frontend CSS skills — rem units, SCSS modules.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/frontend-css",
-   "category": "personal"
+  "metadata": {
+    "description": "Xaaalera personal Claude Code skills, grouped by domain. marketplace.json is generated from plugins/<domain>/plugin.json; plugins/ and README.md are hand-edited.",
+    "version": "1.0.0"
   },
-  {
-   "name": "frontend-js",
-   "description": "Personal JavaScript/TypeScript style conventions.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/frontend-js",
-   "category": "personal"
-  },
-  {
-   "name": "frontend-react",
-   "description": "Personal frontend React skills — component placement/structure, hooks registry, primitive reuse, layout, stories.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/frontend-react",
-   "category": "personal"
-  },
-  {
-   "name": "frontend",
-   "description": "Personal frontend dev-harness skills — types + tests runner.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/frontend",
-   "category": "personal"
-  },
-  {
-   "name": "git",
-   "description": "Personal Git workflow skills — atomic commit splitting.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/git",
-   "category": "personal"
-  },
-  {
-   "name": "i18n",
-   "description": "Personal i18n skills.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/i18n",
-   "category": "personal"
-  },
-  {
-   "name": "jira",
-   "description": "Personal jira skills.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/jira",
-   "category": "personal"
-  },
-  {
-   "name": "meta",
-   "description": "Personal meta skills — authoring new skills.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/meta",
-   "category": "personal"
-  },
-  {
-   "name": "review",
-   "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/review",
-   "category": "personal"
-  },
-  {
-   "name": "salesforce",
-   "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
-   "author": {
-    "name": "Xaaalera"
-   },
-   "source": "./plugins/salesforce",
-   "category": "personal"
-  }
- ]
+  "plugins": [
+    {
+      "name": "cicero",
+      "description": "CICERO — the house voice. A SessionStart hook that injects the always-on communication style and shows a start banner.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/cicero",
+      "category": "engineering"
+    },
+    {
+      "name": "diogenes",
+      "description": "Personal diogenes skills.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/diogenes",
+      "category": "personal"
+    },
+    {
+      "name": "frontend",
+      "description": "Personal frontend dev-harness skills — types + tests runner.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend",
+      "category": "personal"
+    },
+    {
+      "name": "frontend-css",
+      "description": "Personal frontend CSS skills — rem units, SCSS modules.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend-css",
+      "category": "personal"
+    },
+    {
+      "name": "frontend-js",
+      "description": "Personal JavaScript/TypeScript style conventions.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend-js",
+      "category": "personal"
+    },
+    {
+      "name": "frontend-react",
+      "description": "Personal frontend React skills — component placement/structure, hooks registry, primitive reuse, layout, stories.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/frontend-react",
+      "category": "personal"
+    },
+    {
+      "name": "git",
+      "description": "Personal Git workflow skills — atomic commit splitting.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/git",
+      "category": "personal"
+    },
+    {
+      "name": "i18n",
+      "description": "Personal i18n skills.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/i18n",
+      "category": "personal"
+    },
+    {
+      "name": "jira",
+      "description": "Personal jira skills.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/jira",
+      "category": "personal"
+    },
+    {
+      "name": "meta",
+      "description": "Personal meta skills — authoring new skills.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/meta",
+      "category": "personal"
+    },
+    {
+      "name": "review",
+      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/review",
+      "category": "personal"
+    },
+    {
+      "name": "salesforce",
+      "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/salesforce",
+      "category": "personal"
+    }
+  ]
 }
