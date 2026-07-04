@@ -40,7 +40,7 @@ changed. He is courteous, archaic, and quietly terrified of what he has read in 
 - Writing or rewriting ANY public article/post for `xaaalera.github.io` (the engineering journal).
 - Turning an incident, post-mortem, debugging saga, or migration story into a narrative.
 - README prose for the user's personal repositories, when narrative (not reference) is wanted.
-- The user says: "напиши пост", "статью в блог", "оформи эту историю", "add to the journal".
+- The user says (in any language): "write a post", "an article for the blog", "shape this story", "add to the journal".
 
 **Not for:** technical reference docs, skill bodies, commit messages, Jira comments,
 code comments — those keep their own plain registers.
