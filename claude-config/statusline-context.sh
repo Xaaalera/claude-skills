@@ -11,6 +11,18 @@ input=$(cat)
 # truncated skill-name list and the skill count were noise. Zero model context.
 skills_line=" · 🛢 /diogenes токены"
 
+# Progress beacon: long-running background queues write ~/.claude/progress/current.json
+# ({task, step, total, item, eta, updated_epoch}); show it while fresh (<15 min).
+beacon=""
+BF="$HOME/.claude/progress/current.json"
+if [ -f "$BF" ]; then
+  b_upd=$(jq -r '.updated_epoch // 0' "$BF" 2>/dev/null)
+  now=$(date +%s)
+  if [ -n "$b_upd" ] && [ $(( now - b_upd )) -lt 900 ]; then
+    beacon=$(jq -r '" · ⚙ \(.task) \(.step)/\(.total) · \(.item) · ETA \(.eta)"' "$BF" 2>/dev/null)
+  fi
+fi
+
 pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
 used=$(printf '%s' "$input" | jq -r '.context_window.total_input_tokens // empty')
 total=$(printf '%s' "$input" | jq -r '.context_window.context_window_size // 200000')
