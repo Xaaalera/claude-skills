@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
-# Native statusLine: context-window fill bar.
+# Native statusLine: line 1 = context-window fill bar; line 2 = progress beacon
+# (only while a background queue is fresh). Multi-line is officially supported —
+# each printed line is a separate status row (docs: code.claude.com statusline).
+# Plain text only, no ANSI, to avoid the documented multi-line rendering glitches.
 # Receives session JSON on stdin (see `.context_window.*`). Zero model context.
-# Replaces the old meta_context-monitor passive skill's status line.
-# The joke is intentionally NOT here — it lives as a one-line CLAUDE.md
-# directive so the model generates a fresh, language-aware joke each turn.
 
 input=$(cat)
 
-# Teaser pointing at the diogenes token-spend report. Short and static — the old
-# truncated skill-name list and the skill count were noise. Zero model context.
-skills_line=""
-
-# Progress beacon: long-running background queues write ~/.claude/progress/current.json
-# ({task, step, total, item, eta, updated_epoch}); show it while fresh (<15 min).
-beacon=""
+# Line 2 — progress beacon. Long-running background queues write
+# ~/.claude/progress/current.json ({task, step, total, item, eta, updated_epoch}).
+# Shown as its own row while fresh (<15 min); a stale/absent beacon => no 2nd line.
+beacon_line=""
 BF="$HOME/.claude/progress/current.json"
 if [ -f "$BF" ]; then
   b_upd=$(jq -r '.updated_epoch // 0' "$BF" 2>/dev/null)
   now=$(date +%s)
   if [ -n "$b_upd" ] && [ $(( now - b_upd )) -lt 900 ]; then
-    beacon=$(jq -r '" · ⚙ \(.task) \(.step)/\(.total) · \(.item) · ETA \(.eta)"' "$BF" 2>/dev/null)
+    beacon_line=$(jq -r '"⚙ \(.task) \(.step)/\(.total) · \(.item) · ETA \(.eta)"' "$BF" 2>/dev/null)
   fi
 fi
 
@@ -28,7 +25,8 @@ used=$(printf '%s' "$input" | jq -r '.context_window.total_input_tokens // empty
 total=$(printf '%s' "$input" | jq -r '.context_window.context_window_size // 200000')
 
 if [ -z "$pct" ] || [ "$pct" = "null" ]; then
-  printf '🧠 context: warming up…%s%s' "$beacon" "$skills_line"
+  printf '🧠 context: warming up…\n'
+  [ -n "$beacon_line" ] && printf '%s\n' "$beacon_line"
   exit 0
 fi
 
@@ -46,4 +44,5 @@ elif [ "$pct_rounded" -ge 70 ]; then
   marker=" 💬 consider /compact"
 fi
 
-printf '🧠 %s%% · %sk/%sk · %sk left%s%s%s' "$pct_rounded" "$used_k" "$total_k" "$left_k" "$marker" "$beacon" "$skills_line"
+printf '🧠 %s%% · %sk/%sk · %sk left%s\n' "$pct_rounded" "$used_k" "$total_k" "$left_k" "$marker"
+[ -n "$beacon_line" ] && printf '%s\n' "$beacon_line"
