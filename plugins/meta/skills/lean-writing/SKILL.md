@@ -1,5 +1,5 @@
 ---
-description: When writing a spec/design doc or presenting a brainstorming result, write terse — short plain sentences, bullets over prose, no filler. Caveman-simple but technically precise. Applies to spec files and brainstorming/exploration summaries, NOT to normal conversation.
+description: Use this skill to WRITE terse technical documents. Trigger when asked to write, draft, summarize, present, or update a spec, design doc, RFC, brainstorming/exploration summary, or a decision log of options considered — e.g. "write the spec for…", "draft a design doc…", "write up the options we considered…", "present the brainstorming results…", "summarize the exploration we did…" — even if the user never says "concise". Produce short plain sentences, bullets over prose, no filler; caveman-simple but technically precise. NOT for normal conversation, code, or commit/jira messages, and NOT for reviewing or auditing an already-written doc for clarity or bloat (that's meta:wittgenstein).
 ---
 
 # Lean Writing — specs & brainstorming results
