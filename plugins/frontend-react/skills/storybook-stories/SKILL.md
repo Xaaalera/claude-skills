@@ -1,5 +1,5 @@
 ---
-description: After creating a React component, decide whether to also write a Storybook story. On the FIRST component in a project, explain Storybook to the user and ask if they want stories, record the yes/no choice in the project's CLAUDE.md, then honor that choice on every component afterwards.
+description: "Use this skill whenever writing, adding, or asking about a Storybook story for a React/UI component \u2014 including \"add a story for X\", \"write a .stories file\", questions about which states/variants a story should cover (default, empty, error, loading, disabled), how to show a component's skeleton alongside it in a story, what mock data a story should use, or whether a just-finished component needs a story at all. Also use right after creating any new React component to decide whether a story is warranted: on the first component in a project, explain Storybook and ask the user yes/no, record the choice in CLAUDE.md, then honor it for every component after. Do NOT use for general code review, component file placement, hooks, i18n, or repo/CI setup scripts."
 ---
 
 # Storybook Stories — ask once per project, then follow the recorded choice

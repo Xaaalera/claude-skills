@@ -1,5 +1,5 @@
 ---
-description: Before creating any custom React hook, check docs/hooks-registry.md to reuse an existing one; after adding/renaming/moving/removing a hook, update that registry in the same change. Activate whenever about to add or hand-roll a use* hook.
+description: Use when about to add, hand-roll, rename, move, or remove a custom React `use*` hook.
 ---
 
 # React Hooks Registry & Reuse

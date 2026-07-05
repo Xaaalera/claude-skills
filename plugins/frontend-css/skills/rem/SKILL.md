@@ -1,5 +1,5 @@
 ---
-description: CSS Units — Always use rem for all dimensional values. Apply this rule any time CSS, SCSS, or Tailwind styles are written or reviewed.
+description: "CSS Units \u2014 enforce rem for CSS/SCSS/Tailwind dimensions. Use whenever a hardcoded pixel length appears in a stylesheet or component's layout \u2014 spacing, sizing, or typography such as gap, padding, margin, width, height, or font-size \u2014 and the user wants it changed, reviewed, made consistent with a spacing scale, or made responsive to browser zoom/font-size. Applies whether the value is stated as px, an arbitrary Tailwind value like p-[10px], or an SCSS property. Do NOT trigger for genuinely pixel-appropriate values that stay in px: border-width, box-shadow offsets, or SVG attributes like width, height, and stroke-width on chart/vector elements."
 ---
 
 # CSS Units — Always Use rem
