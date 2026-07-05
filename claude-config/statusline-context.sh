@@ -9,7 +9,7 @@ input=$(cat)
 
 # Teaser pointing at the diogenes token-spend report. Short and static — the old
 # truncated skill-name list and the skill count were noise. Zero model context.
-skills_line=" · 🛢 /diogenes токены"
+skills_line=" · 🛢 /diogenes tokens"
 
 # Progress beacon: long-running background queues write ~/.claude/progress/current.json
 # ({task, step, total, item, eta, updated_epoch}); show it while fresh (<15 min).
