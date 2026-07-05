@@ -11,7 +11,7 @@ f=$(jq -r '.tool_input.file_path // .tool_response.filePath // empty')
 [ -n "$f" ] || exit 0
 [ -f "$f" ] || exit 0
 case "$f" in
-  */users-files/*) exit 0 ;;                # sanctioned user-language zone
+  *users-files/*) exit 0 ;;                 # sanctioned user-language zone (incl. hidden .users-files/)
 esac
 # text-ish files only — skip binaries
 case "$f" in
