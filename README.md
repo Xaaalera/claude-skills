@@ -167,3 +167,7 @@ New domain: also add `plugins/<domain>/.claude-plugin/plugin.json`, a row above,
 
 > Local-only infra (hook + statusline scripts) lives in `claude-config/`, which is gitignored — it is
 > not part of the published marketplace.
+
+- **`meta:triage`** — shallow first, deep only where it hurts: before any expensive exhaustive
+  operation (fleet evals, big-diff review, migrations, repo sweeps), run a cheap full-coverage
+  sorting pass, then spend the deep pass on the shortlist only.
