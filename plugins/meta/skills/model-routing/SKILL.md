@@ -53,6 +53,12 @@ each head agent needs a one-line justification.
    whenever the user shows a fresh panel). If the window is already saturated, say so and
    propose waiting for the reset instead of launching into throttling.
 
+6. **Progress beacon — always.** Every multi-item background queue writes its position to
+   `~/.claude/progress/current.json` after EACH item:
+   `{"task", "step", "total", "item", "eta", "updated_epoch"}`. The user's status line renders it
+   live (`⚙ task 7/15 · item · ETA hh:mm`); stale beacons (>15 min) auto-hide. A queue without a
+   beacon leaves the user staring at a silent shell — that is a defect, not a style choice.
+
 ## Eval spend protocol (skill-description evals)
 
 - **New skill** → full rich loop right away (e.g. runs 3 × 3 iterations, ≈25% of a window) —
