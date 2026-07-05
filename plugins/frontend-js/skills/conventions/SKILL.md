@@ -1,5 +1,5 @@
 ---
-description: House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions. Use whenever writing or editing JavaScript or TypeScript (React, Node, or any JS/TS).
+description: House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names (not sel/fn/e), braces on all control structures, small readable functions, and imports (a registered path alias always beats a ../../../ relative import; register one @alias per top-level dir in vite + tsconfig). Use whenever writing, editing, or reviewing JS/TS (React, Node, any JS/TS) — including renaming a variable to a full name, breaking up a long function, converting quotes or adding braces, replacing a deep relative import with an alias, registering a new @alias, or a pre-push style review. NOT for SCSS/styling (frontend-css:scss-modules), scaffolding a component's folder (frontend-react:component-structure), i18n strings, or Apex.
 ---
 
 # JS / TS Conventions

@@ -1,5 +1,5 @@
 ---
-description: Use this skill any time styles are written or modified — creating a new component, writing CSS/SCSS, or refactoring existing styles.
+description: House rules for authoring component SCSS — the .scss-over-.css convention, SCSS file structure, the color/spacing/radius variable & token system (never hardcode hex or magic numbers — add to variables first), and BEM structure (block → &__element → &--modifier). Use when writing or refactoring a component's styles, setting up the SCSS token/variable system, or consolidating hardcoded values to the scale. NOT for choosing a dimensional unit or converting px→rem (frontend-css:rem), naming a component's folder or its non-style files (frontend-react:component-structure), style import-alias policy (frontend-js:conventions), LWC/Aura styling (salesforce:lwc_development), or skeleton/Storybook files.
 ---
 
 # CSS / SCSS — Modules, Colors, and Structure
