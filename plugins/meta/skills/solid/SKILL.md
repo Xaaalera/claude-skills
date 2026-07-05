@@ -1,5 +1,5 @@
 ---
-description: SOLID is the headline design law for all code — apply SRP/OCP/LSP/ISP/DIP (plus DRY, KISS, YAGNI) whenever writing, editing, or reviewing code in ANY language or stack. Activate at DESIGN time, before implementation — not only at review. Pairs with meta:ockham (whether an entity should exist) — SOLID governs how the entities that do exist are structured.
+description: SOLID is the design law for all code — SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI. Activate at DESIGN time and whenever writing, editing, or reviewing code in ANY language or stack — ESPECIALLY when a class, function, hook, route, or method does several things (fetches + formats + writes, or auth + validation + DB in one method) and you're weighing whether to split it; a switch or if-chain keeps growing with new cases; you're deciding how one module should depend on or import another; or designing an interface or extension point. Pairs with meta:ockham (whether an entity should exist at all) — SOLID governs how the entities that DO exist are structured.
 ---
 
 # SOLID — the design law for all code
