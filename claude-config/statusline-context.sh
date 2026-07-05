@@ -46,3 +46,4 @@ fi
 
 printf '🧠 %s%% · %sk/%sk · %sk left%s\n' "$pct_rounded" "$used_k" "$total_k" "$left_k" "$marker"
 [ -n "$beacon_line" ] && printf '%s\n' "$beacon_line"
+exit 0
