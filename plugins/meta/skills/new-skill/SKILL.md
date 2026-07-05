@@ -16,11 +16,11 @@ plugins/<domain>/.claude-plugin/plugin.json      # one per domain
 
 | Scope | Location |
 |---|---|
-| Personal, reusable everywhere | `~/.claude/skills/plugins/<domain>/skills/<name>/` (the `xaaalera` marketplace) |
-| One specific repo / shared with a team | that repo's own marketplace plugin, or `.claude/skills/<name>/` for a quick repo-local skill |
+| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `Xaaalera` marketplace) |
+| One specific repo only | that repo's `.claude/skills/<name>/` for a quick repo-local skill |
 
-There are **no** flat `~/.claude/skills/<name>/` skills anymore, and nothing is "copied to a global
-location" — a skill exists once, in its plugin, and is pulled via the marketplace.
+There are **no** flat `skills/<name>/` skills anymore, and nothing is "copied to a global location" —
+a skill exists once, in its plugin, and is pulled via the marketplace.
 
 ## Naming convention
 
@@ -34,7 +34,8 @@ In use, skills are **namespaced by domain**: `<domain>:<skill-name>`.
 | Domain (plugin) | Skill folder | Used as |
 |---|---|---|
 | `frontend-css` | `rem`, `scss-modules` | `frontend-css:rem`, `frontend-css:scss-modules` |
-| `frontend-react` | `component-placement`, `hooks-registry` | `frontend-react:component-placement`, `frontend-react:hooks-registry` |
+| `frontend-js` | `conventions` | `frontend-js:conventions` |
+| `frontend-react` | `component-structure`, `hooks-registry` | `frontend-react:component-structure`, `frontend-react:hooks-registry` |
 | `git` | `commit` | `git:commit` |
 | `meta` | `new-skill`, `ockham` | `meta:new-skill`, `meta:ockham` |
 
@@ -86,11 +87,18 @@ Use ## sections, code blocks, tables as needed.
 3. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 4. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
    (`{name, description, version, keywords, author:{name:"Xaaalera"}}` — `version` is semver,
-   `keywords` an array for marketplace discovery), add the domain to `.claude-plugin/marketplace.json`
-   (hand-maintained), and enable `<domain>@xaaalera` in `~/.claude/settings.json → enabledPlugins`.
-   Adding a skill to an existing domain needs no manifest change.
-5. Editing anything under `~/.claude/skills/` auto-commits + pushes via the PostToolUse hook — no manual
-   sync step.
+   `keywords` an array for marketplace discovery), then enable `<domain>@Xaaalera` in the
+   consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
+   **generated** from each `plugin.json` by `sync.sh` — do not hand-edit it. Adding a skill to an
+   existing domain needs no manifest change.
+5. Add the skill's one-line entry to `README.md` by hand — the README is hand-maintained (`sync.sh`
+   does not touch it). `sync.sh` runs on the PostToolUse hook whenever a `SKILL.md` or `plugin.json`
+   changes: it regenerates `marketplace.json`, then commits + pushes.
+6. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
+   plugin cache is keyed by version — `/plugin update` only reinstalls a plugin when its version
+   changed. Edit a skill's body or description without bumping the owning plugin's `version` and the
+   change lives in git + the marketplace but **never loads in a session**: the stale cache keeps
+   serving the old copy and `reload-skills` reports "no changes". One bump per plugin per change set.
 
 ---
 
@@ -107,7 +115,7 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
 - **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
   rationalization table ("thought → reality"); otherwise give a positive recipe.
 
-Full house checklist (naming, plugin.json, sync, before-you-finalize) -> `references/authoring-best-practices.md`.
+Full house checklist (naming, plugin.json, sync, before-you-finalize) → `references/authoring-best-practices.md`.
 
 ---
 
