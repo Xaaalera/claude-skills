@@ -1,11 +1,5 @@
 ---
-description: >
-  Use when planning ANY expensive exhaustive operation over many items — reviewing a large
-  diff, auditing/evaluating a fleet of skills or files, migrating dozens of call sites,
-  sweeping a repo for dead code or bugs, reading a long document set, running a full test
-  suite. Before spending depth on everything, run a CHEAP shallow pass over ALL items to
-  sort them, then spend the expensive deep pass only on the shortlist. Activate at planning
-  time, before the first expensive unit of work is launched.
+description: "Use when you're about to attack a LARGE batch of items the same expensive way \u2014 a repo-wide sweep for dead code, unused exports, or bugs; a big multi-file diff to review; dozens of call sites to migrate; a fleet of skills, files, or docs to audit or read; every TODO to classify; hundreds of failing tests to work through. Any \"do X across the whole repo / all of them / everything\" request where the set is too big to give each item full attention. Instead of paying deep cost on every item, first run one CHEAP shallow pass over ALL of them to sort into skip vs. worth-it, then spend the expensive deep pass only on the shortlist. Invoke at planning time, before touching the first item. NOT for a single file or function (just do it), NOT for picking a model tier (meta:model-routing), NOT for a plain parallel spawn with no sorting step."
 ---
 
 # Triage — shallow first, deep only where it hurts
