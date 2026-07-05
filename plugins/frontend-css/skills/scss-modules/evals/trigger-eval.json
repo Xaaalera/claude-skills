@@ -10,7 +10,7 @@
   {"query": "we don't have a global variables file yet — how do I set up the SCSS token system?", "should_trigger": true},
   {"query": "add margin-top: 1.5rem to the card header — is that the right unit?", "should_trigger": false},
   {"query": "the h2 in DashboardPage.tsx uses 20px font-size, convert it to rem", "should_trigger": false},
-  {"query": "create a new React component folder for UserBadge with its tsx, index.ts, and styles", "should_trigger": false},
+  {"query": "create a new React component folder for UserBadge with its tsx, index.ts, and styles", "should_trigger": true},
   {"query": "should I name the component folder UserBadge or user-badge?", "should_trigger": false},
   {"query": "what BEM class name goes on the inner icon of the NavItem component?", "should_trigger": false},
   {"query": "add a Storybook story for the WidgetCard component", "should_trigger": false},

@@ -1,5 +1,5 @@
 ---
-description: House rules for developing Salesforce Lightning Web Components (LWC) and Aura. Use whenever creating or editing an LWC/Aura bundle — a component .js controller, .html template, or .js-meta.xml — or any Salesforce-side frontend JS. Covers DOM access and styling conventions.
+description: House rules for developing Salesforce Lightning Web Components (LWC) and Aura — the .js controller, .html template, .js-meta.xml, and CSS of a bundle, plus every LWC authoring idiom. Use whenever creating or editing an LWC/Aura bundle or writing any Salesforce-side frontend JS — including adding an @api or @track property, wiring an @wire to an Apex class, emitting or handling a custom event, a lifecycle hook, DOM access (querySelector), styling a component (CSS custom properties, scss→css conversion), or writing the js-meta.xml targets / isExposed config.
 ---
 
 # Salesforce LWC Development
