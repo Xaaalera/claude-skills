@@ -1,5 +1,5 @@
 ---
-description: Prefer the salesforce-dx MCP tools over raw `sf` CLI for ANY interaction with any Salesforce org — SOQL/Tooling queries, running Apex tests, deploying or retrieving metadata. Use whenever you query an org, run tests, or push/pull metadata.
+description: "Interact with a Salesforce org through the salesforce-dx MCP tools instead of the raw `sf` CLI. Use for any org-touching task: running SOQL or Tooling queries against an org, running or resuming Apex tests, deploying/pushing or retrieving/pulling metadata and Apex classes to/from an org (scratch, sandbox, or prod), resuming a long-running deploy or test job by id, and resolving which org alias or username to target. Triggers on requests like \"query the org\", \"push/deploy these classes to the org\", \"run the Apex tests on <org>\", \"resume the deploy job\", or \"which org alias should I use\". If the action reaches out to a live org \u2014 data, tests, metadata, or org/alias selection \u2014 reach for this first."
 ---
 
 # Salesforce DX MCP — Use It For Org Interactions

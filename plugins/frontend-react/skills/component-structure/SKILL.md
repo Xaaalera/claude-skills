@@ -1,5 +1,5 @@
 ---
-description: Use this skill any time a new React component is created or an existing component is edited or reviewed.
+description: "Use when creating, editing, restructuring, or reviewing a React frontend component \u2014 including its folder layout and file organization (tsx/scss/index), where a component or sub-component should live, BEM class naming, SCSS styling, rem sizing, i18n of user-visible strings, barrel exports, and replacing inline JS style/hover handlers (e.g. onMouseEnter toggling classes) with CSS. Covers \"this component file is in the wrong place \u2014 fix the structure\", moving a flat .tsx into its own folder, and any question about how a component's files, styles, or markup should be organized."
 ---
 
 # Component Structure — BEM + SCSS + rem + i18n

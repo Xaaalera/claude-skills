@@ -1,5 +1,5 @@
 ---
-description: Use this skill when creating a new skill file. Ensures consistent naming, structure, and placement in the plugin/marketplace model. For iterative creation with evals and testing, use the skill-creator plugin instead.
+description: "Use this skill to author a brand-new skill from scratch \u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md and frontmatter. Triggers for \"create/add/write a skill for X\", \"where does the SKILL.md go\", \"what's the naming convention or folder structure for a new skill\", or \"what goes in the description frontmatter\". This is about scaffolding a new skill's structure and location, NOT about tuning, evaluating, or fixing an existing skill's trigger behavior, and NOT about ordinary code, components, or config in a project. If the task is improving, optimizing, or running evals on a skill that already exists, do not use this skill."
 ---
 
 # Create a New Skill

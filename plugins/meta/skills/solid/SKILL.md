@@ -48,6 +48,20 @@ Ockham) win over structure you don't need today.**
 
 ---
 
+## Rationalizations SOLID rejects
+
+The corner-cuts under deadline — both directions (skipping structure AND over-splitting):
+
+| Thought | Reality |
+|---|---|
+| "Deadline — I'll just add one more branch to this if/switch" | That's the OCP smell. Add the case as an entry (strategy/lookup), not by editing the ladder. |
+| "This function does a few things but it's fine" | Two reasons to change = split (SRP). "Fine" now is the god-function later. |
+| "I'll split this out to be SOLID-correct" (one hypothetical) | Splitting for an imagined case violates YAGNI. Split only on REAL divergence / 3+ duplication / too-big-to-hold. |
+| "Faster to copy the block than refactor" | DRY: one piece of knowledge, one place. Hoist the shared unit. |
+| "A clever abstraction handles all future cases" | KISS. The simplest thing a stranger reads at a glance wins. |
+
+---
+
 ## Checklist
 
 - [ ] Each unit has ONE responsibility (SRP)
