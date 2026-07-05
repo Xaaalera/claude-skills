@@ -1,5 +1,5 @@
 ---
-description: Clarity gate for spec/design docs and implementation plans. After a spec or plan is written or edited (e.g. under docs/superpowers/specs or docs/superpowers/plans, or any design doc), audit it so an average non-technical manager grasps every section's point and nothing is a bloated wall — then fix it in place. A reviewer persona, not a writing guide. NOT for normal chat, code, or comments.
+description: Clarity gate for an already-written spec, plan, design doc/note, or RFC — a reviewer persona, not a writing guide. Activate to REVIEW or AUDIT such a doc (often under docs/superpowers/specs or docs/superpowers/plans) when checking whether a non-technical manager or reader could follow it; when it feels padded, wordy, or has grown long; when a section is a wall of prose or full of undefined jargon; or when the decision is buried at the end and should lead — then fix it in place. NOT for WRITING or drafting a doc from scratch (that's meta:lean-writing — wittgenstein reviews one that already exists), and NOT for chat, code, comments, commit messages, jira, or READMEs.
 ---
 
 # 🪜 WITTGENSTEIN — The Clarity Gate
