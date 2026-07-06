@@ -1,5 +1,5 @@
 ---
-description: Security rules for reviewing changes — secret leakage, BFF route auth, client token boundary, injection, and the Salesforce Security Review bar for Apex. Activate when reviewing a diff for security or writing security-sensitive code (BFF routes, Apex REST, auth, SOQL).
+description: Security rules for reviewing changes or writing security-sensitive code — secret/API-key leakage, BFF route auth, client token boundary, SOQL injection, XSS in Aura/LWC output, WITH USER_MODE / FLS enforcement, and the Salesforce Security Review bar for Apex. Activate when auditing a diff for security (hardcoded secrets, injection, missing auth, token leaks, unescaped output) or writing a BFF route, Apex REST resource, or any auth/SOQL-touching code.
 ---
 
 # Security Review Rules

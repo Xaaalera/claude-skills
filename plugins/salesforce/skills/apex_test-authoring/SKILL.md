@@ -1,5 +1,5 @@
 ---
-description: Author and maintain Apex unit tests to a strict house standard. Use WHENEVER you create or edit an Apex class (.cls), write or fix an Apex test, or set up Apex test data — every new Apex class must get a matching test class in the same change. Covers data factories, @TestSetup, Assert.* assertions, FLS/user-mode testing, REST resource mocking, and bulk/positive/negative coverage.
+description: Use when writing, fixing, or extending an Apex test — writing a test class for a new or changed Apex class, covering a negative or bulk path, adding a @TestSetup data factory, replacing System.assertEquals with Assert.*, removing a hardcoded record Id, mocking a RestRequest for a REST resource, or updating a test after you changed the class under test. Also whenever you create or edit any Apex `.cls` — every new class must get a matching test class in the same change. Covers data factories, @TestSetup, Assert.* assertions, FLS/user-mode testing, REST resource mocking, and bulk/positive/negative coverage.
 ---
 
 # Apex Test Authoring

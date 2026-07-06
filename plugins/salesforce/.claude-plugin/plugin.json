@@ -1,7 +1,7 @@
 {
   "name": "salesforce",
   "description": "Personal Salesforce skills \u2014 Apex test authoring standard and salesforce-dx MCP usage.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "keywords": [
     "salesforce",
     "apex",
