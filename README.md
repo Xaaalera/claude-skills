@@ -136,10 +136,19 @@ Project skills win over plugin skills on a name clash.
   package has no error-code registry, create one.
 - **`meta:lean-writing`** — Write specs, design docs, and brainstorm summaries terse: short plain
   sentences, bullets over prose, no filler — caveman-simple but technically precise.
+- **`meta:model-routing`** — Assign an explicit model tier to every spawned agent / fan-out / eval before
+  it launches (head for final judges, sonnet for judgment, haiku for mechanical sweeps); measure one unit
+  and show the cost table before scaling. Use whenever planning multi-agent or eval work.
 - **`meta:new-skill`** — How to author a new skill in the plugin model: naming, `SKILL.md` structure,
   and where it goes (`plugins/<domain>/skills/<name>/`).
 - **`meta:ockham`** — The Razor. Invoke *before* creating any new entity (file, module, abstraction,
   config key…) to challenge whether it should exist at all — kill needless complexity early.
+- **`meta:solid`** — The design law for code (SRP/OCP/LSP/ISP/DIP + DRY/KISS/YAGNI). Activate at design
+  time and when writing/reviewing code — especially when deciding whether to split a class/function or
+  how one module should depend on another. Pairs with `meta:ockham`.
+- **`meta:triage`** — shallow first, deep only where it hurts: before any expensive exhaustive operation
+  (fleet evals, big-diff review, migrations, repo sweeps), run a cheap full-coverage sorting pass, then
+  spend the deep pass on the shortlist only.
 - **`meta:wittgenstein`** — Clarity gate for specs and plans: audit each section so a non-technical
   reader grasps its point and nothing is a bloated wall of text, then fix it in place.
 
