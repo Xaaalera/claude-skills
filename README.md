@@ -22,6 +22,7 @@ enforcer). Tailor `.claude/review.config.json` per the `review:setup` skill.
 
 | Plugin | Skills |
 |---|---|
+| `cicero` | *(no skill — a SessionStart hook that injects the house voice)* |
 | `diogenes` | `diogenes` |
 | `frontend` | `fe-check` |
 | `frontend-css` | `rem`, `scss-modules` |
@@ -30,7 +31,8 @@ enforcer). Tailor `.claude/review.config.json` per the `review:setup` skill.
 | `git` | `commit` |
 | `i18n` | `ui-strings` |
 | `jira` | `comment-style` |
-| `meta` | `error-handling`, `lean-writing`, `new-skill`, `ockham`, `wittgenstein` |
+| `lovecraft` | `lovecraft` |
+| `meta` | `error-handling`, `lean-writing`, `model-routing`, `new-skill`, `ockham`, `solid`, `triage`, `wittgenstein` |
 | `review` | `setup`, `/scavenge` command, `review-scavenger` agent |
 | `salesforce` | `apex_test-authoring`, `dx_mcp`, `lwc_development`, `security_review-rules`, `sf-deploy-test`, `sf-run` |
 
