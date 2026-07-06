@@ -20,11 +20,41 @@ for f in "$SCRIPT_DIR"/scripts/review/*.ts; do
 done
 cp "$SCRIPT_DIR/scripts/review/package.json" "$TARGET/scripts/review/package.json"
 
-# Git hook + CI workflow + config schema.
-cp "$SCRIPT_DIR/templates/husky-pre-push" "$TARGET/.husky/pre-push"
-chmod +x "$TARGET/.husky/pre-push"
-cp "$SCRIPT_DIR/templates/review-gate.yml" "$TARGET/.github/workflows/review-gate.yml"
+# Config schema is plugin-owned — always refresh it.
 cp "$SCRIPT_DIR/review.config.schema.json" "$TARGET/.claude/review.config.schema.json"
+
+# Git pre-push hook — EXTEND, never clobber. The project may have its own checks
+# (lint, type-check, tests, route compliance) in this hook; only ADD the review gate.
+HOOK="$TARGET/.husky/pre-push"
+if [ -f "$HOOK" ]; then
+  if grep -q 'scripts/review/gate.ts' "$HOOK"; then
+    echo "kept .husky/pre-push (already invokes the review gate)"
+  else
+    {
+      echo ""
+      echo "# Review gate (added by review plugin install) — passing /review attestation + secret scan."
+      echo 'npx tsx "$(git rev-parse --show-toplevel)/scripts/review/gate.ts"'
+    } >> "$HOOK"
+    chmod +x "$HOOK"
+    echo "extended .husky/pre-push with the review gate (kept your existing checks)"
+  fi
+else
+  cp "$SCRIPT_DIR/templates/husky-pre-push" "$HOOK"
+  chmod +x "$HOOK"
+  echo "created .husky/pre-push"
+fi
+
+# CI workflow — CREATE only if absent, never clobber. A project that folded the review
+# gate into its own workflow keeps it; we don't overwrite its other CI steps.
+WF="$TARGET/.github/workflows/review-gate.yml"
+if [ -f "$WF" ]; then
+  grep -q 'scripts/review/gate.ts' "$WF" \
+    && echo "kept .github/workflows/review-gate.yml (already runs the review gate)" \
+    || echo "kept .github/workflows/review-gate.yml (exists — NOT overwritten; add 'npx tsx scripts/review/gate.ts --secrets-only' yourself if missing)"
+else
+  cp "$SCRIPT_DIR/templates/review-gate.yml" "$WF"
+  echo "created .github/workflows/review-gate.yml"
+fi
 
 # Seed config only if absent (idempotent — never clobber the project's own config).
 if [ ! -f "$TARGET/.claude/review.config.json" ]; then
