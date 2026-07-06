@@ -71,13 +71,20 @@ Project skills win over plugin skills on a name clash.
 
 ## Skills
 
+### `cicero`
+- *(no skill)* — a SessionStart hook that injects the house communication voice (bottom line first,
+  concise, plain language, recommend-don't-survey, push back, stay in scope) plus a Stop hook that
+  enforces reply language/concision. Configuration, not an invokable skill.
+
 ### `diogenes`
-- **`lovecraft:lovecraft`** — the Chronicler of the Unknown: house narrative voice for the
-  engineering journal (xaaalera.github.io). Expedition-journal post-mortems — dated log entries,
-  eroding composure, exact numbers, a survivor's protocol at the end.
 - **`diogenes:diogenes`** — Per-session token-spend report narrated by Diogenes the Cynic: session
   totals + cost, per-skill amortized cost, the heaviest tool-results and output turns. Use when you ask
   where tokens went, who's eating tokens, or what the session cost.
+
+### `lovecraft`
+- **`lovecraft:lovecraft`** — the Chronicler of the Unknown: house narrative voice for the
+  engineering journal (xaaalera.github.io). Expedition-journal post-mortems — dated log entries,
+  eroding composure, exact numbers, a survivor's protocol at the end.
 
 ### `frontend-css`
 - **`frontend-css:rem`** — Always size in `rem`, never `px`. Applies whenever CSS / SCSS / Tailwind is
