@@ -179,9 +179,10 @@ Every touched or new skill must ship a trigger eval. A pre-push hook
 no valid `evals/trigger-eval.json` (JSON array of ≥6 `{query, should_trigger}`
 cases, ≥1 positive and ≥1 negative). It only *warns* — never blocks — when the
 eval exists but has not been measured or has gone stale (no fresh
-`evals/result.json`). Refresh a measurement with
-`python3.14 scripts/optimize_description.py --skill-path <dir> --apply`, which writes
-`evals/result.json`.
+`evals/result.json`). Refresh a measurement by running the optimizer **from the
+`claude-skills` repo** (that repo owns the runner), pointing it at this skill's
+path: `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`, which
+writes `evals/result.json`.
 
 **Install once per clone:** `bash install.sh` (sets `core.hooksPath` to `hooks/`).
 Untouched legacy skills are never inspected; `git push --no-verify` skips the local hook.
