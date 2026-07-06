@@ -21,4 +21,17 @@ echo '{"custom":true}' > "$T/.claude/review.config.json"
 bash "$HERE/install.sh" "$T" >/dev/null
 grep -q '"custom":true' "$T/.claude/review.config.json" || { echo "config clobbered"; exit 1; }
 
+# A non-SFDX target must NOT get a .mcp.json from the review install.
+[ -f "$T/.mcp.json" ] && { echo "unexpected .mcp.json in non-SFDX target"; exit 1; }
+
+# An SFDX target (has sfdx-project.json) gets a .mcp.json with the salesforce-dx MCP, idempotently.
+SF="$(mktemp -d)"
+touch "$SF/sfdx-project.json"
+bash "$HERE/install.sh" "$SF" >/dev/null
+jq -e '.mcpServers["salesforce-dx"].args | index("@salesforce/mcp")' "$SF/.mcp.json" >/dev/null \
+  || { echo "MISSING: salesforce-dx MCP not provisioned for SFDX project"; exit 1; }
+bash "$HERE/install.sh" "$SF" >/dev/null  # re-run must not duplicate or clobber
+[ "$(jq '.mcpServers | keys | length' "$SF/.mcp.json")" = "1" ] || { echo "MCP provisioning not idempotent"; exit 1; }
+rm -rf "$SF"
+
 echo "INSTALL TEST PASS"
