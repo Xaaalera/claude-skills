@@ -10,6 +10,17 @@ description: Use this skill whenever the user asks to commit, create a commit, o
 
 !`git diff HEAD`
 
+## Step 0 — Sync docs & skills first
+
+Before splitting commits, make the docs and skills match the change:
+- Honor any `[*-sync]` reminder a PostToolUse hook surfaced this session (e.g. `config-sync`,
+  `spec-sync`, `design-sync`, `env-sync`).
+- If the change touches an area owned by a doc or skill, update that doc/skill in the SAME set of
+  commits. Which doc/skill owns which area is repo-specific — the repo's `CLAUDE.md` names the mapping
+  (e.g. a design-system doc, a project-spec doc, an owning skill). When unsure, check `CLAUDE.md`.
+
+Do not split commits until docs and skills are up to date.
+
 ## Instructions
 
 Analyze the changes above and split them into atomic logical commits. Rules:
