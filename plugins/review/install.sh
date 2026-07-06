@@ -64,6 +64,24 @@ else
   echo "kept existing .claude/review.config.json"
 fi
 
+# Stack tooling MCP — on first adoption, provision the MCP server this repo's stack needs so the
+# matching skill has something to talk to (salesforce:dx_mcp drives the salesforce-dx MCP). Idempotent;
+# never clobbers. Salesforce/Apex repo = has sfdx-project.json → seed/merge the salesforce-dx MCP.
+if [ -f "$TARGET/sfdx-project.json" ]; then
+  MCP="$TARGET/.mcp.json"
+  SFDX_MCP='{command:"npx", args:["-y","@salesforce/mcp","--orgs","DEFAULT_TARGET_ORG","--toolsets","orgs,metadata,data,testing"]}'
+  if [ ! -f "$MCP" ]; then
+    jq -n "{ mcpServers: { \"salesforce-dx\": $SFDX_MCP } }" > "$MCP"
+    echo "seeded .mcp.json with the salesforce-dx MCP (SFDX project detected)"
+  elif ! jq -e '.mcpServers["salesforce-dx"]' "$MCP" >/dev/null 2>&1; then
+    tmp="$(mktemp)"
+    jq ".mcpServers[\"salesforce-dx\"] = $SFDX_MCP" "$MCP" > "$tmp" && mv "$tmp" "$MCP"
+    echo "added salesforce-dx MCP to existing .mcp.json"
+  else
+    echo "kept .mcp.json (already has salesforce-dx)"
+  fi
+fi
+
 # Wire the marketplace + review plugin into the target's committed settings.json (merge, never clobber).
 MARKET_NAME="$(jq -r '.name' "$MARKET_ROOT/.claude-plugin/marketplace.json")"
 REPO="$(git -C "$MARKET_ROOT" remote get-url origin 2>/dev/null | sed -E 's#\.git$##; s#^.*[:/]([^/]+/[^/]+)$#\1#')"
