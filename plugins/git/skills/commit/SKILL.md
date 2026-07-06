@@ -1,5 +1,5 @@
 ---
-description: Use this skill whenever the user asks to commit, create a commit, push changes, or says something like "commit this", "let's commit", "make a commit". Splits all uncommitted changes into atomic logical commits — one logical concern per commit, each describing at most 2-3 actions.
+description: Use this skill whenever the user asks to commit, create a commit, or push changes — e.g. "commit this", "let's commit", "make a commit". First syncs docs/skills owned by the changed area, then splits into atomic logical commits.
 ---
 
 ## Current git state
