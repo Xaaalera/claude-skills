@@ -171,3 +171,17 @@ New domain: also add `plugins/<domain>/.claude-plugin/plugin.json`, a row above,
 - **`meta:triage`** — shallow first, deep only where it hurts: before any expensive exhaustive
   operation (fleet evals, big-diff review, migrations, repo sweeps), run a cheap full-coverage
   sorting pass, then spend the deep pass on the shortlist only.
+
+## Eval gate (pre-push)
+
+Every touched or new skill must ship a trigger eval. A pre-push hook
+(`hooks/pre-push` → `scripts/eval-gate.sh`) blocks the push if a touched skill has
+no valid `evals/trigger-eval.json` (JSON array of ≥6 `{query, should_trigger}`
+cases, ≥1 positive and ≥1 negative). It only *warns* — never blocks — when the
+eval exists but has not been measured or has gone stale (no fresh
+`evals/result.json`). Refresh a measurement with
+`python3.14 scripts/optimize_description.py --skill-path <dir> --apply`, which writes
+`evals/result.json`.
+
+**Install once per clone:** `bash install.sh` (sets `core.hooksPath` to `hooks/`).
+Untouched legacy skills are never inspected; `git push --no-verify` skips the local hook.
