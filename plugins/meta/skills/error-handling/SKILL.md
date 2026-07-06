@@ -1,5 +1,5 @@
 ---
-description: Producing or consuming errors anywhere in a package (Apex, a Node/BFF server, or a frontend). Every error uses ONE format — the Google AIP-193 / google.rpc.Status envelope — so the client handles them identically regardless of source. Activate when adding an error path, throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client. If the package has no error-code registry, create one.
+description: Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (Apex, Node/BFF, or frontend).
 ---
 
 # error-handling — one error format everywhere
