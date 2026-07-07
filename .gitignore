@@ -1,10 +1,24 @@
-sync-skills.sh
+# Safe by default: ignore EVERYTHING at the repo root, then allow only what
+# should be published to the marketplace. Any new top-level folder (a local
+# skill like speccy/, plan-execution/, bilingual-docs/) is private by default —
+# no need to remember to add it. The auto-push hook then cannot leak it.
+/*
+
+# --- published: the marketplace and its supporting infra ---
+!/.gitignore
+!/.claude-plugin/
+!/plugins/
+!/scripts/
+!/hooks/
+!/claude-config/
+!/README.md
+!/CLAUDE.md
+!/AGENTS.md
+!/install.sh
+
+# --- never publish, even though the above un-ignores their parents ---
 node_modules/
-bilingual-docs/
 __pycache__/
 *.pyc
 .DS_Store
-
-# Local-only skills — loaded by Claude for this user, never published to the marketplace
-speccy/
-plan-execution/
+sync-skills.sh
