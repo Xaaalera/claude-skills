@@ -4,3 +4,7 @@ bilingual-docs/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Local-only skills — loaded by Claude for this user, never published to the marketplace
+speccy/
+plan-execution/
