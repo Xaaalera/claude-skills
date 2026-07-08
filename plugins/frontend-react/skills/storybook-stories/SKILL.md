@@ -12,7 +12,7 @@ decision instead of a guess made fresh every time.
 
 Right after creating (or finishing) ANY new React component, in ANY project —
 the moment you would otherwise just move on from a fresh `.tsx`. Pairs with
-`frontend-react:component-placement`: its "catalog it" step routes here.
+`frontend-react_component-placement`: its "catalog it" step routes here.
 
 ---
 
@@ -73,13 +73,24 @@ Then act on the answer (Step 3 if yes; otherwise stop).
   ("Metric — rising"), not domain-specific ("Revenue") — the component is generic, so
   its fixtures stay generic.
 - Cover the **distinct states/variants** the component can reach (default, empty,
-  error, loading, key prop/role variations) — not redundant duplicates. Use realistic
-  or mock props.
+  loading, key prop/role variations) — including the **error state**: what the wrapping
+  `ErrorBoundary` renders is one of the component's states, so the story exercises it
+  too (throw an enveloped error into the boundary and show the fallback tile). Not
+  redundant duplicates. Use realistic or mock props.
+- **Drive states through controls — maximize it, don't multiply exports.** Model the
+  state-driving props as args and expose them via `argTypes` **`select` / `radio` /
+  `boolean`** (options as lists), so a reviewer flips every state from the Controls
+  panel in ONE controllable story. Prefer this over many near-identical exports — one
+  component, every state reachable by a prop (that's the payoff of prop-/BEM-state-driven
+  components). Add a named export only for a state worth pinning as its own entry point.
+  (If a state is produced by *throwing* into an `ErrorBoundary`, give the boundary
+  `key={arg}` so flipping the control remounts it — react-error-boundary latches on the
+  first caught error otherwise.)
 - **If the component has a colocated skeleton** (`<Component>Skeleton`): don't give the
   skeleton its own story file — treat it as a *state*. In each story/case render the
   real component with its skeleton **stacked directly below it** (normal on top), so
   the two compare at a glance; a shared decorator across the states keeps it DRY. See
-  the `skeleton-components` skill.
+  the `react_skeleton-components` skill.
 - Match the project's existing story conventions (framework import path, test helpers,
   decorators) — don't introduce a new style.
 - After writing, surface the **preview URL(s)** (Storybook MCP `preview-stories`, or the
@@ -91,6 +102,6 @@ Then act on the answer (Step 3 if yes; otherwise stop).
 
 - [ ] Read `CLAUDE.md` for the recorded `Storybook stories:` preference
 - [ ] If absent: explained Storybook, asked the user, recorded `yes`/`no` in `CLAUDE.md`
-- [ ] If `yes`: wrote a colocated story covering the key states; surfaced the preview URL
+- [ ] If `yes`: wrote a colocated story covering the key states — including the error/ErrorBoundary state — driven by `select`/`radio`/`boolean` controls (one controllable story, not per-state duplicates); surfaced the preview URL
 - [ ] Story + its mock live in a `stories/` folder; data is a separate `*.mock.ts` (never inline, no app/domain mock-data)
 - [ ] If `no`: skipped story creation silently
