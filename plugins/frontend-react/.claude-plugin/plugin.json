@@ -1,7 +1,7 @@
 {
   "name": "frontend-react",
-  "description": "Personal frontend React skills — component placement/structure, hooks registry, primitive reuse, layout, stories.",
-  "version": "1.0.0",
+  "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
+  "version": "1.0.1",
   "keywords": [
     "react",
     "components",

@@ -148,6 +148,55 @@ Namespace table, usage + nested-key examples, and the full "counts / doesn't cou
 
 ---
 
+## Error boundaries — wrap every fallible component
+
+Any component that fetches data or can otherwise throw at render (a data hook that re-throws its
+query error, a parse, a lazy import) MUST be isolated by an error boundary, so one failing block
+never blanks the whole page. Wrap it at its mount site, or export it wrapped:
+
+```tsx
+import { ErrorBoundary, withErrorBoundary } from '@/components/feedback/error-boundary';
+
+// At the mount site:
+<ErrorBoundary>
+  <DataGrid />
+</ErrorBoundary>
+
+// …or as the component's own default export (the HOC "decorator"):
+export default withErrorBoundary(DataGrid);
+```
+
+The boundary's default fallback reads the app's **unified error envelope** (`shared/errors/codes.ts`)
+and renders the matching user-friendly tile — `AccessDenied` for a permission denial, `ErrorState`
+for everything else, with copy resolved by error reason/status. So you never hand-roll error copy per
+component. A data hook surfaces its failure by re-throwing the query error into the wrapping boundary
+(`if (error) throw error`).
+
+### Storybook: prove the error state, drive it with a control
+
+Every component with an error/fallback (or any multi-state) path gets a Storybook story that
+exercises it — but do NOT write one hardcoded export per state. Author **one controllable story** and
+expose the state-driving prop as an `argTypes` **`select`** (options list), so a reviewer flips every
+state from the Controls dropdown. That is the whole point of prop-/BEM-state-driven components: one
+component, every state reachable through a prop.
+
+```tsx
+// argTypes turns the state prop into a dropdown of every value.
+argTypes: { reason: { control: 'select', options: Object.values(REASONS) } },
+args: { reason: REASONS.INSUFFICIENT_ACCESS },
+render: ({ reason }) => (
+  <ErrorBoundary>
+    <ThrowApiError reason={reason} />
+  </ErrorBoundary>
+),
+```
+
+Model props as lists and prefer `select` / `radio` / `boolean` controls over duplicated story
+exports. Story mechanics + the yes/no-stories decision live in the `frontend-react:storybook-stories`
+skill.
+
+---
+
 ## Barrel exports (index.ts)
 
 Always export:
@@ -176,6 +225,8 @@ export type { FeatureBlockItemData } from './FeatureBlockItem';
 - [ ] All user-visible strings use `useTranslation` — no hardcoded text in JSX
 - [ ] Translation keys added to the correct JSON file in `src/i18n/locales/en/`
 - [ ] New page namespace registered in `src/i18n/index.ts` (if applicable)
+- [ ] Data/fallible component isolated by `<ErrorBoundary>` (or `withErrorBoundary`)
+- [ ] Storybook exercises the error/fallback (and other) states via a `select`-control arg — one controllable story, not per-state exports
 
 ## Checklist — editing an existing component
 
@@ -185,3 +236,4 @@ export type { FeatureBlockItemData } from './FeatureBlockItem';
 - [ ] BEM structure preserved: new elements follow `&__element` pattern
 - [ ] No new inline hover handlers introduced
 - [ ] No new hardcoded color or spacing values — use tokens
+- [ ] Any new fetch/throw path sits inside an `ErrorBoundary`
