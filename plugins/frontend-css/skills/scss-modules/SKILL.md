@@ -141,6 +141,38 @@ $avatar-size: 2.5rem;
 
 ---
 
+## 5. Positioning — avoid `position: absolute` unless there is no other way
+
+Absolute (and `fixed`) positioning pulls an element OUT of normal flow: it stops contributing to
+layout, overlaps siblings, and breaks when content or the container resizes. Reach for it **last**,
+only when flow / flexbox / grid genuinely cannot express the layout.
+
+Prefer, in order:
+- normal flow with margins / `gap`;
+- flexbox or grid for alignment within a container (`align-self`, `margin-*: auto`, `justify-*`);
+- `position: absolute` ONLY for elements that must truly escape flow — decorative layers behind
+  content, a badge pinned to a corner, tooltips / popovers / dropdowns, backdrops/overlays.
+
+```scss
+// Wrong — absolute used just to push a button to the corner of a flex row
+&__close { position: absolute; top: $space-4; right: $space-4; }
+
+// Right — a trailing flex child; the row's align-items puts it in the corner, still in flow
+&__close { align-self: flex-start; margin-left: auto; }
+```
+
+**When absolute IS justified, flag it** — leave a one-line comment stating why flow can't do it, so a
+reviewer sees the intent instead of a silent overlay:
+
+```scss
+// absolute — decorative glow, must overflow the card corner and sit behind content
+&__glow { position: absolute; inset-block-start: -3.75rem; ... }
+```
+
+An `absolute`/`fixed` with **no** such justification comment is a review finding — flag it to the user.
+
+---
+
 ## Checklist when creating component styles
 
 - [ ] Project uses SCSS (if not — propose it first)
@@ -151,3 +183,4 @@ $avatar-size: 2.5rem;
 - [ ] New tokens added to the correct `variables/_*.scss` file first
 - [ ] All sizes in `rem` (except border-width, box-shadow offsets, SVG attributes)
 - [ ] BEM structure: block → `&__element` → `&--modifier`
+- [ ] No `position: absolute`/`fixed` without a one-line justification comment (prefer flow / flex / grid)
