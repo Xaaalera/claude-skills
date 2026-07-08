@@ -22,3 +22,6 @@ __pycache__/
 *.pyc
 .DS_Store
 sync-skills.sh
+
+# skill-creator eval scratch (trigger-eval.json + run_loop logs) — not skill content
+*-workspace/
