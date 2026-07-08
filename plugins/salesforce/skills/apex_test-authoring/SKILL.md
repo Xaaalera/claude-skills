@@ -13,6 +13,12 @@ description: Use when writing, fixing, or extending an Apex test — writing a t
 
 To run/deploy the tests against an org, use the **salesforce-dx MCP** (deploy_metadata, run_apex_test) — see the `salesforce-dx_mcp` skill, not raw `sf` CLI.
 
+## Re-running during a fix loop (the hard rule)
+
+Org test runs are slow. When tests fail, on each iteration re-run **only the specific test classes/methods that failed** — never the whole set. Re-running everything after fixing one test wastes minutes per cycle.
+
+Only once every previously-failing test passes in isolation, do **one** final run of the full affected set to catch regressions. The full run is the final gate, not a per-iteration step. Never re-run the whole suite to confirm a one-test fix.
+
 ---
 
 ## Non-negotiable rules
