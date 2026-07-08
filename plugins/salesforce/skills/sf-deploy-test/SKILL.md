@@ -1,11 +1,20 @@
 ---
-description: "Ship Salesforce Apex classes or metadata to an org and get back a compact pass/fail summary \u2014 deploy status plus optional Apex test results \u2014 instead of wading through raw `sf project deploy` / `sf apex run test` output.\n\nUse this for any request to deploy, push, or ship Apex/LWC/metadata (a single class, several classes, or a whole package/directory like widgetSettings) to a Salesforce org, whether or not tests are also run. Also use it to run specific test classes right after deploying, or to check test results as part of a deploy. And use it when a deploy has failed and the user needs help interpreting or fixing the error \u2014 including source-tracking, unsafe-path, or cross-repo shared-object failures.\n\nDon't use it for anonymous Apex snippets, ad-hoc SOQL queries, listing orgs, code review, or building UI components with no deploy involved."
+description: "CLI fallback that deploys Salesforce Apex/metadata to an org and returns a compact TWO-LINE pass/fail summary (deploy: Succeeded / tests: X/Y passed) via a bash wrapper over `sf project deploy` + `sf apex run test` — no MCP dependency.\n\nPREFER the salesforce-dx MCP (`mcp__salesforce-dx__deploy_metadata` + `mcp__salesforce-dx__run_apex_test`, per the `dx_mcp` skill) for programmatic deploy/test when the project has it — structured, resumable results, no shell/path friction. Reach for THIS skill instead when: you want a terse one-line pass/fail without parsing MCP JSON; the salesforce-dx MCP is unavailable (headless / cron / MCP server not connected); or you need combined deploy-then-test in a single call. If the project's CLAUDE.md names the dx MCP as the default deploy+test harness, follow that and treat this as the fallback.\n\nStill covers interpreting a failed deploy (source-tracking, unsafe-path, cross-repo shared-object errors). Don't use for anonymous Apex snippets, ad-hoc SOQL, listing orgs, code review, or UI work with no deploy."
 ---
 
-# sf-deploy-test — deploy + run tests
+# sf-deploy-test — deploy + run tests (CLI fallback, terse summary)
 
 A colocated script (`sf-deploy-test.sh`, in this skill's directory) wraps
 `sf project deploy start` (+ optional `sf apex run test`) and prints a two-line summary.
+
+## Prefer the salesforce-dx MCP when available
+
+This skill is the **CLI fallback**, not the default. When the project provides the salesforce-dx
+MCP — and especially when its CLAUDE.md names it as the deploy+test harness — use
+`mcp__salesforce-dx__deploy_metadata` + `mcp__salesforce-dx__run_apex_test` instead: structured
+results, resumable long operations, no shell/path-resolution friction. Reach for this skill for a
+terse one-line pass/fail, a single combined deploy+test call, or when the MCP is unavailable
+(headless / cron, MCP not connected).
 
 ## Use it
 
