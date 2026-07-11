@@ -55,6 +55,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | Plugin | What it does | Skills |
 |---|---|---|
 | `cicero` | House voice — SessionStart + Stop hooks that set a plain, concise, bottom-line-first reply style. | — (hook only) |
+| `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
 | `diogenes` | Per-session token-spend report, narrated by Diogenes the Cynic. | [diogenes](#diogenes) |
 | `lovecraft` | House narrative voice for the engineering journal — expedition-journal post-mortems. | [lovecraft](#lovecraft) |
 | `frontend-css` | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) |
