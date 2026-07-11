@@ -18,6 +18,15 @@
       "category": "engineering"
     },
     {
+      "name": "diagram",
+      "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/diagram",
+      "category": "engineering"
+    },
+    {
       "name": "diogenes",
       "description": "Personal diogenes skills.",
       "author": {
