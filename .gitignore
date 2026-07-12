@@ -1,28 +1,12 @@
-# Safe by default: ignore EVERYTHING at the repo root, then allow only what
-# should be published to the marketplace. Any new top-level folder (a local
-# skill like speccy/, plan-execution/, bilingual-docs/) is private by default —
-# no need to remember to add it. The auto-push hook then cannot leak it.
-/*
-
-# --- published: the marketplace and its supporting infra ---
-!/.gitignore
-!/.claude-plugin/
-!/plugins/
-!/scripts/
-!/hooks/
-!/claude-config/
-!/README.md
-!/CLAUDE.md
-!/AGENTS.md
-!/install.sh
-!/.github/
-
-# --- never publish, even though the above un-ignores their parents ---
+# OS / build / editor junk
+.DS_Store
 node_modules/
 __pycache__/
 *.pyc
-.DS_Store
-sync-skills.sh
 
-# skill-creator eval scratch (trigger-eval.json + run_loop logs) — not skill content
+# skill-creator eval scratch (measured locally, not skill content)
 *-workspace/
+
+# local-only sync helpers (never published)
+sync-skills.sh
+sync-local.sh
