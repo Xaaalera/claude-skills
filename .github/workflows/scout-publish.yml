@@ -63,7 +63,8 @@ jobs:
             # (semicolon-joined) so it stays a plain shell arg and doesn't fight
             # YAML's block-scalar indentation rules.
             #
-            # Run outside `set -e` (via `|| true` on the whole pipeline below) so one
+            # Neutralize `set -e` via the `if ! ...; then ...; continue; fi` pattern
+            # below (a failing condition in an `if` does NOT trip `set -e`) so one
             # plugin's malformed/unparseable version can't abort the loop and starve
             # every other affected plugin's bump in the same push: log a warning to
             # stderr and `continue` instead.
