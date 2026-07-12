@@ -1,12 +1,12 @@
 ---
-description: Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (Apex, Node/BFF, or frontend).
+description: Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).
 ---
 
 # error-handling — one error format everywhere
 
 Errors follow the **Google AIP-193 / `google.rpc.Status`** standard (RFC 9457 lineage) on every
-layer — Apex, the BFF, and the client all use the SAME envelope, so an error is handled identically
-regardless of where it came from.
+layer — backend and frontend use the SAME envelope, so an error is handled identically regardless
+of where it came from.
 
 ## The envelope
 
@@ -29,12 +29,6 @@ regardless of where it came from.
    catalog (`reason → status + http code`) and the message dictionary (`reason → text`, extracted so
    text isn't hardcoded / is i18n-ready). Each source maps its own failure to a `reason` via it.
 2. **Normalize at the boundary.** Turn any raw/upstream failure into the envelope; a masked platform
-   error (e.g. Salesforce `Variable does not exist: tmpVar1`) must never leak.
+   or framework error (raw driver text, a stack trace, internal identifiers) must never leak.
 3. **Register every new reason** in the registry doc in the SAME change.
 4. **Frontend consumes by `status` / `reason`** (never a magic number); `message` is display text.
-
-## Reference implementation (example)
-
-- Apex: `<sf-repo>/force-app/main/default/classes/ApiErrors.cls` + `<sf-repo>/docs/ERROR_CODES.md`.
-- BFF: `<ui-repo>/server/lib/errors/` + `<ui-repo>/docs/backend/error-format.md`.
-- Client reader: `<ui-repo>/src/lib/errors/apiError.ts` (`getApiError`).
