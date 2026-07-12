@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "xaaalera": {
+      "source": {
+        "source": "github",
+        "repo": "Xaaalera/claude-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "cicero@xaaalera": true
+  }
+}
