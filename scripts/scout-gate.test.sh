@@ -86,6 +86,20 @@ check "no-sidecar skill blocks" 1 "$code"
 check_output_contains "no-sidecar block names the skill" "plugins/p/skills/nosidecar" "$out"
 
 # ---------------------------------------------------------------------------
+# Scenario C: allowed-tools frontmatter self-contradiction (mutating tool
+# grant + changes.tags:[]) -> the ONE hard-FAIL arm. Gate BLOCKS, naming
+# the offending skill.
+# ---------------------------------------------------------------------------
+r="$(setup_repo)"
+add_skill "$r" "plugins/p/skills/base" "files" "" ""
+freeze_as_origin_main "$r"
+add_skill "$r" "plugins/p/skills/badgrant" "" "" "Write"
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm "add skill with allowed-tools self-contradiction"
+out="$(run_gate "$r")"; code=$?
+check "allowed-tools self-contradiction blocks" 1 "$code"
+check_output_contains "self-contradiction block names the skill" "plugins/p/skills/badgrant" "$out"
+
+# ---------------------------------------------------------------------------
 # Scenario D: bundled mutating script + changes.tags:[] -> author-asserted
 # ambiguity, not a frontmatter grant -> gate PASSES (exit 0) but RECORDS
 # self-asserted for the offending skill.
