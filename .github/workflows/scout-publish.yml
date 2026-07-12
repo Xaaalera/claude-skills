@@ -62,7 +62,17 @@ jobs:
             # since a 4th segment would break `/plugin update`. Kept as a one-liner
             # (semicolon-joined) so it stays a plain shell arg and doesn't fight
             # YAML's block-scalar indentation rules.
-            python3 -c "import json, sys; path = sys.argv[1]; data = json.load(open(path)); version = data.get('version', '0.0.0'); parts = version.split('.'); sys.exit(f'{path}: version {version!r} is not 3-part SemVer - refusing to bump') if len(parts) != 3 else None; major, minor, patch = parts; bumped = f'{major}.{minor}.{int(patch) + 1}'; data['version'] = bumped; json.dump(data, open(path, 'w'), indent=2); open(path, 'a').write('\n'); print(f'{path}: {version} -> {bumped}')" "$plugin_json"
+            #
+            # Run outside `set -e` (via `|| true` on the whole pipeline below) so one
+            # plugin's malformed/unparseable version can't abort the loop and starve
+            # every other affected plugin's bump in the same push: log a warning to
+            # stderr and `continue` instead.
+            if ! python3 -c "import json, sys; path = sys.argv[1]; data = json.load(open(path)); version = data.get('version', '0.0.0'); parts = version.split('.'); sys.exit(f'{path}: version {version!r} is not 3-part SemVer - refusing to bump') if len(parts) != 3 else None; major, minor, patch = parts; bumped = f'{major}.{minor}.{int(patch) + 1}'; data['version'] = bumped; json.dump(data, open(path, 'w'), indent=2); open(path, 'a').write('\n'); print(f'{path}: {version} -> {bumped}')" "$plugin_json" 2>/tmp/bump-error.$$; then
+              echo "::warning::skipping $plugin_json — $(cat /tmp/bump-error.$$)" >&2
+              rm -f /tmp/bump-error.$$
+              continue
+            fi
+            rm -f /tmp/bump-error.$$
           done
 
       - name: Commit and push regenerated catalog + bumped version(s)

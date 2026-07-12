@@ -125,6 +125,30 @@ class ContradictionLiveHookTests(unittest.TestCase):
             self.assertEqual(r.returncode, 0, r.stderr)
 
 
+class RealScoutSkillAcceptanceTest(unittest.TestCase):
+    """Pins the acceptance fixture from the spec/plan: scout's own real skill
+    directory (tags: [], owning plugin has a live PostToolUse hook) must report
+    self-asserted, never FAIL. Synthetic fixtures above cover the same code path
+    in isolation, but only this test runs against the actual committed
+    plugins/scout/skills/scout — so a future edit to scout's own metadata.yaml
+    or hooks.json that regresses the hook -> self-asserted downgrade is caught
+    automatically instead of relying on manual verification."""
+
+    def test_real_scout_skill_is_self_asserted_not_fail(self):
+        repo_root = Path(__file__).resolve().parent.parent
+        skill_dir = repo_root / "plugins" / "scout" / "skills" / "scout"
+        self.assertTrue(
+            skill_dir.is_dir(),
+            f"expected real fixture at {skill_dir} — repo layout changed?",
+        )
+
+        r = run(skill_dir)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("self-asserted:", r.stdout)
+        self.assertIn(str(skill_dir), r.stdout)
+        self.assertIn("hook", r.stdout)
+
+
 class ContradictionScriptScanTests(unittest.TestCase):
     """Weighted arm 2: recursive scan over skill root + references/ + scripts/,
     matching the REAL shapes (report.py at root, build.sh in references/)."""
