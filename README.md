@@ -239,14 +239,13 @@ See [`new-skill`](#new-skill). New skill in an existing plugin: just add
 > Local-only infra (hook + statusline scripts) lives in `claude-config/`, which is gitignored — it is
 > not part of the published marketplace.
 
-## Eval gate (pre-push)
+## Eval gate (CI)
 
-Every touched or new skill must ship a trigger eval. A pre-push hook
-(`hooks/pre-push` → `scripts/eval-gate.sh`) blocks the push if a touched skill has no valid
+Every touched or new skill must ship a trigger eval. The **eval-gate** GitHub Actions check
+(`scripts/eval-gate.sh`, a required status check on `main`) fails the PR if a touched skill has no valid
 `evals/trigger-eval.json` (JSON array of ≥6 `{query, should_trigger}` cases, ≥1 positive and ≥1
-negative). It only *warns* — never blocks — when the eval exists but has not been measured or has gone
+negative). It only *warns* — never fails — when the eval exists but has not been measured or has gone
 stale. Refresh a measurement with
 `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`.
 
-**Install once per clone:** `bash install.sh` (sets `core.hooksPath` to `hooks/`). Untouched legacy
-skills are never inspected; `git push --no-verify` skips the local hook.
+Server-side only — nothing to install per clone. Untouched legacy skills are never inspected.
