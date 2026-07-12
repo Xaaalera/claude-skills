@@ -1,7 +1,7 @@
 {
   "name": "lovecraft",
-  "description": "LOVECRAFT — the Chronicler of the Unknown. House narrative voice for the engineering journal (xaaalera.github.io) and personal-repo storytelling: expedition-journal post-mortems with exact numbers and creeping dread.",
-  "version": "1.0.0",
+  "description": "LOVECRAFT \u2014 the Chronicler of the Unknown. House narrative voice for the engineering journal (xaaalera.github.io) and personal-repo storytelling: expedition-journal post-mortems with exact numbers and creeping dread.",
+  "version": "1.0.1",
   "keywords": [
     "lovecraft",
     "writing",
