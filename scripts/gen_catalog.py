@@ -20,13 +20,21 @@ Field mapping (source -> catalog):
   plugin.json:name    -> skill entry: plugin
   plugin.json:version -> skill entry: plugin-version
 
+Each skill entry also carries a `hooks` field: the list of event names (the
+keys under the top-level `hooks` object) declared in the owning plugin's
+plugins/<domain>/hooks/hooks.json. No hooks.json -> []. A malformed/
+unparseable hooks.json -> a single defensive sentinel entry (never crash,
+never silently drop). This is DISCLOSURE-ONLY — it never affects any gate.
+This reader is intentionally separate from scout_validate.py's
+_plugin_has_declared_hook (two readers by design; do not unify or import).
+
 Output shape:
   {
     "schema-version": 1,
     "marketplace": "<.claude-plugin/marketplace.json:name>",
     "generated": "YYYY-MM-DD",
     "skills": [ {name, plugin, plugin-version, activates-when, purpose,
-                 best-for, needs, changes}, ... ]
+                 best-for, needs, changes, hooks}, ... ]
   }
 
 CLI:
@@ -106,6 +114,39 @@ def _read_plugin_json(plugin_dir: Path, domain: str) -> dict:
     return data
 
 
+_HOOK_MALFORMED_SENTINEL = ["unknown/unparseable hook present"]
+
+
+def _read_plugin_hooks(plugin_dir: Path, domain: str) -> list:
+    """Enumerate a plugin's declared hook EVENT NAMES for disclosure only.
+
+    Reads plugins/<domain>/hooks/hooks.json. The result is the list of keys
+    under the top-level "hooks" object (e.g. ["PostToolUse"]). No hooks.json
+    -> []. Malformed/unparseable/wrong-shape -> a single defensive sentinel
+    entry; this never raises and never aborts catalog generation.
+
+    Intentionally NOT shared with scout_validate.py's
+    _plugin_has_declared_hook — that reader answers a different question
+    (is there a live hook, for a self-asserted mark) and lives in the gate,
+    not the generator. Two readers by design.
+    """
+    hooks_path = plugin_dir / "hooks" / "hooks.json"
+    if not hooks_path.is_file():
+        return []
+    try:
+        data = json.loads(hooks_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return list(_HOOK_MALFORMED_SENTINEL)
+
+    if not isinstance(data, dict):
+        return list(_HOOK_MALFORMED_SENTINEL)
+    hooks_obj = data.get("hooks")
+    if not isinstance(hooks_obj, dict):
+        return list(_HOOK_MALFORMED_SENTINEL)
+
+    return list(hooks_obj.keys())
+
+
 def _read_skill_description(skill_dir: Path, skill_id: str) -> str:
     skill_md = skill_dir / "SKILL.md"
     if not skill_md.is_file():
@@ -143,7 +184,7 @@ def _read_metadata(skill_dir: Path, skill_id: str) -> dict:
     return data
 
 
-def _build_entry(domain: str, skill_dir: Path, plugin_json: dict) -> dict:
+def _build_entry(domain: str, skill_dir: Path, plugin_json: dict, hooks: list) -> dict:
     skill_id = f"{domain}:{skill_dir.name}"
 
     description = _read_skill_description(skill_dir, skill_id)
@@ -165,6 +206,7 @@ def _build_entry(domain: str, skill_dir: Path, plugin_json: dict) -> dict:
             "tags": changes.get("tags", []),
             "notes": changes.get("notes", ""),
         },
+        "hooks": list(hooks),
     }
 
 
@@ -187,6 +229,7 @@ def generate_catalog(root: Path) -> dict:
         raise SystemExit(f"gen_catalog: no plugins/*/skills/*/SKILL.md found under {root}")
 
     plugin_json_cache: dict = {}
+    plugin_hooks_cache: dict = {}
     entries = []
     for skill_md in skill_mds:
         skill_dir = skill_md.parent
@@ -197,7 +240,11 @@ def generate_catalog(root: Path) -> dict:
             plugin_json_cache[domain] = _read_plugin_json(plugin_dir, domain)
         plugin_json = plugin_json_cache[domain]
 
-        entries.append(_build_entry(domain, skill_dir, plugin_json))
+        if domain not in plugin_hooks_cache:
+            plugin_hooks_cache[domain] = _read_plugin_hooks(plugin_dir, domain)
+        hooks = plugin_hooks_cache[domain]
+
+        entries.append(_build_entry(domain, skill_dir, plugin_json, hooks))
 
     return {
         "schema-version": SCHEMA_VERSION,

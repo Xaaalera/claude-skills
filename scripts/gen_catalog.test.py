@@ -70,6 +70,22 @@ def _to_yaml(data: dict) -> str:
     return yaml.safe_dump(data, sort_keys=False)
 
 
+def write_hooks_json(plugin_dir: Path, events: list) -> None:
+    """Write a well-formed hooks.json declaring the given event names."""
+    hooks_dir = plugin_dir / "hooks"
+    hooks_dir.mkdir(parents=True, exist_ok=True)
+    (hooks_dir / "hooks.json").write_text(json.dumps({
+        "hooks": {event: [] for event in events},
+    }))
+
+
+def write_malformed_hooks_json(plugin_dir: Path) -> None:
+    """Write an unparseable hooks.json (invalid JSON)."""
+    hooks_dir = plugin_dir / "hooks"
+    hooks_dir.mkdir(parents=True, exist_ok=True)
+    (hooks_dir / "hooks.json").write_text("{ this is not valid json ")
+
+
 class BuildsCorrectCatalog(unittest.TestCase):
     def test_multiple_skills_multiple_plugins(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -186,6 +202,49 @@ class FailsLoudlyOnPluginNameDivergence(unittest.TestCase):
             message = str(ctx.exception)
             self.assertIn("alpha", message)
             self.assertIn("not-alpha", message)
+
+
+class HookEnumeration(unittest.TestCase):
+    def test_events_listed_for_every_skill_of_the_plugin(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_marketplace(root)
+            plugin_dir = write_plugin(root, "alpha")
+            write_hooks_json(plugin_dir, ["PostToolUse", "SessionStart"])
+            write_skill(plugin_dir, "one")
+            write_skill(plugin_dir, "two")
+
+            catalog = gen_catalog.generate_catalog(root)
+            by_name = {s["name"]: s for s in catalog["skills"]}
+
+            self.assertEqual(by_name["alpha:one"]["hooks"], ["PostToolUse", "SessionStart"])
+            self.assertEqual(by_name["alpha:two"]["hooks"], ["PostToolUse", "SessionStart"])
+
+    def test_malformed_hooks_json_yields_present_sentinel_and_does_not_crash(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_marketplace(root)
+            plugin_dir = write_plugin(root, "beta")
+            write_malformed_hooks_json(plugin_dir)
+            write_skill(plugin_dir, "solo")
+
+            catalog = gen_catalog.generate_catalog(root)
+            entry = catalog["skills"][0]
+
+            self.assertEqual(len(entry["hooks"]), 1)
+            self.assertIn("present", entry["hooks"][0])
+
+    def test_no_hooks_json_yields_empty_list(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_marketplace(root)
+            plugin_dir = write_plugin(root, "gamma")
+            write_skill(plugin_dir, "solo")
+
+            catalog = gen_catalog.generate_catalog(root)
+            entry = catalog["skills"][0]
+
+            self.assertEqual(entry["hooks"], [])
 
 
 class CliBehavior(unittest.TestCase):
