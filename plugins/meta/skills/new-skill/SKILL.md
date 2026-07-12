@@ -16,7 +16,7 @@ plugins/<domain>/.claude-plugin/plugin.json      # one per domain
 
 | Scope | Location |
 |---|---|
-| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `Xaaalera` marketplace) |
+| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `xaaalera` marketplace) |
 | One specific repo only | that repo's `.claude/skills/<name>/` for a quick repo-local skill |
 
 There are **no** flat `skills/<name>/` skills anymore, and nothing is "copied to a global location" —
@@ -87,7 +87,7 @@ Use ## sections, code blocks, tables as needed.
 3. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 4. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
    (`{name, description, version, keywords, author:{name:"Xaaalera"}}` — `version` is semver,
-   `keywords` an array for marketplace discovery), then enable `<domain>@Xaaalera` in the
+   `keywords` an array for marketplace discovery), then enable `<domain>@xaaalera` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
    **generated** from each `plugin.json` by `sync.sh` — do not hand-edit it. Adding a skill to an
    existing domain needs no manifest change.

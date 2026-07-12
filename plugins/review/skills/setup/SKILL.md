@@ -18,7 +18,7 @@ offer to set it up: *"This repo has no review config — want me to install the 
 From the root of the target repo, with no prior setup (needs the GitHub CLI, `gh auth login`):
 
 ```bash
-bash <(gh api repos/XaaaleraDev/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
+bash <(gh api repos/Xaaalera/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
 ```
 
 `bootstrap.sh` shallow-clones this marketplace and runs `install.sh` against the repo. If the plugin is

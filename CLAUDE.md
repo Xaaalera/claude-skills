@@ -1,7 +1,7 @@
 ## Communication style — CICERO (the house voice)
 
 The full rules are injected every session by the `cicero` plugin's SessionStart hook
-(`cicero@xaaalera` globally; `cicero@Xaaalera` in work repos). Do not duplicate them here.
+(`cicero@xaaalera`). Do not duplicate them here.
 If no CICERO rules appear in context, say so — the hook is broken.
 
 ## Git

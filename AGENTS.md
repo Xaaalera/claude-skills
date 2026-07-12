@@ -4,8 +4,8 @@ Rules for any AI agent (or human) changing this repo. Read before editing.
 
 ## What this repo is
 `~/.claude/skills` — my personal Claude Code plugin marketplace. Each `plugins/<domain>/` holds skills
-(`skills/<name>/SKILL.md`), and optionally hooks/commands/agents. It mirrors the team `Xaaalera`
-marketplace as a personal safety net (survives leaving the org) plus personal-only plugins (`diogenes`).
+(`skills/<name>/SKILL.md`), and optionally hooks/commands/agents. It is a standalone marketplace — the
+single source of truth for these skills.
 
 ## Hard rules
 - **One problem per change.** A focused edit, not a grab-bag.
@@ -23,8 +23,3 @@ marketplace as a personal safety net (survives leaving the org) plus personal-on
 - **No `name:` frontmatter field** — the folder name is authoritative and the callable id is `<domain>:<folder>`
   (colon form is invalid in the field anyway). Frontmatter is just `description:`.
 - Keep the body short; push deep tables/examples into a `references/` subfolder (progressive disclosure).
-
-## Sync with Xaaalera
-This marketplace mirrors `Xaaalera` (team SSOT). When pulling changes across, copy everything EXCEPT
-marketplace-identity fields — `author` (`Xaaalera` here), the "Personal …" plugin descriptions, and the
-`meta:new-skill` placement/push wording, which are intentionally repo-specific.
