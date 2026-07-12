@@ -10,3 +10,7 @@ __pycache__/
 # local-only sync helpers (never published)
 sync-skills.sh
 sync-local.sh
+.speccy/
+
+# plan-execution task breakdown (durable local record, not published)
+.tasks/

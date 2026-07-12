@@ -1,0 +1,13 @@
+[
+  {"query": "write a blog post for my personal site about the outage we had last night, i want it as a story not a dry post-mortem", "should_trigger": true},
+  {"query": "turn this incident writeup into an article for xaaalera.github.io", "should_trigger": true},
+  {"query": "write me an article for the blog about this bug, in the user's native language, framed as a story rather than a dry report", "should_trigger": true},
+  {"query": "shape this debugging saga into a post for my engineering journal", "should_trigger": true},
+  {"query": "rewrite this migration story as a proper narrative article for my repo's blog", "should_trigger": true},
+  {"query": "add this incident to the journal — make it read like an expedition log, not a status update", "should_trigger": true},
+  {"query": "write the README for my open-source project explaining how to install and configure it", "should_trigger": false},
+  {"query": "draft a Jira comment summarizing what's done and what's left on this ticket", "should_trigger": false},
+  {"query": "write a concise design doc for the new caching layer we're building", "should_trigger": false},
+  {"query": "write a commit message for these staged changes", "should_trigger": false},
+  {"query": "review this skill's SKILL.md for leaks before I publish it", "should_trigger": false}
+]

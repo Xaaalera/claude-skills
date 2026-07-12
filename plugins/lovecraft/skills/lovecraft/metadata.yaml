@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: House narrative voice — casts a post-mortem, incident, or blog article as a Lovecraftian expedition journal (dated log entries, creeping dread, exact facts) instead of plain prose.
+best-for: The user's public engineering blog (xaaalera.github.io) or personal repos, when an incident/migration/debugging story is being written up as narrative rather than reference docs.
+needs: []
+changes:
+  tags: []
+  notes: Pure advisory/style skill — it shapes how the assistant writes prose (voice, structure, checklist) for a post the user is already authoring; it does not itself edit files, run commands, or touch git/network/org.

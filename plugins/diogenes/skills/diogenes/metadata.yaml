@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Reports where session tokens/cost went (totals, per-skill estimate, heaviest tool-results and output turns), narrated in the voice of Diogenes the Cynic.
+best-for: Anyone who wants a quick "who's eating tokens" / session-cost breakdown for their current Claude Code session, with cynical commentary instead of a dry table.
+needs: []
+changes:
+  tags: []
+  notes: "Read-only: runs the bundled report.py against the local session .jsonl transcript and prints a report; it writes nothing, touches no git/network/org state."

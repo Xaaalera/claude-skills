@@ -1,0 +1,14 @@
+[
+  {"query": "where did all the tokens go in this session?", "should_trigger": true},
+  {"query": "who's eating the most tokens right now, which skill is the fatty boy", "should_trigger": true},
+  {"query": "how much did this session cost me so far?", "should_trigger": true},
+  {"query": "give me a token report — biggest tool results, biggest output turns, all of it", "should_trigger": true},
+  {"query": "where are the tokens going in this session and who's guzzling them?", "should_trigger": true},
+  {"query": "break down token usage per skill loaded this session and tell me the total cost", "should_trigger": true},
+  {"query": "before we spawn ten agents in parallel, estimate the cost of running one so I can size the fan-out", "should_trigger": false},
+  {"query": "what's the per-token pricing for the current Claude model versus the previous one?", "should_trigger": false},
+  {"query": "our monthly Anthropic API bill jumped — pull the invoice and explain the line items", "should_trigger": false},
+  {"query": "review this diff for dead code and unused exports", "should_trigger": false},
+  {"query": "profile the backend service and tell me which endpoint is slowest under load", "should_trigger": false},
+  {"query": "summarize what this skill's SKILL.md instructs the agent to do", "should_trigger": false}
+]
