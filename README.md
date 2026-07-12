@@ -54,6 +54,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 
 | Plugin | What it does | Skills |
 |---|---|---|
+| `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | `cicero` | House voice — SessionStart + Stop hooks that set a plain, concise, bottom-line-first reply style. | — (hook only) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
 | `diogenes` | Per-session token-spend report, narrated by Diogenes the Cynic. | [diogenes](#diogenes) |
@@ -72,6 +73,14 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 ## Skills
 
 Grouped by plugin. Each group links back to [Plugins](#plugins).
+
+### cerberus &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="leak-check"></a>**leak-check** — the leak guard's agent pass. Before a new or edited skill,
+  reference, or eval fixture ships to this PUBLIC marketplace, review the change for anything that points
+  to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an
+  employer brand, or the aggregate domain flavor) and rewrite it to a neutral fictional demo. A
+  **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design — a list of the
+  real names to catch would itself be the leak.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
 No skill — a **SessionStart** hook injects the house communication voice (bottom line first, concise,
