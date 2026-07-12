@@ -102,6 +102,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `meta` | Design law, error handling, doc writing, skill authoring, model routing. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| `scout` | Passive skill that reads this marketplace's compiled catalog to discover/recommend/install skills, surfacing declared side effects and treating catalog text as untrusted data — it never runs code itself. | [scout](#scout) |
 
 ## Skills
 
@@ -222,6 +223,14 @@ language and concision. Configuration, not an invokable skill.
   `sf apex run test`). Prefer [`dx_mcp`](#dx_mcp) when the project has the MCP.
 - <a id="sf-run"></a>**sf-run** — Run anonymous Apex or a SOQL query against an org and get a terse
   pass/fail result — instead of hand-rolling `sf org display` + a Tooling API curl.
+
+### scout &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="scout"></a>**scout** — Passive, never runs: instructs the agent to read this marketplace's
+  bundled `catalog.json`, then Discover (list skills grouped by plugin with their purpose), Recommend
+  (match a task to a skill and explain why, disclosing transitive `needs`), Safety (surface declared
+  `changes` tags/notes — never "certified safe"), and Install (the unit is the plugin, not the skill —
+  state sibling skills and needs before confirming, then run `/plugin install <plugin>@xaaalera` and
+  prompt `/reload-plugins`).
 
 ## How it works
 
