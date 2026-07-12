@@ -112,6 +112,10 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
 - **Keep the body short; use `references/`.** Push deep tables/examples into `plugins/<domain>/skills/<name>/references/`
   and link one level deep — the SKILL.md stays an overview + quick-reference.
 - **One excellent example beats five mediocre ones.** Show the canonical case fully; don't enumerate.
+- **Examples must be fictional & generic.** This is a PUBLIC marketplace. Every example identifier — in the
+  body, `references/`, and the eval fixtures (class/object/field/org/ticket/repo/component/route names) —
+  must be invented for a neutral demo product (`Order__c`, `WidgetConfig`, `myOrg`, `/api/items`), reused
+  across skills. NEVER paste a real name from a work codebase: a real identifier is a leak, not a better example.
 - **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
   rationalization table ("thought → reality"); otherwise give a positive recipe.
 

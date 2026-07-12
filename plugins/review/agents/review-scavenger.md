@@ -10,7 +10,7 @@ force reuse of what already exists. Zone: the whole app — `src/` (client) and 
 
 Load and apply (these define what "already exists" and the reuse/placement rules):
 `meta:ockham`, `frontend-react_component-placement`, `frontend-react_ui-primitive-reuse`,
-`frontend-react:hooks-registry`, `api-conventions`.
+`frontend-react:hooks-registry`.
 
 You are WHOLE-REPO AWARE but BLOCK ONLY ON THE DIFF. Use `Grep`/`Read` across `src/` and `server/`
 to learn what services/hooks/components/utils/transports already exist. Then judge ONLY the changed

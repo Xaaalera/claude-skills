@@ -53,7 +53,7 @@ with the org plugins enabled has them; a project-local hyphen-id skill is NOT sa
 | CSS (plain) | `frontend-css:rem` → conventions |
 | Tailwind | `frontend-css:rem` → conventions |
 | React | `frontend-react:component-structure`, `frontend-react:hooks-registry`, `frontend-react:storybook-stories` → conventions |
-| Salesforce / Apex | `salesforce:apex_test-authoring` → tests · `salesforce:security_review-rules` → security · `salesforce:conventions`, `salesforce:conventions` → architecture |
+| Salesforce / Apex | `salesforce:apex_test-authoring` → tests · `salesforce:security_review-rules` → security |
 | i18n | `i18n:ui-strings` → conventions |
 | always | `meta:solid` → conventions · `meta:ockham` → scavenger |
 

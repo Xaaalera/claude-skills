@@ -22,11 +22,3 @@ see `frontend-js:conventions`. This skill adds the LWC-specific rules.
 - Do **not** use SCSS in LWC. Style through the component's own CSS file and use
   CSS custom properties (`var(--token)`) for shared values.
 - Plain-web / React styling (SCSS, modules) lives in `frontend-css:scss-modules`.
-
-## Related architecture
-
-When the LWC work is part of the React ↔ Salesforce integration (Embed
-postMessage bridge, Aura container, BFF transport) or per-user UI config, the
-org-specific architecture is documented in the project skills
-`salesforce-conventions` and `salesforce-conventions` — read those
-before changing bridge or config code.

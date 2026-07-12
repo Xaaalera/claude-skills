@@ -16,7 +16,7 @@ to line-substring matching — that was tried and produces systematic false
 negatives.
 
 Why a wrapper and not an upstream edit: skill-creator lives in the read-only
-plugin marketplace cache and is overwritten by `/plugin update`. We import its
+plugin marketplace cache and is  overwritten by `/plugin update`. We import its
 modules and monkeypatch `run_loop.run_eval` in THIS process only (threads, not
 processes, so the patch survives).
 
@@ -28,10 +28,16 @@ id per probe so detection can't collide with the user's global skills, which
 
 Run with the real Python (system 3.9 is too old):
   /opt/homebrew/bin/python3.14 scripts/optimize_description.py \
-      --skill-path plugins/salesforce/skills/conventions \
+      --skill-path plugins/meta/skills/ockham \
       --model opus [--max-iterations 5] [--runs 5] [--apply] [--report]
 
 Default eval set: <skill-path>/evals/trigger-eval.json (9 should + 9 should-not).
+
+PUBLIC-REPO RULE: this marketplace is public. Descriptions AND eval fixtures must
+use FICTIONAL, generic example names — never real class/object/field/org/ticket/
+repo/component names from a work codebase. Keep every example domain-neutral
+(e.g. Order__c, WidgetConfig, myOrg, /api/items) so nothing fingerprints a real
+project. Authoring guidance: meta:new-skill and AGENTS.md.
 """
 import argparse
 import concurrent.futures

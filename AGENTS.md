@@ -23,3 +23,6 @@ single source of truth for these skills.
 - **No `name:` frontmatter field** — the folder name is authoritative and the callable id is `<domain>:<folder>`
   (colon form is invalid in the field anyway). Frontmatter is just `description:`.
 - Keep the body short; push deep tables/examples into a `references/` subfolder (progressive disclosure).
+- **Examples are fictional & generic.** Class/object/field/org/ticket/repo/component names in the body,
+  references, and eval fixtures must be invented for a neutral demo product — never real identifiers from a
+  work codebase. This marketplace is PUBLIC; a real name is a leak, not a better example.
