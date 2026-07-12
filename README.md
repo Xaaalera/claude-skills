@@ -48,6 +48,39 @@ It vendors the gate (`scripts/review/*`, `.husky/pre-push`, `.github/workflows/r
 to arm the local hook, and make **`review-gate`** a required status check in branch protection (the real
 enforcer). Tailor `.claude/review.config.json` per the [`setup`](#setup) skill.
 
+## Guard the gate — [`cerberus`](#leak-check)
+
+**If you publish skills anywhere public, install this first.** When a skill library is authored
+alongside private work, it is easy for an example to quietly pick up something specific to that
+work rather than a clean invented demo. Scrubbing it after the fact is slow and nerve-wracking;
+catching it at edit time is not. `cerberus` is that nudge — the moment you touch a skill, it checks
+the change and flags anything that reads as real before it ships.
+
+**Why it's an agent, not a regex:** a denylist scanner that *lists the things to catch* is itself a
+leak. So `cerberus` keeps **zero denylist by design** — a path-only **PostToolUse hook** fires on any
+edit under `skills/`, `references/`, or `evals/` (or to a `SKILL.md` / `plugin.json` /
+`marketplace.json`) — it reads the file path, never the content, so it names nothing — and the
+**[`leak-check`](#leak-check) skill** reads the change in context and rewrites anything that looks
+copied-from-real onto one fictional demo product before it ships.
+
+### Install
+
+```
+/plugin install cerberus@xaaalera
+```
+
+Or enable it in a project's `.claude/settings.json`:
+
+```json
+{
+  "enabledPlugins": {
+    "cerberus@xaaalera": true
+  }
+}
+```
+
+Nothing to vendor, no CI wiring — one hook plus one skill. The hook arms itself when the plugin loads.
+
 ## Plugins
 
 Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links jump to [Skills](#skills).
@@ -215,14 +248,13 @@ See [`new-skill`](#new-skill). New skill in an existing plugin: just add
 > Local-only infra (hook + statusline scripts) lives in `claude-config/`, which is gitignored — it is
 > not part of the published marketplace.
 
-## Eval gate (pre-push)
+## Eval gate (CI)
 
-Every touched or new skill must ship a trigger eval. A pre-push hook
-(`hooks/pre-push` → `scripts/eval-gate.sh`) blocks the push if a touched skill has no valid
+Every touched or new skill must ship a trigger eval. The **eval-gate** GitHub Actions check
+(`scripts/eval-gate.sh`, a required status check on `main`) fails the PR if a touched skill has no valid
 `evals/trigger-eval.json` (JSON array of ≥6 `{query, should_trigger}` cases, ≥1 positive and ≥1
-negative). It only *warns* — never blocks — when the eval exists but has not been measured or has gone
+negative). It only *warns* — never fails — when the eval exists but has not been measured or has gone
 stale. Refresh a measurement with
 `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`.
 
-**Install once per clone:** `bash install.sh` (sets `core.hooksPath` to `hooks/`). Untouched legacy
-skills are never inspected; `git push --no-verify` skips the local hook.
+Server-side only — nothing to install per clone. Untouched legacy skills are never inspected.
