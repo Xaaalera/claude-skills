@@ -8,6 +8,19 @@
     }
   },
   "enabledPlugins": {
-    "cicero@xaaalera": true
+    "cicero@xaaalera": true,
+    "diagram@xaaalera": true,
+    "diogenes@xaaalera": true,
+    "frontend@xaaalera": true,
+    "frontend-css@xaaalera": true,
+    "frontend-js@xaaalera": true,
+    "frontend-react@xaaalera": true,
+    "git@xaaalera": true,
+    "i18n@xaaalera": true,
+    "jira@xaaalera": true,
+    "lovecraft@xaaalera": true,
+    "meta@xaaalera": true,
+    "review@xaaalera": true,
+    "salesforce@xaaalera": true
   }
 }
