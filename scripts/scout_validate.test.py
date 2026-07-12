@@ -65,7 +65,7 @@ def write_skill_md(skill_dir: Path, allowed_tools=None):
 class ContradictionLiveHookTests(unittest.TestCase):
     """Weighted arm 1: the owning plugin's hooks/hooks.json (cerberus-shaped)."""
 
-    def test_declared_hook_with_none_tags_fails(self):
+    def test_declared_hook_with_none_tags_is_self_asserted(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = make_skill(root, plugin="cerberuslike")
@@ -79,9 +79,10 @@ class ContradictionLiveHookTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn(str(skill_dir), r.stderr)
-            self.assertIn("hook", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("self-asserted:", r.stdout)
+            self.assertIn(str(skill_dir), r.stdout)
+            self.assertIn("hook", r.stdout)
 
     def test_declared_hook_with_matching_tag_is_ok(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -128,7 +129,7 @@ class ContradictionScriptScanTests(unittest.TestCase):
     """Weighted arm 2: recursive scan over skill root + references/ + scripts/,
     matching the REAL shapes (report.py at root, build.sh in references/)."""
 
-    def test_mutating_script_in_skill_root_fails(self):
+    def test_mutating_script_in_skill_root_is_self_asserted(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = make_skill(root)
@@ -140,10 +141,11 @@ class ContradictionScriptScanTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn("mutating pattern", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("self-asserted:", r.stdout)
+            self.assertIn("mutating pattern", r.stdout)
 
-    def test_mutating_script_in_references_subdir_fails(self):
+    def test_mutating_script_in_references_subdir_is_self_asserted(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = make_skill(root)
@@ -159,8 +161,9 @@ class ContradictionScriptScanTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn("mutating pattern", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("self-asserted:", r.stdout)
+            self.assertIn("mutating pattern", r.stdout)
 
     def test_scripts_only_glob_would_miss_this_root_script_but_ours_catches_it(self):
         # Regression guard for the CRITICAL scope note: no scripts/ dir exists
@@ -176,8 +179,9 @@ class ContradictionScriptScanTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn("mutating pattern", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("self-asserted:", r.stdout)
+            self.assertIn("mutating pattern", r.stdout)
 
     def test_mutating_script_under_scripts_subdir_also_caught(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -192,8 +196,9 @@ class ContradictionScriptScanTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn("mutating pattern", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("self-asserted:", r.stdout)
+            self.assertIn("mutating pattern", r.stdout)
 
     def test_scout_ignore_suppresses_false_positive(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -294,6 +299,19 @@ class SelfAssertedTests(unittest.TestCase):
             r = run(skill_dir)
             self.assertNotEqual(r.returncode, 0)
             self.assertIn("Write", r.stderr)
+
+    def test_webfetch_grant_with_none_tags_fails(self):
+        # Network rows (WebFetch/WebSearch) are live members of the kept
+        # allowed-tools FAIL arm -- NOT pruned, NOT downgraded.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = make_skill(root)
+            write_meta(skill_dir, tags=[])
+            write_skill_md(skill_dir, allowed_tools=["WebFetch"])
+
+            r = run(skill_dir)
+            self.assertNotEqual(r.returncode, 0)
+            self.assertIn("WebFetch", r.stderr)
 
 
 class MetadataValidityTests(unittest.TestCase):

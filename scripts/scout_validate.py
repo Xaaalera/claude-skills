@@ -10,12 +10,16 @@ and a `Bash` grant can't be told read-only from mutating just by its name.
 
 Per skill this emits ONE verdict:
   - ok             -- valid metadata.yaml + no contradiction.
-  - fail(reason)   -- a validity error, OR a CLEAR contradiction (the skill
-                      claims LESS side effect than its plugin/scripts show).
-                      Blocks. Nonzero exit, `SystemExit("<skill-dir> :: <reason>")`.
-  - self-asserted(reason) -- an ambiguity the author asserts is safe (broad
-                      Bash grant, semantic money/org tags, unrecognized tool).
-                      NOT blocked: exit 0, with a stdout marker line.
+  - fail(reason)   -- a validity error, OR the ONE CLEAR contradiction: the
+                      author's own `allowed-tools` frontmatter grants an
+                      unambiguously mutating tool while `changes.tags` is
+                      empty. Blocks. Nonzero exit,
+                      `SystemExit("<skill-dir> :: <reason>")`.
+  - self-asserted(reason) -- an ambiguity the author asserts is safe (a
+                      declared plugin hook, a bundled script matching a
+                      mutating pattern, broad Bash grant, semantic money/org
+                      tags, unrecognized tool). NOT blocked: exit 0, with a
+                      stdout marker line.
 
 CLI:
     python3 scripts/scout_validate.py <path-to-skill-dir>
@@ -58,6 +62,7 @@ TOOL_TAG_MAP = {
 # Mutating shell/script patterns (checked with word-boundary matching, after
 # stripping `#`-comments). Small, representative set -- not exhaustive. A line
 # containing the literal `# scout-ignore` suppresses a match on that line.
+# ADVISORY ONLY: a match never blocks -- it can only add a self-asserted mark.
 MUTATING_PATTERNS = [
     r"\bgit\s+push\b",
     r"\bgit\s+commit\b",
@@ -305,13 +310,11 @@ def _contradiction_verdict(skill_dir: Path, tags: set) -> Verdict:
         if t in TOOL_TAG_MAP and TOOL_TAG_MAP[t]["class"] == "broad"
     ]
 
-    # --- CLEAR contradiction: claims "none" while reality shows a mutating
-    #     side effect (live hook, mutating script, or mutating tool grant).
+    # --- CLEAR contradiction: claims "none" while the author's OWN
+    #     allowed-tools frontmatter grants an unambiguously mutating tool.
+    #     This is the ONLY hard-FAIL arm -- a live hook or a mutating script
+    #     match are self-asserted ambiguities, not blocks (see below).
     if declares_none:
-        if has_hook:
-            return Verdict("fail", f"{name} :: changes.tags is empty but plugin declares a live hook")
-        if has_mutating_script:
-            return Verdict("fail", f"{name} :: changes.tags is empty but a bundled script matches a mutating pattern")
         if mutating_grant_tools:
             return Verdict(
                 "fail",
@@ -321,6 +324,10 @@ def _contradiction_verdict(skill_dir: Path, tags: set) -> Verdict:
 
     # --- self-asserted ambiguities (never block):
     reasons = []
+    if declares_none and has_hook:
+        reasons.append("plugin declares a live hook")
+    if declares_none and has_mutating_script:
+        reasons.append("a bundled script matches a mutating pattern")
     if unknown_tools:
         reasons.append(f"unrecognized allowed-tools entr(y/ies) {unknown_tools}")
     if broad_grant_tools and declares_none:
