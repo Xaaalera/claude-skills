@@ -147,7 +147,26 @@ def _read_plugin_hooks(plugin_dir: Path, domain: str) -> list:
     return list(hooks_obj.keys())
 
 
+_DESCRIPTION_KEY_RE = re.compile(r"^description:[ \t]?(.*)$")
+_TOP_LEVEL_KEY_RE = re.compile(r"^[A-Za-z0-9_-]+:")
+
+
 def _read_skill_description(skill_dir: Path, skill_id: str) -> str:
+    """Extract the SKILL.md frontmatter `description` value tolerantly.
+
+    Per this repo's AGENTS.md, SKILL.md frontmatter is JUST a `description:`
+    field. Its value is free text and may itself contain colon-space
+    sequences (e.g. "Framework-agnostic: governs ..."), which a strict YAML
+    mapping parser rejects ("mapping values are not allowed here"). Claude
+    Code's own frontmatter reader is lenient about this, so this generator
+    must not be stricter than the platform it catalogs.
+
+    Approach: isolate the frontmatter block between the leading `---`
+    fences, take everything after the `description:` key up to the next
+    top-level `key:` line or the closing fence, strip surrounding quotes,
+    and normalize whitespace. The result is used verbatim (no re-parsing,
+    no paraphrasing).
+    """
     skill_md = skill_dir / "SKILL.md"
     if not skill_md.is_file():
         raise SystemExit(f"gen_catalog: {skill_id} :: missing SKILL.md at {skill_md}")
@@ -155,16 +174,35 @@ def _read_skill_description(skill_dir: Path, skill_id: str) -> str:
     m = _FRONTMATTER_RE.match(text)
     if not m:
         raise SystemExit(f"gen_catalog: {skill_id} :: SKILL.md has no YAML frontmatter")
-    try:
-        front = yaml.safe_load(m.group(1))
-    except yaml.YAMLError as e:
-        raise SystemExit(f"gen_catalog: {skill_id} :: SKILL.md frontmatter is not valid YAML ({e})")
-    if not isinstance(front, dict):
-        raise SystemExit(f"gen_catalog: {skill_id} :: SKILL.md frontmatter must be a mapping")
-    description = front.get("description")
-    if not isinstance(description, str) or not description.strip():
+
+    lines = m.group(1).splitlines()
+    start_idx = None
+    first_line_rest = ""
+    for i, line in enumerate(lines):
+        key_match = _DESCRIPTION_KEY_RE.match(line)
+        if key_match:
+            start_idx = i
+            first_line_rest = key_match.group(1)
+            break
+
+    if start_idx is None:
         raise SystemExit(f"gen_catalog: {skill_id} :: SKILL.md frontmatter missing 'description'")
-    return description
+
+    value_lines = [first_line_rest]
+    for line in lines[start_idx + 1:]:
+        if _TOP_LEVEL_KEY_RE.match(line):
+            break
+        value_lines.append(line)
+
+    raw_value = " ".join(part.strip() for part in value_lines if part.strip())
+    raw_value = re.sub(r"\s+", " ", raw_value).strip()
+
+    if len(raw_value) >= 2 and raw_value[0] == raw_value[-1] and raw_value[0] in ("'", '"'):
+        raw_value = raw_value[1:-1].strip()
+
+    if not raw_value:
+        raise SystemExit(f"gen_catalog: {skill_id} :: SKILL.md frontmatter missing 'description'")
+    return raw_value
 
 
 def _read_metadata(skill_dir: Path, skill_id: str) -> dict:

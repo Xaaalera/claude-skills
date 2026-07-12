@@ -149,6 +149,38 @@ class BuildsCorrectCatalog(unittest.TestCase):
             self.assertEqual(entry["needs"], ["alpha:one", "beta:three"])
             self.assertEqual(entry["changes"], {"tags": ["git", "network"], "notes": "Pushes and fetches."})
 
+    def test_description_with_colon_space_is_tolerated_not_crashed(self):
+        # Regression: a colon-space inside the (unquoted) description value
+        # makes it invalid as a strict-YAML mapping value ("mapping values
+        # are not allowed here"), but Claude Code's own frontmatter reader
+        # is lenient about this — the generator must not be stricter than
+        # the platform. See plugins/frontend-react/skills/component-placement.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_marketplace(root)
+            plugin_dir = write_plugin(root, "delta")
+            skill_dir = plugin_dir / "skills" / "colon-desc"
+            skill_dir.mkdir(parents=True, exist_ok=True)
+            description = "Framework-agnostic: governs X. Activate whenever about to do Y."
+            (skill_dir / "SKILL.md").write_text(
+                "---\n"
+                f"description: {description}\n"
+                "---\n\n"
+                "# colon-desc\n\nBody text.\n"
+            )
+            (skill_dir / "metadata.yaml").write_text(_to_yaml({
+                "schema-version": 1,
+                "purpose": "Fixture purpose for colon-desc.",
+                "best-for": "Fixture adoption fit.",
+                "needs": [],
+                "changes": {"tags": [], "notes": ""},
+            }))
+
+            catalog = gen_catalog.generate_catalog(root)
+            entry = catalog["skills"][0]
+            self.assertEqual(entry["name"], "delta:colon-desc")
+            self.assertEqual(entry["activates-when"], description)
+
 
 class FailsLoudlyOnMissingMetadata(unittest.TestCase):
     def test_missing_metadata_yaml_exits_nonzero_and_names_skill(self):
