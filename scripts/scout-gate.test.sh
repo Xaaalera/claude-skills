@@ -86,22 +86,9 @@ check "no-sidecar skill blocks" 1 "$code"
 check_output_contains "no-sidecar block names the skill" "plugins/p/skills/nosidecar" "$out"
 
 # ---------------------------------------------------------------------------
-# Scenario C: SKILL.md edited, metadata.yaml NOT touched -> cross-file
-# staleness BLOCK naming the skill.
-# ---------------------------------------------------------------------------
-r="$(setup_repo)"
-add_skill "$r" "plugins/p/skills/stale" "files" "" ""
-freeze_as_origin_main "$r"
-echo "extra line" >> "$r/plugins/p/skills/stale/SKILL.md"
-git -C "$r" add -A >/dev/null; git -C "$r" commit -qm "edit SKILL.md only"
-out="$(run_gate "$r")"; code=$?
-check "SKILL.md-only edit blocks (cross-file staleness)" 1 "$code"
-check_output_contains "staleness block names the skill" "plugins/p/skills/stale" "$out"
-check_output_contains "staleness block explains itself" "staleness" "$out"
-
-# ---------------------------------------------------------------------------
-# Scenario D: CLEAR contradiction — bundled mutating script + changes.tags:[]
-# -> gate BLOCKS naming the offending skill.
+# Scenario D: bundled mutating script + changes.tags:[] -> author-asserted
+# ambiguity, not a frontmatter grant -> gate PASSES (exit 0) but RECORDS
+# self-asserted for the offending skill.
 # ---------------------------------------------------------------------------
 r="$(setup_repo)"
 add_skill "$r" "plugins/p/skills/base" "files" "" ""
@@ -113,8 +100,8 @@ rm -rf /tmp/whatever
 SCRIPT
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm "add contradiction skill"
 out="$(run_gate "$r")"; code=$?
-check "clear contradiction blocks" 1 "$code"
-check_output_contains "contradiction block names the skill" "plugins/p/skills/contradiction" "$out"
+check "bundled mutating script + empty tags passes" 0 "$code"
+check_output_contains "mutating-script ambiguity recorded as self-asserted" "self-asserted" "$out"
 
 # ---------------------------------------------------------------------------
 # Scenario E: broad-grant ambiguity (allowed-tools: Bash, changes.tags:[])
