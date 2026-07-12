@@ -14,26 +14,22 @@ on:
 jobs:
   scout-publish:
     runs-on: ubuntu-latest
-    # PRIMARY loop-guard: skip the job entirely when the push was made by the bot's own
-    # publish commit, so that commit doesn't re-trigger this workflow (infinite loop).
-    # This is an ACTOR guard, not a `paths:` exclude — a paths-exclude would also
-    # silently suppress a legitimate human PR-merge that happens to touch only
-    # catalog/version files, which we don't want.
-    # ADMIN TODO: replace 'scout-publish-bot[bot]' below with the real bot/App identity
-    # once it's provisioned (see Spike-2 precondition note on the checkout step).
-    if: github.actor != 'scout-publish-bot[bot]'
+    # Loop-guard: the publish commit carries `[skip ci]` (see the commit step), so the
+    # bot's own push to main does NOT re-trigger this workflow. An actor guard can't be
+    # used here — the token below is a fine-grained PAT owned by a human, so the bot's
+    # push and that same human's PR-merge share one `github.actor` and are
+    # indistinguishable; guarding on it would wrongly skip publish on every human merge.
+    # `[skip ci]` is therefore the sole, correct loop-guard.
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # ADMIN TODO (Spike-2 precondition, NOT done by this workflow): provision a
-          # GitHub App installation token or fine-grained PAT for the bot identity above,
-          # store it as the SCOUT_PUBLISH_TOKEN secret, and add that identity to the
-          # branch-protection "allow specified actors to bypass" list on `main`. Without
-          # this, checkout falls back to the default GITHUB_TOKEN, which cannot push to
-          # a protected main — the push step below will simply fail until an admin does
-          # this setup. That setup is tracked separately and is out of scope here.
-          token: ${{ secrets.SCOUT_PUBLISH_TOKEN }}
+          # Auth for the push to protected main: PUBLISH_TOKEN is a fine-grained PAT
+          # (Contents: read & write) owned by a repo admin. On this user-owned repo
+          # `enforce_admins` is off, so that owner bypasses the PR requirement and can
+          # push to main directly (proven by the Spike-2 push). On an ORG-owned mirror,
+          # swap this for the built-in github-actions[bot] added to a ruleset bypass.
+          token: ${{ secrets.PUBLISH_TOKEN }}
 
       - uses: actions/setup-python@v5
         with:
