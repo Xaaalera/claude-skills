@@ -2,47 +2,61 @@
 """
 Stop-hook: enforce CICERO communication rules on the assistant's reply to the user.
 
-Embeds the rules themselves (pulled from CICERO), does NOT hardcode a single language:
-  - Principle 12 (Language): converse in the USER's language — detected from their own
-    messages, not assumed. Code/paths/identifiers stay English (that is allowed).
-  - Principle 2 (Size to ask): concise; no wall of filler.
-  - Principle 3 (Gloss every term): no dump of untranslated jargon / anglicisms; a term
-    that must stay foreign has to be glossed in (parens).
+Language-agnostic engine. All language-specific data lives OUTSIDE this file:
+  - plugins/cicero/hooks/dicts/_base.json  — cross-language ALLOW (proper nouns).
+  - plugins/cicero/hooks/dicts/<lang>.json — shipped, English-only: `script` + which
+    English terms to flag and how (`action`). No translations here (repo is English-only).
+  - ~/.claude/cicero/dicts/<lang>.json     — the USER dictionary: Russian (etc.) values +
+    the user's own terms. Merged over the shipped dict; user entries win.
+  - ~/.claude/cicero/config.json           — {"language": "<lang>"} chosen by the user once.
+
+Term actions (per entry):
+  - translate : always use `value`; flag the raw English form.
+  - gloss     : English is OK but must be explained in (parens) on first use.
+  - allow     : foreign word is fine as-is; never flag.
+
+Enforced principles (CICERO):
+  12 Language  — reply in the USER's language; code/paths/identifiers stay English.
+  2  Size      — concise; no wall of filler.
+  3  Gloss     — no dump of untranslated jargon; a foreign term is translated or glossed.
+  0  Readable  — governs all; short sentences, one idea each, understood in one pass.
 
 Deterministic heuristic (no model call): catches the GROSS violations —
   (a) reply prose in a different script than the user's language, and
-  (b) untranslated technical jargon appearing in prose (outside code spans).
+  (b) `translate` terms appearing raw, plus too many stray foreign words in prose.
 It cannot judge subtle style; it stops the repeat offenders.
 """
 import json, re, sys
+from pathlib import Path
 
-# --- CICERO rules, embedded verbatim so the block message carries the actual law ---
+HOOK_DIR = Path(__file__).resolve().parent
+PLUGIN_DICTS = HOOK_DIR / "dicts"
+USER_ROOT = Path.home() / ".claude" / "cicero"
+USER_CONFIG = USER_ROOT / "config.json"
+USER_DICTS = USER_ROOT / "dicts"
+
+# --- CICERO rules, embedded so the block message carries the actual law ---
 CICERO = (
+    "CICERO 0 (Readable first — governs all): minimize cognitive load; short sentences, one idea each, understood in ONE pass.\n"
     "CICERO 12 (Language): converse in the USER's language; only code/docs/identifiers stay English.\n"
-    "CICERO 2 (Size to ask): concise, bullets over prose, no filler.\n"
-    "CICERO 3 (Gloss EVERY term the user may not know, first use, in (parens); over-explain by default)."
+    "CICERO 2 (Size to ask): concise; bullets for lists, plain sentences for reasoning; no filler.\n"
+    "CICERO 3 (Gloss): gloss a term the user may not know on first use, briefly, without nesting the sentence."
 )
 
-# Jargon that must be TRANSLATED, not dropped raw into non-English prose.
-# (Matched only OUTSIDE code spans / paths — see cleaning below.)
-JARGON = [
-    "holdout", "recall", "precision", "baseline", "false-fire", "false fire",
-    "over-trigger", "under-trigger", "over-triggering", "under-triggering",
-    "trigger", "triggering", "fork", "probe", "queryset", "roi", "lexical",
-    "eval", "evals", "commit", "push", "merge", "diff", "scaffold",
-]
-# Latin tokens that are allowed in any language prose (proper nouns, unavoidable).
-ALLOW = {
-    "cicero", "ockham", "solid", "git", "github", "claude", "lwc", "aura",
-    "apex", "react", "node", "css", "scss", "bem", "rem", "kpi", "bff",
-    "ui", "api", "id", "ts", "js", "md", "ok",
-}
+
+def load_json(path):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
 
 def load_input():
     try:
         return json.load(sys.stdin)
     except Exception:
         return {}
+
 
 def text_of(msg):
     c = msg.get("message", {}).get("content", "")
@@ -51,6 +65,7 @@ def text_of(msg):
     if isinstance(c, list):
         return " ".join(b.get("text", "") for b in c if isinstance(b, dict) and b.get("type") == "text")
     return ""
+
 
 def transcript_messages(path):
     out = []
@@ -64,6 +79,7 @@ def transcript_messages(path):
         pass
     return out
 
+
 def strip_code(s):
     s = re.sub(r"```.*?```", " ", s, flags=re.S)      # fenced code
     s = re.sub(r"`[^`]*`", " ", s)                     # inline code
@@ -73,10 +89,103 @@ def strip_code(s):
     s = re.sub(r"\([^)]*\)", " ", s)                   # parenthetical glosses are OK -> drop
     return s
 
-def script_of(s):
-    cyr = sum(1 for ch in s if chr(0x400) <= ch <= chr(0x4ff))
-    lat = sum(1 for ch in s if "a" <= ch.lower() <= "z")
-    return cyr, lat
+
+# Script families we distinguish. Beyond these three we don't enforce.
+def script_counts(s):
+    """Count characters per script family: latin, cyrillic, cjk (han + kana + hangul)."""
+    lat = cyr = cjk = 0
+    for ch in s:
+        o = ord(ch)
+        if "a" <= ch.lower() <= "z":
+            lat += 1
+        elif 0x0400 <= o <= 0x04FF:
+            cyr += 1
+        elif (0x3040 <= o <= 0x30FF) or (0x3400 <= o <= 0x9FFF) or (0xAC00 <= o <= 0xD7AF):
+            cjk += 1
+    return {"latin": lat, "cyrillic": cyr, "cjk": cjk}
+
+
+def dominant_script(counts, floor=20):
+    """The single script family that clearly dominates, or None if none clears `floor`."""
+    name = max(counts, key=counts.get)
+    if counts[name] >= floor and counts[name] > sum(v for k, v in counts.items() if k != name):
+        return name
+    return None
+
+
+def detected_script(msgs):
+    """User's dominant script from their last few real messages: latin / cyrillic / cjk / None."""
+    total = {"latin": 0, "cyrillic": 0, "cjk": 0}
+    seen = 0
+    for m in reversed(msgs):
+        if m.get("type") == "user":
+            t = text_of(m)
+            if t.strip() and not t.strip().startswith("<"):
+                for k, v in script_counts(t).items():
+                    total[k] += v
+                seen += 1
+                if seen >= 3:
+                    break
+    return dominant_script(total)
+
+
+def lang_for_script(script):
+    """Find a shipped dict whose `script` matches; return its language code (file stem)."""
+    for f in sorted(PLUGIN_DICTS.glob("*.json")):
+        if f.stem.startswith("_"):
+            continue
+        d = load_json(f)
+        if isinstance(d, dict) and d.get("script") == script:
+            return f.stem
+    return None
+
+
+def resolve_language(msgs):
+    """Config language wins; else auto-detect from the user's script."""
+    cfg = load_json(USER_CONFIG)
+    if isinstance(cfg, dict) and isinstance(cfg.get("language"), str) and cfg["language"]:
+        return cfg["language"]
+    script = detected_script(msgs)
+    if script and script != "latin":
+        return lang_for_script(script)
+    return None
+
+
+def load_dictionary(lang):
+    """Merge shipped <lang>.json over _base.json, then the user dict over that.
+    Returns (script, terms) where terms maps lowercased word -> {action, value?}."""
+    base = load_json(PLUGIN_DICTS / "_base.json") or {}
+    shipped = load_json(PLUGIN_DICTS / f"{lang}.json")
+    user = load_json(USER_DICTS / f"{lang}.json")
+
+    if shipped is None and user is None:
+        return None, None  # unknown language — caller creates a skeleton and passes
+
+    terms = {}
+    for word in base.get("allow", []):
+        terms[word.lower()] = {"action": "allow"}
+    for src in (shipped, user):
+        if isinstance(src, dict):
+            for word, spec in (src.get("terms") or {}).items():
+                if isinstance(spec, dict) and spec.get("action"):
+                    terms[word.lower()] = spec
+    script = None
+    for src in (shipped, user):
+        if isinstance(src, dict) and src.get("script"):
+            script = src["script"]
+    return script, terms
+
+
+def ensure_user_skeleton(lang, script):
+    """First contact with a language we don't ship: drop an empty user dict to grow into."""
+    try:
+        USER_DICTS.mkdir(parents=True, exist_ok=True)
+        path = USER_DICTS / f"{lang}.json"
+        if not path.exists():
+            path.write_text(json.dumps({"script": script or "", "terms": {}}, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
 
 def main():
     data = load_input()
@@ -87,6 +196,17 @@ def main():
     if not msgs:
         sys.exit(0)
 
+    lang = resolve_language(msgs)
+    if not lang:
+        sys.exit(0)  # no target language (English user, or unresolved) — nothing to enforce
+
+    script, terms = load_dictionary(lang)
+    if terms is None:
+        ensure_user_skeleton(lang, detected_script(msgs))
+        sys.exit(0)  # language we don't know yet — skeleton created, pass this turn
+    if script not in ("cyrillic", "cjk"):
+        sys.exit(0)  # script-mismatch checks only work for non-Latin targets; Latin targets can't be told from English by script
+
     # last assistant text
     assistant = ""
     for m in reversed(msgs):
@@ -96,42 +216,40 @@ def main():
     if not assistant.strip():
         sys.exit(0)
 
-    # user's language from their last few real messages
-    user_cyr = user_lat = 0
-    seen = 0
-    for m in reversed(msgs):
-        if m.get("type") == "user":
-            t = text_of(m)
-            if t.strip() and not t.strip().startswith("<"):
-                c, l = script_of(t)
-                user_cyr += c; user_lat += l
-                seen += 1
-                if seen >= 3:
-                    break
-    user_is_cyrillic = user_cyr > user_lat and user_cyr > 20
+    # Derive the working sets from the merged terms.
+    translate = {w: spec.get("value") for w, spec in terms.items() if spec.get("action") == "translate"}
+    ok_raw = {w for w, spec in terms.items() if spec.get("action") in ("allow", "gloss")}
 
     prose = strip_code(assistant)
     reasons = []
 
-    # (a) language mismatch: user writes Cyrillic, reply prose is mostly Latin
-    a_cyr, a_lat = script_of(prose)
-    if user_is_cyrillic and a_lat > a_cyr and a_lat > 15:
-        reasons.append("reply prose is mostly English while the user writes Russian")
+    # (a) script mismatch: reply prose is dominated by a script other than the target's
+    counts = script_counts(prose)
+    target_n = counts.get(script, 0)
+    others = {k: v for k, v in counts.items() if k != script}
+    worst = max(others, key=others.get)
+    if others[worst] > target_n and others[worst] > 15:
+        reasons.append(f"reply prose is mostly {worst}-script while the user's language is '{lang}' ({script})")
 
-    # (b) untranslated jargon in prose
+    # (b) `translate` terms appearing raw — suggest the translation when the dict has one
     low = prose.lower()
-    hits = sorted({j for j in JARGON if re.search(r"(?<![\w-])" + re.escape(j) + r"(?![\w-])", low)})
-    if user_is_cyrillic and hits:
-        reasons.append("untranslated jargon in Russian prose: " + ", ".join(hits))
+    hits = sorted(w for w in translate if re.search(r"(?<![\w-])" + re.escape(w) + r"(?![\w-])", low))
+    if hits:
+        shown = [f"{w}→{translate[w]}" if translate[w] else w for w in hits]
+        reasons.append(f"untranslated jargon in '{lang}' prose: " + ", ".join(shown))
 
-    # (c) heavy anglicism: many non-allowed Latin words in Cyrillic prose
-    if user_is_cyrillic:
-        lat_words = [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z-]{2,}", prose)]
-        stray = [w for w in lat_words if w not in ALLOW and w not in JARGON]
-        if len(stray) > 8:
-            reasons.append(f"{len(stray)} English words in Russian prose (gloss or translate them)")
+    # (c) heavy anglicism: many stray latin words not covered by the dictionary
+    lat_words = [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z-]{2,}", prose)]
+    stray = sorted({w for w in lat_words if w not in ok_raw and w not in translate})
+    if len(stray) > 8:
+        reasons.append(f"{len(stray)} Latin-script words in '{lang}' prose (gloss or translate them)")
 
     if reasons:
+        teach = (
+            "\n\nTo teach a term permanently, tell the user they can say \"add <word>\" and choose: "
+            "translate (always use the '" + lang + "' word), gloss (keep the foreign word + explain "
+            "in parens), or allow (leave it). Record the choice in ~/.claude/cicero/dicts/" + lang + ".json."
+        )
         out = {
             "decision": "block",
             "reason": (
@@ -140,12 +258,14 @@ def main():
                 + "\n\n" + CICERO
                 + "\n\nRe-send in the user's language, plain and short; translate the jargon "
                 "or gloss each foreign term in (parens). Keep code/paths/identifiers as-is."
+                + teach
             ),
         }
         print(json.dumps(out, ensure_ascii=False))
         sys.exit(0)
 
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
