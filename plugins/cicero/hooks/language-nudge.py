@@ -6,7 +6,7 @@ and the user may switch languages mid-session (SessionStart can't react to that)
 fires on each prompt, detects the prompt's dominant script (latin / cyrillic / cjk), and
 injects a one-line reminder to reply in that language (CICERO 12). Cheap (~15 tokens), and
 silent when the script is Latin or ambiguous — English is the model default and needs no
-nudge. Complements the Stop-hook guard (which enforces after the fact); this steers before.
+nudge. The static voice rules ship as an output style; this hook only keeps the reply language current.
 """
 import json
 import sys
