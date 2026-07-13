@@ -18,10 +18,10 @@ From Claude Code:
 ```
 
 > **Install [`scout`](#scout) first — it's the one plugin that finds all the others.** It ships the
-> whole compiled catalog, so you just ask *"what's here / what helps with this task?"* and it
-> discovers, recommends, and installs any other skill on demand — including ones you haven't
-> installed yet. One plugin to reach the rest; grab the specific ones below only if you already know
-> what you want.
+> whole compiled catalog, so you just ask — *"which skills would help me in this project?"*, *"what's
+> here / what helps with this task?"* — and it discovers, recommends, and installs any other skill on
+> demand, including ones you haven't installed yet. One plugin to reach the rest; grab the specific
+> ones below only if you already know what you want.
 
 Or wire it into a project's `.claude/settings.json` and run `/plugin`:
 
