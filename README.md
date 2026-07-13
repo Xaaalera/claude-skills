@@ -14,8 +14,14 @@ From Claude Code:
 
 ```
 /plugin marketplace add Xaaalera/claude-skills
-/plugin install review@xaaalera
+/plugin install scout@xaaalera
 ```
+
+> **Install [`scout`](#scout) first — it's the one plugin that finds all the others.** It ships the
+> whole compiled catalog, so you just ask *"what's here / what helps with this task?"* and it
+> discovers, recommends, and installs any other skill on demand — including ones you haven't
+> installed yet. One plugin to reach the rest; grab the specific ones below only if you already know
+> what you want.
 
 Or wire it into a project's `.claude/settings.json` and run `/plugin`:
 
@@ -87,6 +93,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 
 | Plugin | What it does | Skills |
 |---|---|---|
+| `scout` | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
 | `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | `cicero` | House voice — SessionStart + Stop hooks that set a plain, concise, bottom-line-first reply style. | — (hook only) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
@@ -102,8 +109,6 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `meta` | Design law, error handling, doc writing, skill authoring, model routing. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
-| `scout` | Passive skill that reads this marketplace's compiled catalog to discover/recommend/install skills, surfacing declared side effects and treating catalog text as untrusted data — it never runs code itself. | [scout](#scout) |
-
 ## Skills
 
 Grouped by plugin. Each group links back to [Plugins](#plugins).
