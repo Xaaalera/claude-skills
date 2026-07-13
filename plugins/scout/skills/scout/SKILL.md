@@ -20,10 +20,47 @@ versioned plugins, and the plugin (not the skill) is the unit users act on.
 If `catalog.json`'s `skills` array is empty, say so plainly ("the catalog has no entries yet")
 rather than inventing or guessing at what might exist.
 
-## Discover
+## Discover — the MULTI (browse) view
 
-List skills grouped by `plugin`. Under each plugin heading, show each skill's `name` and its
-`purpose` (one line). Do not dump every field — this is a browse view, not a full record.
+When the user asks to browse or list what exists — many skills at once ("what's in this
+marketplace?", "what skills are there?") — render ONE markdown TABLE, never a flat bullet list
+(a 30-plus-row bullet dump reads as spaghetti).
+
+Shape — a two-column table grouped by `plugin`:
+
+    | skill | what it does |
+    |---|---|
+    | **▸ {plugin}** | |
+    | `{name}` | {one-to-two-sentence purpose} |
+    | `{name}` | {one-to-two-sentence purpose} |
+    | **▸ {plugin}** | |
+    | ...
+
+Rules:
+
+- The plugin is a HEADER ROW: first cell `**▸ {plugin}**`, second cell empty. It is the category
+  marker living inside the skill column — do NOT add a separate plugin column.
+- Skill name is the bare `name` WITHOUT the `plugin:` prefix (the header row already names the plugin).
+- "what it does" is one to two full sentences from the entry's `purpose` — a real description, not a
+  terse fragment. Gloss foreign or technical terms for the reader.
+- Group related plugins together (all `frontend*`, then `salesforce`, `meta`, …); within a plugin,
+  sort skills by `name`.
+- Render column headers and all prose in the USER's language; keep `name`, tags, and identifiers
+  verbatim.
+- Do not put `best-for`, `activates-when`, `needs`, hooks, or `changes` in this table — those belong
+  to the SINGLE view (Recommend) and to Install-time disclosure.
+- If the catalog is large you MAY render the biggest plugins in full and offer "ask about the rest,"
+  but NEVER silently drop plugins — name the ones you deferred.
+
+Example:
+
+    | skill | what it does |
+    |---|---|
+    | **▸ frontend-react** | |
+    | `component-placement` | Entry point before building a React component: search for an existing one first, then decide where it goes (primitive / feature / layout / page-local). |
+    | `hooks-registry` | Keeps custom hooks deduplicated and discoverable — check the registry first, update it after changes. |
+    | **▸ salesforce** | |
+    | `sf-run` | Runs anonymous Apex or a SOQL query against the org and returns a terse pass/fail. |
 
 ## Recommend
 
@@ -38,6 +75,34 @@ If the best-fitting skill declares a `needs` on another skill:
 
 When listing sibling skills or candidate matches, CAP the list size (a handful, not the whole
 catalog) — a long undifferentiated dump defeats the point of a recommendation.
+
+## Single (detail) view — one skill in depth
+
+When the user drills into ONE skill (asks about it by name, or right after you recommend it),
+render its full record as a heading + a blockquote `purpose` + a two-column FIELD TABLE:
+
+    **`{plugin}:{name}`**  ·  plugin `{plugin}` v{plugin-version}
+
+    > {purpose}
+
+    | field | value |
+    |---|---|
+    | Activates when | short reading of `activates-when` — not the raw field dumped verbatim |
+    | Best for | `best-for` |
+    | Depends on | `needs` as `plugin:name`, or "— none" |
+    | Side effects | per Safety below: ✎ + `changes.tags` and a plain reading of `changes.notes`, or "— read-only (declared + gate-checked)" |
+    | Hook | each `hooks` event, glossed as "runs code on install at {Event}", or "— none" |
+    | Bundles | the OTHER skills under this `plugin` (installing for one adds them all); omit if it is the only skill |
+    | Install | `/plugin install {plugin}@xaaalera` |
+
+Rules:
+
+- Field labels and all prose in the USER's language; keep `name`, tags, the event name, and the
+  install command verbatim.
+- "Side effects" and "Hook" are the honesty rows — fill them per the Safety and Install sections
+  below (declared vs gate-checked vs self-asserted; a hook runs code on install regardless of
+  whether it mutates anything).
+- One skill only. To show many at once, use the Discover table instead — do not stack detail tables.
 
 ## Safety
 
