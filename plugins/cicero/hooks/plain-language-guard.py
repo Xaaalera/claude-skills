@@ -22,8 +22,10 @@ Enforced principles (CICERO):
   0  Readable  — governs all; short sentences, one idea each, understood in one pass.
 
 Deterministic heuristic (no model call): catches the GROSS violations —
-  (a) reply prose in a different script than the user's language, and
-  (b) `translate` terms appearing raw, plus too many stray foreign words in prose.
+  (a) reply prose in a different script than the user's language,
+  (b) `translate` terms appearing raw (the dict has a native word for them),
+  (c) too many stray foreign words the dict doesn't cover, and
+  (d) `gloss` terms used without their (parenthetical) explanation on first use.
 It cannot judge subtle style; it stops the repeat offenders.
 """
 import json, re, sys
@@ -219,6 +221,7 @@ def main():
     # Derive the working sets from the merged terms.
     translate = {w: spec.get("value") for w, spec in terms.items() if spec.get("action") == "translate"}
     ok_raw = {w for w, spec in terms.items() if spec.get("action") in ("allow", "gloss")}
+    gloss_terms = {w for w, spec in terms.items() if spec.get("action") == "gloss"}
 
     prose = strip_code(assistant)
     reasons = []
@@ -243,6 +246,18 @@ def main():
     stray = sorted({w for w in lat_words if w not in ok_raw and w not in translate})
     if len(stray) > 8:
         reasons.append(f"{len(stray)} Latin-script words in '{lang}' prose (gloss or translate them)")
+
+    # (d) `gloss` terms used raw — English is fine, but must be explained in (parens) on
+    # first use. strip_code() drops parentheticals, so check the ORIGINAL reply: a gloss
+    # term passes if it appears at least once as "term (...)"; flag it if it never does.
+    orig_low = assistant.lower()
+    unglossed = sorted(
+        w for w in gloss_terms
+        if re.search(r"(?<![\w-])" + re.escape(w) + r"(?![\w-])", low)
+        and not re.search(re.escape(w) + r"[\w-]*\s*\([^)]*\)", orig_low)
+    )
+    if unglossed:
+        reasons.append("gloss terms used without a (parenthetical) explanation: " + ", ".join(unglossed))
 
     if reasons:
         teach = (
