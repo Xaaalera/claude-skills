@@ -68,7 +68,9 @@ EOF
 
 if [ -n "$LANG_CHOSEN" ]; then
   SYSMSG="$BANNER
-cicero v$VER · voice language: $LANG_CHOSEN · say \"add <word>\" to grow the dictionary"
+cicero v$VER · voice language: $LANG_CHOSEN
+tip → say \"add <word>\" to teach your personal jargon dictionary how to render that term
+      (translate · gloss · keep as-is) — the voice then uses your wording and stops flagging it"
   CONTEXT="$DICT_HOWTO"
 else
   SYSMSG="$BANNER
