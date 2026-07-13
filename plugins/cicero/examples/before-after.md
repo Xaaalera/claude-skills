@@ -142,3 +142,118 @@ optional — only against wasted work, never as the safety guarantee.
 | **0 · Readable first** | nested sub-lists and cross-references | flat points, one idea each |
 
 Same conclusion, a third of the length, and you know the answer from line one.
+
+---
+
+# A second, everyday question
+
+The first example is a hard architecture question. But the same effect shows up on the
+small, ordinary questions you ask a dozen times a day — where a long answer is the more
+expensive kind, because it taxes you every single time.
+
+## The question
+
+> Is it bad practice to use `any` in TypeScript?
+
+## Side by side
+
+<table>
+<tr>
+<th width="50%">Vanilla Claude</th>
+<th width="50%">With CICERO</th>
+</tr>
+<tr valign="top">
+<td>
+
+**Short answer:** yes, `any` is generally bad practice — but it's a tool with a few
+legitimate uses. The problem is what it does, not that it exists.
+
+**Why it's discouraged**
+
+`any` doesn't mean "any type" — it means "turn off type checking here." It's contagious
+and silent:
+
+```ts
+const data: any = JSON.parse(input);
+data.foo.bar.baz;        // no error, even if it explodes at runtime
+const n: number = data;  // no error — `any` flows into a typed slot silently
+data.toUpperCase() * 2;  // no error
+```
+
+Once a value is `any`, everything it touches loses type safety too. You lose autocomplete,
+refactoring safety, and the compiler's ability to catch real bugs — which is the whole
+reason to use TypeScript.
+
+**What to use instead**
+
+- `unknown` — the safe counterpart to `any`. Accepts anything, but forces you to narrow
+  before use:
+
+```ts
+const data: unknown = JSON.parse(input);
+if (typeof data === "object" && data && "foo" in data) { /* now safe */ }
+```
+
+- Generics — when a function works over many types but should preserve them:
+
+```ts
+function first<T>(arr: T[]): T | undefined { return arr[0]; }
+```
+
+- Proper types / interfaces — model the shape instead of opting out.
+- Union types (`string | number`), `Record<string, T>`, etc.
+
+**When `any` is actually OK**
+
+- Migrating a large JS codebase to TS incrementally.
+- Genuinely dynamic boundaries where typing is impractical, and you narrow immediately after.
+- Quick prototypes / tests where safety doesn't matter yet.
+- Escaping a wrong or overly strict third-party type, as a localized, commented escape hatch.
+
+**Practical guardrails**
+
+- Turn on `noImplicitAny` (part of `strict`) so `any` must be written, never silently inferred.
+- Prefer `unknown` as your default "I don't know the type yet."
+- Consider the ESLint rule `@typescript-eslint/no-explicit-any` to force each use to be justified.
+
+Rule of thumb: reach for `unknown`, and if you type `any`, treat it as a deliberate,
+commented exception — not the default.
+
+</td>
+<td>
+
+Yes — `any` disables type-checking on that value, so it silently defeats the reason you're
+using TypeScript. Every property access and call on an `any` becomes unchecked.
+
+**Use instead:**
+
+- `unknown` *(the safe counterpart — accepts anything, but forces a check before use)* when
+  you truly don't know the type.
+- A real type or generic when you do.
+
+**When `any` is fine:** quick migration of old JS, or a genuinely dynamic boundary you'll
+validate at runtime anyway. Turn on `noImplicitAny` so it's always a deliberate choice,
+never an accident.
+
+</td>
+</tr>
+</table>
+
+## The overall feel
+
+This isn't a claim that CICERO is "smarter" — on both questions the two answers agree.
+It's about what the answer is like to *live with*:
+
+- **The verdict comes first.** You learn the decision on line one, then read further only
+  if you want the reasoning — instead of scrolling to the bottom to find out what to do.
+- **There's less to hold in your head.** One idea per point, no nested cross-references. The
+  shorter answer isn't missing anything here; it just doesn't make you carry what you
+  didn't ask for.
+- **Terms are explained as they arrive.** `unknown`, `noImplicitAny` — glossed in passing,
+  so you're never quietly assumed to already know.
+- **It's gentler with your attention and your codebase.** It sizes the reply to the size of
+  the question, and on a risky request it pushes back before acting rather than racing
+  ahead.
+
+The pitch is quiet on purpose: not dramatically better, just easier — lower cognitive load,
+and more considerate of the person on the other side of the screen.
