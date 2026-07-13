@@ -70,6 +70,19 @@ no voice language set yet — I'll ask you to pick one"
   CONTEXT="$DICT_HOWTO$FIRSTRUN"
 fi
 
+# One-time notice: the voice now ships as a force-for-plugin output style. We CANNOT detect
+# from a hook whether it actually applied (no documented "active output style" field in the
+# SessionStart input), so this is informational, shown once, then silenced via a marker file.
+NOTICE_MARK="$HOME/.claude/cicero/.voice-style-notice-seen"
+if [ ! -f "$NOTICE_MARK" ]; then
+  SYSMSG="$SYSMSG
+──────────────────────────────────
+note (shown once): the voice now ships as an OUTPUT STYLE, auto-applied while this plugin is on.
+  check it   → /config  (the \"Output style\" line should read CICERO)
+  not applied? → 1) /reload-plugins   2) /plugin update cicero   3) update Claude Code to the latest"
+  mkdir -p "$HOME/.claude/cicero" && : > "$NOTICE_MARK" || true
+fi
+
 # systemMessage -> shown to the user once at session start.
 # additionalContext -> the DYNAMIC voice context (dictionary mechanic + first-run language pick).
 # The static rules are the output style, not this injection.
