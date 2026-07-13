@@ -15,6 +15,12 @@ if [ -f "$CFG" ]; then
   LANG_CHOSEN="$(jq -r '.language // empty' "$CFG" 2>/dev/null || true)"
 fi
 
+# Loaded plugin version — printed in the banner so it's obvious at a glance whether
+# this session runs a fresh build or a stale cached one. Read from the running copy's
+# own plugin.json (CLAUDE_PLUGIN_ROOT is the installed/cached dir the hook executes from).
+VER="$(jq -r '.version // empty' "${CLAUDE_PLUGIN_ROOT:-}/.claude-plugin/plugin.json" 2>/dev/null || true)"
+[ -z "$VER" ] && VER="?"
+
 read -r -d '' BANNER <<'EOF' || true
 ═══════════════════════════════════
 C I C E R O — the house voice
@@ -62,11 +68,11 @@ EOF
 
 if [ -n "$LANG_CHOSEN" ]; then
   SYSMSG="$BANNER
-voice language: $LANG_CHOSEN · say \"add <word>\" to grow the dictionary"
+cicero v$VER · voice language: $LANG_CHOSEN · say \"add <word>\" to grow the dictionary"
   CONTEXT="$DICT_HOWTO"
 else
   SYSMSG="$BANNER
-no voice language set yet — I'll ask you to pick one"
+cicero v$VER · no voice language set yet — I'll ask you to pick one"
   CONTEXT="$DICT_HOWTO$FIRSTRUN"
 fi
 
