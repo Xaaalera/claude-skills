@@ -1,0 +1,9 @@
+{
+  "_comment": "Cross-language ALLOW list — proper nouns / identifiers unavoidable in any language's prose. Never flagged, regardless of target language. Language-specific terms live in <lang>.json.",
+  "allow": [
+    "cicero", "ockham", "solid", "git", "github", "claude", "lwc", "aura",
+    "apex", "react", "node", "css", "scss", "bem", "rem", "kpi", "bff",
+    "ui", "api", "id", "ts", "js", "md", "ok", "json", "html", "http", "url",
+    "cli", "mcp", "soql", "dom", "xss", "salesforce", "storybook"
+  ]
+}
