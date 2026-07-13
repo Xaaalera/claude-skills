@@ -14,3 +14,6 @@ sync-local.sh
 
 # plan-execution task breakdown (durable local record, not published)
 .tasks/
+
+# JetBrains IDE config
+.idea/
