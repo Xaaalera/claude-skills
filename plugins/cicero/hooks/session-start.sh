@@ -77,9 +77,18 @@ NOTICE_MARK="$HOME/.claude/cicero/.voice-style-notice-seen"
 if [ ! -f "$NOTICE_MARK" ]; then
   SYSMSG="$SYSMSG
 ──────────────────────────────────
-note (shown once): the voice now ships as an OUTPUT STYLE, auto-applied while this plugin is on.
-  check it   → /config  (the \"Output style\" line should read CICERO)
-  not applied? → 1) /reload-plugins   2) /plugin update cicero   3) update Claude Code to the latest"
+note (shown once): CICERO is a force-for-plugin OUTPUT STYLE — while this plugin is enabled it is
+injected into the system prompt and OVERRIDES your own outputStyle setting. You do not select it.
+  heads-up: /config keeps showing YOUR saved style (often \"default\") — the plugin overrides that
+  slot without changing what it displays, so \"default\" there does NOT mean the voice is off.
+  confirm it is live → send me this exact line:
+      Quote Rule 0 and Rule 14 of your active output style, verbatim.
+    active   = I reply with the real rules (Rule 0 \"Readable first…\", Rule 14 \"end with a joke\").
+    NOT active = I don't know them, or answer in generic terms.
+  truly missing (older Claude Code, or a stale plugin)? run in order:
+    /reload-plugins         — reload plugins in this session
+    /plugin update cicero   — pull the latest plugin version
+    update Claude Code       — if still missing, upgrade the CLI to the latest"
   mkdir -p "$HOME/.claude/cicero" && : > "$NOTICE_MARK" || true
 fi
 
