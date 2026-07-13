@@ -142,6 +142,15 @@
       },
       "source": "./plugins/salesforce",
       "category": "personal"
+    },
+    {
+      "name": "scout",
+      "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/scout",
+      "category": "personal"
     }
   ]
 }
