@@ -245,7 +245,10 @@ def main():
     lat_words = [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z-]{2,}", prose)]
     stray = sorted({w for w in lat_words if w not in ok_raw and w not in translate})
     if len(stray) > 8:
-        reasons.append(f"{len(stray)} Latin-script words in '{lang}' prose (gloss or translate them)")
+        reasons.append(
+            f"{len(stray)} Latin-script words in '{lang}' prose not covered by the dictionary "
+            "(gloss or translate them): " + ", ".join(stray)
+        )
 
     # (d) `gloss` terms used raw — English is fine, but must be explained in (parens) on
     # first use. strip_code() drops parentheticals, so check the ORIGINAL reply: a gloss
@@ -261,9 +264,10 @@ def main():
 
     if reasons:
         teach = (
-            "\n\nTo teach a term permanently, tell the user they can say \"add <word>\" and choose: "
+            "\n\nThe flagged words above are dictionary candidates. After re-sending the fixed reply, "
+            "ASK the user how to handle each one and WAIT for their answer — never auto-add: "
             "translate (always use the '" + lang + "' word), gloss (keep the foreign word + explain "
-            "in parens), or allow (leave it). Record the choice in ~/.claude/cicero/dicts/" + lang + ".json."
+            "in parens), or allow (leave it). Record each chosen word in ~/.claude/cicero/dicts/" + lang + ".json."
         )
         out = {
             "decision": "block",
