@@ -4,32 +4,32 @@ name: scout-publish
 # auto-commit + push the result back to main.
 #
 # NOTE on gate interaction: scout-gate.yml and eval-gate.yml trigger on `pull_request`
-# only. A direct bot push to `main` (as this workflow performs) does NOT hit those PR
-# gates and is not blocked by them — they simply never see this push event. The
-# loop-guard below (not those gates) is what prevents this job from re-triggering itself.
+# only. A direct push to `main` (as this workflow performs) does NOT hit those PR gates.
+# A deploy-key push DOES re-trigger `push` workflows, so the `[skip ci]` loop-guard below
+# is what prevents this job from re-triggering itself.
+#
+# NOTE on auth: the push to protected `main` uses a write DEPLOY KEY (secret DEPLOY_KEY).
+# `main` is protected by the `main-protection` ruleset, which lists "Deploy keys" as a
+# bypass actor — so the deploy-key push bypasses the PR + status-check rules. No PAT
+# (no expiry/rotation), no `enforce_admins` change, no org-owner needed. Setup: docs/publishing.md.
 on:
   push:
     branches: [main]
 
+# The token needs no write: the push below authenticates via the deploy key, not GITHUB_TOKEN.
+permissions:
+  contents: read
+
 jobs:
   scout-publish:
     runs-on: ubuntu-latest
-    # Loop-guard: the publish commit carries `[skip ci]` (see the commit step), so the
-    # bot's own push to main does NOT re-trigger this workflow. An actor guard can't be
-    # used here — the token below is a fine-grained PAT owned by a human, so the bot's
-    # push and that same human's PR-merge share one `github.actor` and are
-    # indistinguishable; guarding on it would wrongly skip publish on every human merge.
-    # `[skip ci]` is therefore the sole, correct loop-guard.
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Auth for the push to protected main: PUBLISH_TOKEN is a fine-grained PAT
-          # (Contents: read & write) owned by a repo admin. On this user-owned repo
-          # `enforce_admins` is off, so that owner bypasses the PR requirement and can
-          # push to main directly (proven by the Spike-2 push). On an ORG-owned mirror,
-          # swap this for the built-in github-actions[bot] added to a ruleset bypass.
-          token: ${{ secrets.PUBLISH_TOKEN }}
+          # ssh-key sets the origin remote to SSH and authenticates as the deploy key,
+          # which the ruleset allows to bypass branch protection on the push below.
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - uses: actions/setup-python@v5
         with:
@@ -44,12 +44,17 @@ jobs:
       - name: Compute affected plugin(s) and PATCH-bump version
         run: |
           set -euo pipefail
-          # "Affected plugin" = any plugin under which a skill changed in this push.
-          # Diff the merge commit against its first parent to get the paths that changed,
-          # then map each plugins/<domain>/skills/... path to its owning plugin.json.
-          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*/skills/*' || true)"
+          # "Affected plugin" = any plugin whose PAYLOAD changed in this push — a skill,
+          # hook, command, output-style, or agent. NOT just skills/: a plugin can ship
+          # non-skill content (e.g. cicero is a hook + output-style with no skills at all),
+          # and a skills-only filter silently skips its bump, leaving the version-keyed
+          # plugin cache stale on every client. Diff the merge commit against its first
+          # parent, then map each plugins/<domain>/... path to its owning plugin.json.
+          # Exclude the auto-managed files (the version we're about to write, and scout's
+          # generated catalog) so a bot write or a manual version edit can't self-trigger.
+          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*' ':(exclude)plugins/*/.claude-plugin/plugin.json' ':(exclude)plugins/scout/skills/scout/catalog.json' || true)"
           if [ -z "$changed_paths" ]; then
-            echo "no plugins/*/skills/* changes in this push — nothing to bump"; exit 0
+            echo "no plugin payload changes in this push — nothing to bump"; exit 0
           fi
           affected_plugins="$(echo "$changed_paths" | cut -d/ -f2 | sort -u)"
           for plugin in $affected_plugins; do
@@ -84,10 +89,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "nothing to commit — catalog and versions already up to date"; exit 0
           fi
-          # [skip ci] is belt-and-suspenders only; the actor guard above is the real
-          # loop-guard and is what actually prevents re-triggering this workflow.
+          # [skip ci] stops this deploy-key push from re-triggering the workflow.
           git commit -m "chore(scout): regenerate catalog + bump affected plugin version [skip ci]"
-          # This push succeeds only once the Spike-2 precondition (bot token +
-          # branch-protection bypass allowance, see checkout step above) has been
-          # satisfied by a repo admin. Until then, this step is expected to fail.
           git push origin HEAD:main
