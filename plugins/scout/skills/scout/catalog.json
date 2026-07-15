@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "xaaalera",
-  "generated": "2026-07-13",
+  "generated": "2026-07-15",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -543,7 +543,8 @@
         "notes": "Read-only \u2014 reads the bundled catalog.json and, on explicit user OK, runs /plugin install in-session. Never writes files, never shells out, never touches git."
       },
       "hooks": [
-        "PostToolUse"
+        "PostToolUse",
+        "UserPromptSubmit"
       ]
     }
   ]
