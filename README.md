@@ -99,14 +99,14 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
 | `diogenes` | Per-session token-spend report, narrated by Diogenes the Cynic. | [diogenes](#diogenes) |
 | `lovecraft` | House narrative voice for the engineering journal — expedition-journal post-mortems. | [lovecraft](#lovecraft) |
-| `frontend-css` | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) |
+| `frontend-css` | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | `frontend-js` | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
 | `frontend-react` | React conventions — placement, structure, hooks, primitives, layout, skeletons, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
 | `frontend` | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) |
 | `git` | Git workflow — atomic commit splitting. | [commit](#commit) |
 | `i18n` | Route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
-| `meta` | Design law, error handling, doc writing, skill authoring, model routing. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| `meta` | Design law, error handling, doc writing, skill authoring, model routing. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 ## Skills
@@ -145,6 +145,9 @@ shorter, easier to read in one pass.
   root font size. Applies whenever CSS / SCSS / Tailwind is written or reviewed.
 - <a id="scss-modules"></a>**scss-modules** — House conventions for SCSS modules: structure, the
   color/spacing/radius token system, BEM. Applies any time styles are created, modified, or refactored.
+- <a id="responsive-layout"></a>**responsive-layout** — The definition-of-done that a component/page
+  renders validly at every breakpoint (no overflow, readable text, discernible images, restrained
+  borders, sane density); proposes a breakpoint scale if the project has none. Stack-agnostic.
 
 ### frontend-js &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="conventions"></a>**conventions** — House JS/TS style: arrow functions, single quotes, full
@@ -195,6 +198,9 @@ shorter, easier to read in one pass.
   fan-out / eval before it launches; measure one unit and show the cost table before scaling.
 - <a id="new-skill"></a>**new-skill** — How to author a new skill in the plugin model: naming, `SKILL.md`
   structure, and where it goes (`plugins/<domain>/skills/<name>/`).
+- <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and
+  score it (bundled `score-description.py`, self-contained); the canonical measurer, replaces
+  skill-creator's false-negative-prone run_eval.
 - <a id="ockham"></a>**ockham** — The Razor. Invoke *before* creating any new entity (file, module,
   abstraction, config key…) to challenge whether it should exist at all.
 - <a id="solid"></a>**solid** — The design law for code (SRP/OCP/LSP/ISP/DIP + DRY/KISS/YAGNI). Activate
