@@ -144,6 +144,15 @@
       "category": "personal"
     },
     {
+      "name": "error",
+      "description": "Error skills — the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
+      "author": {
+        "name": "Xaaalera"
+      },
+      "source": "./plugins/error",
+      "category": "personal"
+    },
+    {
       "name": "scout",
       "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
       "author": {
