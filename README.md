@@ -97,6 +97,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | `cicero` | House voice — SessionStart + Stop hooks that set a plain, concise, bottom-line-first reply style. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
+| `error` | Error handling — the unified error envelope + reason-code vocabulary, and the framework-agnostic client-side error-handling architecture. | [format](#format), [architecture](#architecture) |
 | `diogenes` | Per-session token-spend report, narrated by Diogenes the Cynic. | [diogenes](#diogenes) |
 | `lovecraft` | House narrative voice for the engineering journal — expedition-journal post-mortems. | [lovecraft](#lovecraft) |
 | `frontend-css` | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
@@ -106,7 +107,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `git` | Git workflow — atomic commit splitting. | [commit](#commit) |
 | `i18n` | Route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
-| `meta` | Design law, error handling, doc writing, skill authoring, model routing. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 ## Skills
@@ -139,6 +140,10 @@ shorter, easier to read in one pass.
 - <a id="lovecraft"></a>**lovecraft** — the Chronicler of the Unknown: house narrative voice for the
   engineering journal (xaaalera.github.io). Expedition-journal post-mortems — dated log entries, eroding
   composure, exact numbers, a survivor's protocol at the end.
+
+### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.
+- <a id="architecture"></a>**architecture** — The framework-agnostic client-side error-handling architecture: one code→UX policy table as the sole classifier, a state-dispatcher, a shared error-tile renderer that owns escalation, boundary tiers + a single outer floor; role-named with per-framework bindings.
 
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Always size in `rem`, never `px`, so type and spacing scale with the user's
@@ -189,9 +194,6 @@ shorter, easier to read in one pass.
   top, one-line bullets, understandable on the first read.
 
 ### meta &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="error-handling"></a>**error-handling** — One error format everywhere: the `google.rpc.Status`
-  envelope on every layer (Apex, BFF, client). Activate on any error path; create an error-code registry
-  if the package has none.
 - <a id="lean-writing"></a>**lean-writing** — Write specs, design docs, and summaries terse: short plain
   sentences, bullets over prose, no filler — caveman-simple but technically precise.
 - <a id="model-routing"></a>**model-routing** — Assign an explicit model tier to every spawned agent /
