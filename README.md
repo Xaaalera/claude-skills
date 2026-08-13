@@ -48,11 +48,11 @@ One command, from the root of the repo you want to protect (needs the GitHub CLI
 bash <(gh api repos/Xaaalera/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
 ```
 
-It vendors the gate (`scripts/review/*`, `.husky/pre-push`, `.github/workflows/review-gate.yml`), seeds
-`.claude/review.config.json`, and wires this marketplace + `review@xaaalera` into the repo's committed
-`.claude/settings.json`. Then commit, `(cd scripts/review && npm i)` + `npm i -D husky && npx husky init`
-to arm the local hook, and make **`review-gate`** a required status check in branch protection (the real
-enforcer). Tailor `.claude/review.config.json` per the [`setup`](#setup) skill.
+It seeds `.claude/review.config.json`, `.husky/pre-push`, and `.github/workflows/review-gate.yml`, and
+wires this marketplace + `review@xaaalera` and `review-workflow@xaaalera` into the repo's committed
+`.claude/settings.json`. Nothing is vendored — the harness comes from npm. Then commit, `npm i -D husky
+&& npx husky init` to arm the local hook, and make **`review-gate`** a required status check in branch
+protection (the real enforcer). Tailor `.claude/review.config.json` per the [`setup`](#setup) skill.
 
 ## Guard the gate — [`cerberus`](#leak-check)
 
@@ -109,6 +109,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
 | `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
+| `review-workflow` | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 ## Skills
 
