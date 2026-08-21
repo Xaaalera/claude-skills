@@ -97,6 +97,8 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | `cicero` | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
+| `docs` | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
+| `plan-gate` | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
 | `error` | Error handling — the unified error envelope + reason-code vocabulary, and the framework-agnostic client-side error-handling architecture. | [format](#format), [architecture](#architecture) |
 | `diogenes` | Per-session token-spend report, narrated by Diogenes the Cynic. | [diogenes](#diogenes) |
 | `lovecraft` | House narrative voice for the engineering journal — expedition-journal post-mortems. | [lovecraft](#lovecraft) |
@@ -146,6 +148,9 @@ replace the jargon, and it reads a third to two-thirds shorter.
 - <a id="lovecraft"></a>**lovecraft** — the Chronicler of the Unknown: house narrative voice for the
   engineering journal (xaaalera.github.io). Expedition-journal post-mortems — dated log entries, eroding
   composure, exact numbers, a survivor's protocol at the end.
+
+### docs &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="standard"></a>**standard** — Where a document belongs and whether anything keeps it honest: four layers separated by update discipline (decision, mechanism, rule, frozen record), a `README.md` in every layer root answering five fixed questions about that section's own rules, and a vendored `docs-check.py` that fails a push when a declared mechanism changes and its doc does not. Installs into a target repo with its own hook and CI workflow.
 
 ### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.
