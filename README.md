@@ -112,7 +112,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `review-workflow` | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
-| `salesforce` | Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| `salesforce` | LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 | `tests` | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 ## Skills
 
@@ -237,7 +237,6 @@ replace the jargon, and it reads a third to two-thirds shorter.
   `🐀 Scavenger` section to `docs/superpowers/BACKLOG.md`.
 
 ### salesforce &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="apex_test-authoring"></a>**apex_test-authoring** — Author Apex unit tests to a strict house
   standard: per-object fluent-builder factories, `@TestSetup`, `Assert.*`, FLS/user-mode, and bulk +
   positive + negative coverage. Every new Apex class gets a matching test class in the same change.
 - <a id="dx_mcp"></a>**dx_mcp** — Prefer the salesforce-dx MCP tools over the raw `sf` CLI for any org
