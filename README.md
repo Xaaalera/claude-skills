@@ -113,7 +113,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `review-workflow` | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | `salesforce` | LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
-| `tests` | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
+| `tests` | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 ## Skills
 
 Grouped by plugin. Each group links back to [Plugins](#plugins).
