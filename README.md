@@ -96,6 +96,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `scout` | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
 | `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | `cicero` | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
+| `critique` | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
 | `docs` | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
 | `plan-gate` | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
@@ -139,6 +140,9 @@ current across a mid-session switch.
 **Why use it:** see [before / after on real questions](plugins/cicero/examples/before-after.md) — the same
 answers with and without CICERO, side by side. Same conclusions; the answer lands first, plain words
 replace the jargon, and it reads a third to two-thirds shorter.
+
+### critique &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="critique"></a>**critique** — Run an adversarial critique of a design, spec, or plan: 3–4 diverse independent lenses, each scoped to one layer with its own rubric, findings grounded in a location and merged parallel-then-synthesize, handed to a human to dispose.
 
 ### diogenes &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="diogenes"></a>**diogenes** — Per-session token-spend report narrated by Diogenes the Cynic:
