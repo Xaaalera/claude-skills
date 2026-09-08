@@ -69,6 +69,9 @@ edit under `skills/`, `references/`, or `evals/` (or to a `SKILL.md` / `plugin.j
 **[`leak-check`](#leak-check) skill** reads the change in context and rewrites anything that looks
 copied-from-real onto one fictional demo product before it ships.
 
+The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
+consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
+
 ### Install
 
 ```
@@ -94,7 +97,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | Plugin | What it does | Skills |
 |---|---|---|
 | `scout` | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
-| `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
+| `cerberus` | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work-codebase fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | `cicero` | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | `critique` | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
@@ -110,10 +113,11 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `git` | Git workflow — atomic commit splitting. | [commit](#commit) |
 | `i18n` | Route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
-| `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
-| `review-workflow` | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
+| `review-workflow` | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | `salesforce` | LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| `skillcraft` | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
 | `tests` | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 ## Skills
 
@@ -126,6 +130,11 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   employer brand, or the aggregate domain flavor) and rewrite it to a neutral fictional demo. A
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design — a list of the
   real names to catch would itself be the leak.
+- <a id="security-scan"></a>**security-scan** — the guard's inward-facing head. Before a skill ships to
+  whoever installs it, run the eight-point consumer-safety checklist — prompt injection, exfiltration,
+  secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation —
+  plus an adversarial "make this skill do something its author did not intend" pass. An agent judgment
+  pass, not a denylist; the counterpart to [`leak-check`](#leak-check), which guards what leaks *out*.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
 Not a skill — the house communication style. The **numbered rules** under one governing readability rule
@@ -216,6 +225,9 @@ replace the jargon, and it reads a third to two-thirds shorter.
   fan-out / eval before it launches; measure one unit and show the cost table before scaling.
 - <a id="new-skill"></a>**new-skill** — How to author a new skill in the plugin model: naming, `SKILL.md`
   structure, and where it goes (`plugins/<domain>/skills/<name>/`).
+- <a id="update-skill"></a>**update-skill** — Bring an existing skill up to the house standard —
+  contract, boundary, checking loop, acceptance criteria — and refresh its `metadata.yaml` when only
+  the wiring changed. The counterpart to [`new-skill`](#new-skill) for skills that already exist.
 - <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and
   score it (bundled `score-description.py`, self-contained); the canonical measurer, replaces
   skill-creator's false-negative-prone run_eval.
@@ -290,6 +302,14 @@ stale. Refresh a measurement with
 `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`.
 
 Server-side only — nothing to install per clone. Untouched legacy skills are never inspected.
+
+### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
+  meant to help with, and improve it without regressions. Generates the same task with and without the
+  guide, judges the quality delta and per-rule instruction compliance, attributes each weak spot to the
+  guide or the agent, and — behind a mandatory anti-regression anchor — re-judges any fix. An
+  embedding-optional adaptation of SkillAxe (arXiv 2606.10546). Reach for it on a periodic audit of a
+  high-traffic guide skill or before a large rewrite, not for a one-line wording fix.
 
 ### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.
