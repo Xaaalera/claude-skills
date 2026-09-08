@@ -69,6 +69,9 @@ edit under `skills/`, `references/`, or `evals/` (or to a `SKILL.md` / `plugin.j
 **[`leak-check`](#leak-check) skill** reads the change in context and rewrites anything that looks
 copied-from-real onto one fictional demo product before it ships.
 
+The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
+consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
+
 ### Install
 
 ```
@@ -94,7 +97,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | Plugin | What it does | Skills |
 |---|---|---|
 | `scout` | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
-| `cerberus` | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
+| `cerberus` | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work-codebase fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | `cicero` | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | `critique` | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | `diagram` | Architecture/flow diagram authoring — spec or raw code → readable, clickable D2→ELK page; Atlas + Sextant-hardened. | [diagram](#diagram) |
@@ -127,6 +130,11 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   employer brand, or the aggregate domain flavor) and rewrite it to a neutral fictional demo. A
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design — a list of the
   real names to catch would itself be the leak.
+- <a id="security-scan"></a>**security-scan** — the guard's inward-facing head. Before a skill ships to
+  whoever installs it, run the eight-point consumer-safety checklist — prompt injection, exfiltration,
+  secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation —
+  plus an adversarial "make this skill do something its author did not intend" pass. An agent judgment
+  pass, not a denylist; the counterpart to [`leak-check`](#leak-check), which guards what leaks *out*.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
 Not a skill — the house communication style. The **numbered rules** under one governing readability rule

@@ -6,7 +6,7 @@
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.1.0",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
       "best-for": "Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits.",
@@ -14,6 +14,24 @@
       "changes": {
         "tags": [],
         "notes": ""
+      },
+      "hooks": [
+        "PostToolUse"
+      ]
+    },
+    {
+      "name": "cerberus:security-scan",
+      "plugin": "cerberus",
+      "plugin-version": "2.1.0",
+      "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this marketplace \u2014 review the change for anything UNSAFE to the person who installs and runs it: prompt-injection text, data exfiltration, an embedded secret, a dangerous/destructive command, obfuscated payloads, an unexpected external fetch, credential-store access, or privilege escalation. The consumer-safety half of the gate; the outward-leak half is cerberus:leak-check. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
+      "purpose": "The consumer-safety head of cerberus \u2014 reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.",
+      "best-for": "Any marketplace where an installed skill runs on someone else's machine and must be certified safe, not just leak-free.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "files"
+        ],
+        "notes": "An agent judgment pass; edits the reviewed skill/script to remove or rewrite an unsafe behaviour. No network, no org, no money."
       },
       "hooks": [
         "PostToolUse"
