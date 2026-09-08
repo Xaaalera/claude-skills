@@ -12,8 +12,10 @@
       "best-for": "Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits.",
       "needs": [],
       "changes": {
-        "tags": [],
-        "notes": ""
+        "tags": [
+          "files"
+        ],
+        "notes": "An agent judgment pass; rewrites the reviewed skill/reference/eval in place to replace a leaked real identifier with a neutral fictional demo. No network, no org, no money."
       },
       "hooks": [
         "PostToolUse"

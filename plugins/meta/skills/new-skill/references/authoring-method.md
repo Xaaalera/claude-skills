@@ -228,7 +228,7 @@ what counts as clean:
 2. Empty? Done. Not empty — replace each hit with rem and return to step 1.
 ```
 
-The list of expectations is NOT repeated there. It lives once, in its own file:
+The list of expectations is NOT repeated there. It lives once, as its own half of `rubric.json`:
 
 ```json
 [
@@ -237,11 +237,12 @@ The list of expectations is NOT repeated there. It lives once, in its own file:
 ]
 ```
 
-**Why its own file rather than a field inside the trigger eval.** They answer different questions, and
-research 05 is explicit that the two must be measured apart: `rubric.json` answers *did the skill
-fire*, acceptance answers *did the result come out right*. A skill can fire reliably and change
-nothing — and with one merged file, that looks green. A separate file also reads on its own: its name
-says what it is, and a person opening it needs no explanation.
+**Why its own half rather than folded into the trigger cases.** They answer different questions, and
+research 05 is explicit that the two must be measured apart: the `trigger` half answers *did the skill
+fire*, the `acceptance` half answers *did the result come out right*. A skill can fire reliably and
+change nothing — and folded into the trigger cases, that looks green. Keeping them as two named keys of
+one `rubric.json` keeps each readable on its own — a person opening the file sees which half is which
+without explanation — while a single measurement pass can still read both.
 
 ## The `evals/` directory
 
