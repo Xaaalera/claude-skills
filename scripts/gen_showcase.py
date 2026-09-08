@@ -221,7 +221,7 @@ footer code{font-family:"JetBrains Mono",monospace;color:var(--muted)}
 </header>
 <main><div class="grid" id="grid"></div><div class="empty" id="empty" hidden>no skills match</div></main>
 <footer>Generated from <code>catalog.json</code> by <code>scripts/gen_showcase.py</code> — one source, no hand-maintained list.
-Each card shows what a skill does, when it fires, what it touches, and its full <code>SKILL.md</code>. Quality &amp; security metrics land here once measured.</footer>
+Each card shows what a skill does, when it fires, what it touches, and links out to its <code>SKILL.md</code> on GitHub. Quality &amp; security metrics land here once measured.</footer>
 <div class="scrim" id="scrim"><div class="modal" id="modal"></div></div>
 <script id="data" type="application/json">__DATA__</script>
 <script>
