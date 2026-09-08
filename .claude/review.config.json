@@ -69,6 +69,16 @@
           "severity": "major"
         },
         {
+          "code": "scripts/validate_acceptance.py",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "scripts/validate_security.py",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
           "code": "plugins/meta/skills/skill-eval/scripts/*",
           "doc": "docs/mechanisms/skill-eval.md",
           "severity": "major"
