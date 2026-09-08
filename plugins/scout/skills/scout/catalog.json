@@ -1,14 +1,14 @@
 {
   "schema-version": 1,
   "marketplace": "xaaalera",
-  "generated": "2026-09-04",
+  "generated": "2026-09-08",
   "skills": [
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
       "plugin-version": "2.0.2",
-      "activates-when": "Use before committing a NEW or EDITED skill, its references, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/eval edit.",
-      "purpose": "Agent judgment pass that reviews a skill/reference/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
+      "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
+      "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
       "best-for": "Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits.",
       "needs": [],
       "changes": {
@@ -39,15 +39,15 @@
       "name": "diagram:diagram",
       "plugin": "diagram",
       "plugin-version": "2.0.0",
-      "activates-when": "Use when creating or refining an architecture / flow diagram (a feature \"schema\", data flow, or how-it-works picture) that should end up readable and user-friendly \u2014 renders a D2 source with the ELK layout engine and inlines it into a self-contained, committable HTML page. Also use when iterating on an existing diagram to improve readability.",
-      "purpose": "Turn a spec/code scope into a hardened entity Atlas, then a readable D2\u2192ELK architecture diagram inlined into a self-contained, committable HTML page.",
-      "best-for": "Teams who want an accurate, clickable \"how it works\" diagram (classes/objects/permission sets + relations) committed alongside a spec or module instead of a hand-drawn or memory-derived picture.",
+      "activates-when": "Use when creating or refining an architecture / flow / how-it-works diagram (a feature \"schema\", object model, data flow, dependency graph) that should end up readable and user-friendly \u2014 builds a plain diagram-model JSON, hardens it with parallel read-only hunters, and renders it into a single committable HTML page \u2014 one file, React Flow + ELK, libraries loaded from a CDN. Also use when iterating on an existing diagram to improve readability.",
+      "purpose": "Turn a spec/code scope into a hardened diagram-model JSON, then render it into ONE committable HTML page (one file, React Flow + ELK, libraries loaded from a CDN at view time) where node kind and subsystem are encoded automatically for readability.",
+      "best-for": "Teams who want an accurate, clickable \"how it works\" diagram (classes/objects/components/permission sets + relations) committed alongside a spec or module \u2014 with a heterogeneous mix of node kinds (react / apex / lambda / object) kept visually distinct \u2014 instead of a hand-drawn or memory-derived picture.",
       "needs": [],
       "changes": {
         "tags": [
           "files"
         ],
-        "notes": "Writes a new docs/diagrams/<name>/ folder \u2014 atlas.md, diagram.html, and assets/ (graph.d2, page.html, copied CSS/JS/svg-pan-zoom, rendered SVG/PNG) \u2014 via the bundled references/build.sh script. Does not touch git, network, org, or money."
+        "notes": "Writes a docs/diagrams/<name>/ folder \u2014 the <name>.diagram.json model (the Sextant-hardened source of truth) and the built <name>.html (no sibling files, model inlined) \u2014 via references/build-spec-diagram.mjs. The build itself touches no network; the produced HTML loads its three libraries (React, React Flow, elkjs) from a CDN (esm.sh) at view time, so opening it needs network. Does not touch git, org, or money."
       },
       "hooks": []
     },
@@ -103,7 +103,7 @@
       "name": "error:format",
       "plugin": "error",
       "plugin-version": "2.0.0",
-      "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).",
+      "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend). Do NOT use to design the whole app's error-handling architecture \u2014 the single code-to-UX policy table (error:architecture) \u2014 or to wrap one component in a boundary or style one error tile (your framework's component skill); this skill owns the wire envelope and the reason vocabulary.",
       "purpose": "Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.",
       "best-for": "Any project defining or touching an error path \u2014 a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error \u2014 that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.",
       "needs": [],
@@ -117,7 +117,7 @@
       "name": "frontend:fe-check",
       "plugin": "frontend",
       "plugin-version": "2.0.0",
-      "activates-when": "Typecheck and run (targeted) unit tests for a frontend repo, returning a terse one-block summary. Use after editing TypeScript/React to quickly confirm types are clean and the relevant tests pass \u2014 instead of running tsc and vitest separately and reading full output.",
+      "activates-when": "Typecheck and run (targeted) unit tests for a frontend repo, returning a terse one-block summary. Use after editing TypeScript/React to quickly confirm types are clean and the relevant tests pass \u2014 instead of running tsc and vitest separately and reading full output. Do NOT use for reviewing a diff, nor for any Apex or Salesforce-org check \u2014 this runs the frontend tsc + vitest and nothing else.",
       "purpose": "Typecheck a frontend repo with tsc and run (optionally targeted) vitest tests, printing one terse pass/fail summary instead of two noisy tool outputs.",
       "best-for": "Any TypeScript/React repo with tsc + vitest configured, pulled in right after editing code to confirm types and relevant tests still pass before moving on.",
       "needs": [],
@@ -132,7 +132,7 @@
     {
       "name": "frontend-css:rem",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.0",
+      "plugin-version": "2.1.1",
       "activates-when": "CSS Units \\u2014 enforce rem for CSS/SCSS/Tailwind dimensions. Use whenever a hardcoded pixel length appears in a stylesheet or component's layout \\u2014 spacing, sizing, or typography such as gap, padding, margin, width, height, or font-size \\u2014 and the user wants it changed, reviewed, made consistent with a spacing scale, or made responsive to browser zoom/font-size. Applies whether the value is stated as px, an arbitrary Tailwind value like p-[10px], or an SCSS property. Do NOT trigger for genuinely pixel-appropriate values that stay in px: border-width, box-shadow offsets, or SVG attributes like width, height, and stroke-width on chart/vector elements.",
       "purpose": "Enforce rem (not px) for CSS/SCSS/Tailwind dimensional values so layouts respect user font-size/zoom preferences.",
       "best-for": "Frontend projects with a shared CSS/SCSS/Tailwind codebase that want consistent, accessible, zoom-responsive sizing instead of scattered hardcoded px.",
@@ -146,7 +146,7 @@
     {
       "name": "frontend-css:responsive-layout",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.0",
+      "plugin-version": "2.1.1",
       "activates-when": "Use when creating or editing ANY UI component, page, or layout style \u2014 the acceptance bar that it must render validly at every defined viewport breakpoint (no overflow, readable text, discernible images, restrained borders, sane density). Also use when a project has no breakpoint/grid system yet: propose one before verifying. NOT for choosing px\u2192rem (frontend-css:rem), SCSS tokens/BEM structure (frontend-css:scss-modules), or component folder placement (frontend-react:component-structure).",
       "purpose": "The acceptance bar that any UI component/page renders validly at every defined viewport breakpoint \u2014 no overflow, readable text, discernible images, restrained borders, sane density \u2014 plus a step-0 that establishes a breakpoint scale when a project has none.",
       "best-for": "Any UI stack with responsive layouts spanning phone\u2192desktop (React, Vue, Angular, Svelte, Salesforce LWC/Aura, plain HTML/CSS) that wants an enforceable, framework-agnostic definition-of-done for breakpoint validity applied at component-authoring time.",
@@ -160,7 +160,7 @@
     {
       "name": "frontend-css:scss-modules",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.0",
+      "plugin-version": "2.1.1",
       "activates-when": "House rules for authoring component SCSS \u2014 the .scss-over-.css convention, SCSS file structure, the color/spacing/radius variable & token system (never hardcode hex or magic numbers \u2014 add to variables first), and BEM structure (block \u2192 &__element \u2192 &--modifier). Use when writing or refactoring a component's styles, setting up the SCSS token/variable system, or consolidating hardcoded values to the scale. NOT for choosing a dimensional unit or converting px\u2192rem (frontend-css:rem), naming a component's folder or its non-style files (frontend-react:component-structure), style import-alias policy (frontend-js:conventions), LWC/Aura styling (salesforce:lwc_development), or skeleton/Storybook files.",
       "purpose": "House rules for authoring component SCSS \u2014 SCSS-over-CSS, the color/spacing/radius token system, BEM structure, and when position:absolute is/isn't justified.",
       "best-for": "Frontend projects with their own bundler (Vite/Webpack/Next.js, non-Salesforce) that want a consistent SCSS token system and BEM convention instead of scattered hardcoded values.",
@@ -237,14 +237,14 @@
       "plugin": "frontend-react",
       "plugin-version": "2.0.0",
       "activates-when": "Use when about to add, hand-roll, rename, move, or remove a custom React `use*` hook.",
-      "purpose": "Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/hooks-registry.md.",
+      "purpose": "Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/mechanisms/hooks-registry.md.",
       "best-for": "Teams with a growing React codebase where duplicate/overlapping use* hooks keep creeping in and need a single source of truth.",
       "needs": [
         "frontend-react:component-placement"
       ],
       "changes": {
         "tags": [],
-        "notes": "Pure advisory/convention skill \u2014 it directs the agent to read and hand-edit docs/hooks-registry.md; the skill itself runs no script and touches nothing on its own."
+        "notes": "Pure advisory/convention skill \u2014 it directs the agent to read and hand-edit docs/mechanisms/hooks-registry.md; the skill itself runs no script and touches nothing on its own."
       },
       "hooks": []
     },
@@ -330,7 +330,7 @@
       "name": "i18n:ui-strings",
       "plugin": "i18n",
       "plugin-version": "2.0.0",
-      "activates-when": "Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text \u2014 labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy \u2014 in any project and any stack.",
+      "activates-when": "Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text a user will see \u2014 labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy \u2014 in any project and any stack. Do NOT use for text a user never reads: log lines, internal error codes, test fixtures, code identifiers, enum keys, slugs, or proper-noun/canonical identifiers (those stay as plain data).",
       "purpose": "Route every user-facing UI string through the project's localization system (or Custom Labels on Salesforce) instead of hardcoding it.",
       "best-for": "Any project with user-facing UI text \u2014 teams that want new labels/messages/toasts to land in the existing i18n catalog/namespace rather than as scattered string literals.",
       "needs": [],
@@ -410,7 +410,7 @@
         "tags": [
           "files"
         ],
-        "notes": "Writes the skill's SKILL.md, metadata.yaml, evals/trigger-eval.json and evals/acceptance.json on disk, and edits README.md and the owning plugin.json version."
+        "notes": "Writes the skill's SKILL.md, metadata.yaml, evals/rubric.json on disk, and edits README.md and the owning plugin.json version."
       },
       "hooks": []
     },
@@ -509,10 +509,10 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.5.1",
+      "plugin-version": "2.5.2",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
-      "purpose": "Install and tailor the pre-push review framework (seven reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
-      "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the pre-push review gate adopted and tuned to its stack \u2014 including deciding which of the seven bundled lenses it has a subject for.",
+      "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
+      "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the pre-push review gate adopted and tuned to its stack \u2014 including deciding which of the eight bundled lenses it has a subject for.",
       "needs": [],
       "changes": {
         "tags": [
@@ -589,7 +589,7 @@
       "name": "salesforce:sf-run",
       "plugin": "salesforce",
       "plugin-version": "2.0.1",
-      "activates-when": "Run anonymous Apex or a SOQL query against a Salesforce org and get a terse pass/fail result. Use whenever you need to execute anonymous Apex, reproduce an org-side error, or run a quick SOQL check against a dev/scratch org \u2014 instead of hand-rolling `sf org display` + curl to the Tooling API.",
+      "activates-when": "Run anonymous Apex or a SOQL query against a Salesforce org and get a terse pass/fail result. Use whenever you need to execute anonymous Apex, reproduce an org-side error, or run a quick SOQL check against a dev/scratch org \u2014 instead of hand-rolling `sf org display` + curl to the Tooling API. Do NOT use to deploy or retrieve metadata (use `sf-deploy-test`), to describe an object schema or field names (use `dx_mcp`/`as_mcp`), or to build UI \u2014 this only runs anon Apex and SOQL.",
       "purpose": "Run anonymous Apex or a SOQL query against a Salesforce org via a colocated script, returning a terse pass/fail instead of raw JSON.",
       "best-for": "Anyone doing Salesforce org-side dev work who needs a quick anonymous-Apex/SOQL check without hand-rolling the sf CLI token + curl recipe.",
       "needs": [],

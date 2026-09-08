@@ -110,10 +110,11 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `git` | Git workflow — atomic commit splitting. | [commit](#commit) |
 | `i18n` | Route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
-| `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `review-workflow` | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | `salesforce` | LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| `skillcraft` | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
 | `tests` | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 ## Skills
 
@@ -216,6 +217,9 @@ replace the jargon, and it reads a third to two-thirds shorter.
   fan-out / eval before it launches; measure one unit and show the cost table before scaling.
 - <a id="new-skill"></a>**new-skill** — How to author a new skill in the plugin model: naming, `SKILL.md`
   structure, and where it goes (`plugins/<domain>/skills/<name>/`).
+- <a id="update-skill"></a>**update-skill** — Bring an existing skill up to the house standard —
+  contract, boundary, checking loop, acceptance criteria — and refresh its `metadata.yaml` when only
+  the wiring changed. The counterpart to [`new-skill`](#new-skill) for skills that already exist.
 - <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and
   score it (bundled `score-description.py`, self-contained); the canonical measurer, replaces
   skill-creator's false-negative-prone run_eval.
@@ -290,6 +294,14 @@ stale. Refresh a measurement with
 `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`.
 
 Server-side only — nothing to install per clone. Untouched legacy skills are never inspected.
+
+### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
+  meant to help with, and improve it without regressions. Generates the same task with and without the
+  guide, judges the quality delta and per-rule instruction compliance, attributes each weak spot to the
+  guide or the agent, and — behind a mandatory anti-regression anchor — re-judges any fix. An
+  embedding-optional adaptation of SkillAxe (arXiv 2606.10546). Reach for it on a periodic audit of a
+  high-traffic guide skill or before a large rewrite, not for a one-line wording fix.
 
 ### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.
