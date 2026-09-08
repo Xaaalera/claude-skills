@@ -65,9 +65,10 @@
       "needs": [],
       "changes": {
         "tags": [
-          "files"
+          "files",
+          "network"
         ],
-        "notes": "Writes a docs/diagrams/<name>/ folder \u2014 the <name>.diagram.json model (the Sextant-hardened source of truth) and the built <name>.html (no sibling files, model inlined) \u2014 via references/build-spec-diagram.mjs. The build itself touches no network; the produced HTML loads its three libraries (React, React Flow, elkjs) from a CDN (esm.sh) at view time, so opening it needs network. Does not touch git, org, or money."
+        "notes": "Writes a docs/diagrams/<name>/ folder \u2014 the <name>.diagram.json model (the Sextant-hardened source of truth) and the built <name>.html (no sibling files, model inlined) \u2014 via references/build-spec-diagram.mjs. Network happens two ways, both from the same CDN (esm.sh) \u2014 the produced HTML loads its three libraries (React, React Flow, elkjs) at view time, and the skill's mandatory verification step (references/shot.mjs launching headless Chrome against that HTML) fetches those same libraries during the skill's own run. Does not touch git, org, or money."
       },
       "hooks": []
     },

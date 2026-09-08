@@ -3,5 +3,5 @@ purpose: Turn a spec/code scope into a hardened diagram-model JSON, then render 
 best-for: Teams who want an accurate, clickable "how it works" diagram (classes/objects/components/permission sets + relations) committed alongside a spec or module — with a heterogeneous mix of node kinds (react / apex / lambda / object) kept visually distinct — instead of a hand-drawn or memory-derived picture.
 needs: []
 changes:
-  tags: [files]
-  notes: Writes a docs/diagrams/<name>/ folder — the <name>.diagram.json model (the Sextant-hardened source of truth) and the built <name>.html (no sibling files, model inlined) — via references/build-spec-diagram.mjs. The build itself touches no network; the produced HTML loads its three libraries (React, React Flow, elkjs) from a CDN (esm.sh) at view time, so opening it needs network. Does not touch git, org, or money.
+  tags: [files, network]
+  notes: Writes a docs/diagrams/<name>/ folder — the <name>.diagram.json model (the Sextant-hardened source of truth) and the built <name>.html (no sibling files, model inlined) — via references/build-spec-diagram.mjs. Network happens two ways, both from the same CDN (esm.sh) — the produced HTML loads its three libraries (React, React Flow, elkjs) at view time, and the skill's mandatory verification step (references/shot.mjs launching headless Chrome against that HTML) fetches those same libraries during the skill's own run. Does not touch git, org, or money.
