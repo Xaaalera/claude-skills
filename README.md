@@ -8,6 +8,9 @@ no copied folders, no duplication.
 - The `@xaaalera` suffix is only the install/enable key — never part of the invocation.
 - Enable/disable is per **plugin**, so domains are split fine-grained for independent control.
 
+**Browse the catalogue → [xaaalera.github.io/claude-skills](https://xaaalera.github.io/claude-skills/)** — a
+generated showcase of every skill: what it does, when it fires, what it touches, and its measured trigger score.
+
 ## Install
 
 From Claude Code:

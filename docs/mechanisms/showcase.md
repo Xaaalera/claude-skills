@@ -29,12 +29,14 @@ metrics are omitted until they are stored per skill.
 
 ## The `[skip ci]` trap (why the trigger looks the way it does)
 
-`catalog.json`'s only writer is scout-publish-bot, which commits as
+`catalog.json`'s only writer is scout-publish, which commits as
 `chore(scout): regenerate catalog … [skip ci]`. GitHub Actions' `[skip ci]` suppresses
 **every** push-triggered workflow on that commit, repo-wide — so a push trigger on
-`catalog.json` can never fire. `pages.yml` therefore does not trigger on `catalog.json`;
-a **daily `schedule`** picks up version bumps, and the push trigger covers the generator,
-the workflow, and `SKILL.md` edits. `workflow_dispatch` forces a manual rebuild.
+`catalog.json` can never fire. `pages.yml` therefore triggers on **`workflow_run`** of the
+`scout-publish` workflow COMPLETING: that fires on the workflow finishing, not on its
+`[skip ci]` commit's push, so the showcase rebuilds immediately after every catalog
+regeneration. A **daily `schedule`** stays as a fallback, the push trigger covers the
+generator/workflow/`SKILL.md` edits, and `workflow_dispatch` forces a manual rebuild.
 
 ## Change trigger
 
