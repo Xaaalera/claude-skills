@@ -99,6 +99,14 @@ falls back to sane defaults:
 - **extensionSkill** — only when a rule is too complex for the fields above: point at a prose skill that
   spells it out (the escape hatch).
 
+**`gates` (top-level, not per-agent)** — the deterministic oracle layer, the sibling of `agents`. Each
+gate is `{"name": "...", "command": "..."}` — the repo's OWN gate the push already trusts (`bash
+scripts/eval-gate.sh`, a typecheck, the test suite). `/review` runs each over the change set and a
+non-zero exit REFUSES the attestation outright, like the secret scan, whatever the lens verdicts. This
+is the difference between a lens's soft `checks` (evidence to weigh) and a hard `gate` (a verdict): wire
+the same command your pre-push hook / CI runs here, so the review can never attest a diff the push then
+rejects. Omit `gates` entirely if the repo has no such oracle.
+
 Keep thresholds at defaults (craft 7, architecture 8, tests 7, docs 8, security 9) unless the
 project wants a different bar; an agent a repo adds itself picks its own.
 
