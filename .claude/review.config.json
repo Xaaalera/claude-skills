@@ -108,5 +108,11 @@
       "rules": [],
       "pairedDocs": []
     }
+  ],
+  "gates": [
+    {
+      "name": "eval-gate",
+      "command": "bash scripts/eval-gate.sh"
+    }
   ]
 }
