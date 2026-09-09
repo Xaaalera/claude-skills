@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "xaaalera",
-  "generated": "2026-09-08",
+  "generated": "2026-09-09",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -42,7 +42,7 @@
     {
       "name": "critique:critique",
       "plugin": "critique",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.3",
       "activates-when": "Use when someone wants an existing design, spec, or plan ATTACKED for soundness before it is built from \u2014 \\\"tear this apart\\\", \\\"assume it is wrong and show me where\\\", \\\"find what breaks\\\", \\\"critique this hard\\\", \\\"red-team it\\\", \\\"poke holes in it\\\" \u2014 whether they want one hard pass or several independent critics each from a different angle. It sets HOW the attack runs so it catches real defects instead of agreeing with the author. It attacks an idea on paper that already exists \u2014 NOT writing or drawing one, NOT polishing a document\\'s wording (`meta:wittgenstein`), NOT already-written code. A pipeline with a critique phase \u2014 speccy, a Sprut critic role \u2014 invokes this method.",
       "purpose": "The house method for running an adversarial critique of a design, spec, or plan \u2014 diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize \u2014 so the critique detects real defects instead of laundering a green stamp.",
       "best-for": "Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.",
@@ -50,15 +50,19 @@
         "meta:model-routing"
       ],
       "changes": {
-        "tags": [],
-        "notes": "Advisory only: gives the rules, biases, and anti-patterns for structuring an adversarial critique. It does not itself spawn critic agents, call APIs, or write files \u2014 the fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing)."
+        "tags": [
+          "files",
+          "network",
+          "org"
+        ],
+        "notes": "Mostly advisory: gives the rules, biases, and anti-patterns for structuring an adversarial critique; the critic fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing). ONE exception \u2014 the 'Prototype to settle it' step: to settle an empirical finding the method MAY build and run a throwaway prototype (a spike) against the real environment, which executes code and writes scratch files, and whose further reach (network / API / org) depends on the claim being probed. That step is PERMISSION-GATED \u2014 the critic asks the human first and only skips the ask in an autonomous or pre-authorized run \u2014 and the spike is throwaway, never left in the artifact."
       },
       "hooks": []
     },
     {
       "name": "diagram:diagram",
       "plugin": "diagram",
-      "plugin-version": "2.1.0",
+      "plugin-version": "2.1.1",
       "activates-when": "Use when asked to draw, sketch, map, diagram, visualize, or make a picture/schema/architecture of how software works \u2014 the architecture or how-it-works view of a feature, the relationships between classes or interfaces (with their methods and fields), data or record flow, an object model with its fields and permission sets, or a dependency graph \u2014 for a package, a feature, a handful of files, or a whole undocumented source directory, built from a spec, a plan or ticket, or read straight from the code, and output as one shareable HTML page you can commit. Also use to clean up an existing generated diagram that is hard to read (overlapping nodes, tiny text). Do NOT use to plot a data or metrics chart from a dataset, to paste a mermaid or ascii snippet into a PR or README, to draw in an external editor like Lucidchart or Excalidraw, to convert a whiteboard photo, to re-render an existing page for a screenshot, or to explain how something works in words with no picture.",
       "purpose": "Turn a spec/code scope into a hardened diagram-model JSON, then render it into ONE committable HTML page (one file, React Flow + ELK, libraries loaded from a CDN at view time) where node kind and subsystem are encoded automatically for readability.",
       "best-for": "Teams who want an accurate, clickable \"how it works\" diagram (classes/objects/components/permission sets + relations) committed alongside a spec or module \u2014 with a heterogeneous mix of node kinds (react / apex / lambda / object) kept visually distinct \u2014 instead of a hand-drawn or memory-derived picture.",
@@ -530,7 +534,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.7.2",
+      "plugin-version": "2.8.0",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
       "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the pre-push review gate adopted and tuned to its stack \u2014 including deciding which of the eight bundled lenses it has a subject for.",
@@ -540,7 +544,7 @@
           "files",
           "network"
         ],
-        "notes": "Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the network), which write .husky/pre-push, .github/workflows/review-gate.yml, the config schema, and a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin entry into the repo's committed .claude/settings.json. No harness is vendored \u2014 the gate is the published bladeforge-review-harness npm package, run via `npx \u2026@latest`. The skill itself then hand-edits .claude/review.config.json (skills/rules/pairedDocs/extensionSkill) to tailor it to the project.\n"
+        "notes": "Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the network), which write .husky/pre-push, .github/workflows/review-gate.yml, the config schema, and a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin entry into the repo's committed .claude/settings.json. No harness is vendored \u2014 the gate is the published bladeforge-review-harness npm package, run via `npx \u2026@latest`. The skill itself then hand-edits .claude/review.config.json \u2014 the per-agent skills/rules/pairedDocs/extensionSkill, plus the top-level gates array that wires the repo's own attestation-blocking oracle command \u2014 to tailor it to the project.\n"
       },
       "hooks": []
     },
