@@ -1,5 +1,4 @@
 schema-version: 1
-category: docs
 purpose: House narrative voice — casts a post-mortem, incident, or blog article as a Lovecraftian expedition journal (dated log entries, creeping dread, exact facts) instead of plain prose.
 best-for: The user's public engineering blog (xaaalera.github.io) or personal repos, when an incident/migration/debugging story is being written up as narrative rather than reference docs.
 needs: []
