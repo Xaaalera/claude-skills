@@ -154,13 +154,13 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
    | field | rule |
    |---|---|
    | `purpose` | One-line human gloss. REQUIRED, non-blank. |
-   | `category` | REQUIRED. EXACTLY ONE purpose bucket from the glossary below — what the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
+   | `category` | Recommended — EXACTLY ONE purpose bucket from the glossary below (a legacy skill may omit it). What the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
    | `best-for` | Adoption-fit sentence. Optional — may be blank. |
    | `needs` | Other skill ids (`<domain>:<name>`) this one depends on. `[]` if none. |
    | `changes.tags` | MULTI-SELECT from the fixed glossary below. `[]` if the skill changes nothing. |
    | `changes.notes` | Free text. REQUIRED non-blank if `other` is among `changes.tags`. |
 
-   `category` glossary (pick the ONE that best fits; enforced by `scout_validate.py`):
+   `category` glossary (pick the ONE that best fits; validated by `scout_validate.py` when set):
 
    | category | means |
    |---|---|

@@ -385,7 +385,8 @@ class MetadataValidityTests(unittest.TestCase):
             self.assertNotEqual(r.returncode, 0)
             self.assertIn("category", r.stderr)
 
-    def test_missing_category_fails(self):
+    def test_missing_category_is_ok(self):
+        # category is optional — a legacy skill may omit it entirely
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = make_skill(root)
@@ -396,8 +397,7 @@ class MetadataValidityTests(unittest.TestCase):
             write_skill_md(skill_dir)
 
             r = run(skill_dir)
-            self.assertNotEqual(r.returncode, 0)
-            self.assertIn("category", r.stderr)
+            self.assertEqual(r.returncode, 0, r.stderr)
 
     def test_other_tag_without_notes_fails(self):
         with tempfile.TemporaryDirectory() as tmp:

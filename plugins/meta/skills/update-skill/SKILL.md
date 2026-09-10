@@ -128,7 +128,7 @@ this order:
 | field | rule |
 |---|---|
 | `purpose` | One-line human gloss. REQUIRED, non-blank. |
-| `category` | REQUIRED. EXACTLY ONE purpose bucket — `frontend`, `salesforce`, `quality`, `docs`, `authoring`, or `workflow` (enforced by `scout_validate.py`). What the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
+| `category` | Recommended — EXACTLY ONE purpose bucket: `frontend`, `salesforce`, `quality`, `docs`, `authoring`, or `workflow` (a legacy skill may omit it; validated by `scout_validate.py` when set). What the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
 | `best-for` | Adoption-fit sentence. Optional — may be blank. |
 | `needs` | Other skill ids (`<domain>:<name>`) this one depends on. `[]` if none. |
 | `changes.tags` | MULTI-SELECT from the fixed glossary below. `[]` if the skill changes nothing. |

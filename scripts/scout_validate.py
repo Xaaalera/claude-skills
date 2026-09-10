@@ -45,7 +45,8 @@ ALLOWED_TAGS = {"git", "files", "network", "org", "money", "other"}
 
 # The ONLY allowed values for `category` in metadata.yaml — the purpose bucket a
 # skill belongs to, so the catalog and the showcase can group by what a skill is
-# FOR rather than which plugin namespace it lives in. Required, exactly one.
+# FOR rather than which plugin namespace it lives in. Optional (a legacy skill may
+# omit it), but when set it must be exactly one of these.
 ALLOWED_CATEGORIES = {
     "frontend",    # building UI — CSS, JS, React, i18n
     "salesforce",  # the Salesforce platform — Apex, LWC, org tooling
@@ -159,9 +160,9 @@ def _validate_metadata_fields(
         raise SystemExit(f"{name} :: best-for must be a string if present")
 
     category = data.get("category")
-    if category not in ALLOWED_CATEGORIES:
+    if category is not None and category not in ALLOWED_CATEGORIES:
         raise SystemExit(
-            f"{name} :: category must be exactly one of "
+            f"{name} :: category, when set, must be exactly one of "
             f"{sorted(ALLOWED_CATEGORIES)} (got {category!r})"
         )
 
