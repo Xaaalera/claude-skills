@@ -69,7 +69,7 @@
         "pass": true
       },
       {
-        "query": "I edited the widget-catalog skill's body — refresh its metadata.yaml",
+        "query": "I edited the widget-catalog skill's body \u2014 refresh its metadata.yaml",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
@@ -113,9 +113,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T18:43:40",
+    "scanned_at": "2026-09-10T19:03:51",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "317166c9fe8ede07492d4aec728584aa11fddde5becebe24d65788d7482ba342",
+    "scanned_hash": "112a80f3e08205a63869ec2413e8cb2fa7c12b4d0a36a87b64c54144180a279f",
     "checklist": [
       {
         "n": 1,
