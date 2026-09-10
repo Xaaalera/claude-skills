@@ -1,4 +1,5 @@
 schema-version: 1
+category: docs
 purpose: Reports where session tokens/cost went (totals, per-skill estimate, heaviest tool-results and output turns), narrated in the voice of Diogenes the Cynic.
 best-for: Anyone who wants a quick "who's eating tokens" / session-cost breakdown for their current Claude Code session, with cynical commentary instead of a dry table.
 needs: []
