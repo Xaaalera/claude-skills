@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "xaaalera",
-  "generated": "2026-09-10",
+  "generated": "2026-09-11",
   "skills": [
     {
       "name": "cerberus:leak-check",
