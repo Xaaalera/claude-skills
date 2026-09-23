@@ -278,6 +278,12 @@ replace the jargon, and it reads a third to two-thirds shorter.
   `changes` tags/notes — never "certified safe"), and Install (the unit is the plugin, not the skill —
   state sibling skills and needs before confirming, then run `/plugin install <plugin>@xaaalera` and
   prompt `/reload-plugins`).
+- <a id="plugin-sync"></a>**plugin-sync** — why an enabled plugin's skills never load. A plugin loads only
+  when the project ENABLES it (`.claude/settings.json`) and the user-level registry records it as INSTALLED
+  for that project (`~/.claude/plugins/installed_plugins.json`); nothing reconciles the two and a
+  disagreement is silent. Read both halves, then `claude plugin install <id> --scope project`,
+  `claude plugin update <id>`, or a session restart. The plugin's `SessionStart` hook runs the same
+  comparison automatically.
 
 ## How it works
 
@@ -305,12 +311,6 @@ stale. Refresh a measurement with
 `python3.14 scripts/optimize_description.py --skill-path <dir> --apply`.
 
 Server-side only — nothing to install per clone. Untouched legacy skills are never inspected.
-- <a id="plugin-sync"></a>**plugin-sync** — why an enabled plugin's skills never load. A plugin loads only
-  when the project ENABLES it (`.claude/settings.json`) and the user-level registry records it as INSTALLED
-  for that project (`~/.claude/plugins/installed_plugins.json`); nothing reconciles the two and a
-  disagreement is silent. Read both halves, then `claude plugin install <id> --scope project`,
-  `claude plugin update <id>`, or a session restart. The plugin's `SessionStart` hook runs the same
-  comparison automatically.
 
 ### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
