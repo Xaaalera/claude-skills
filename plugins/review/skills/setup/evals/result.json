@@ -113,9 +113,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-09T12:19:00",
+    "scanned_at": "2026-09-24T14:28:25",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "9be6936d746f9cdb0c94a98eae629e56673d02f438cb4a1414d25d5da461153b",
+    "scanned_hash": "87e588d8f5301e1810c0792c3d8f342ecd91e8cc40ef1a6cfbfa85b7a644021f",
     "checklist": [
       {
         "n": 1,
@@ -139,7 +139,7 @@
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "No rm -rf, force-push, dd, chmod -R 777, or mass delete present anywhere in the file."
+        "note": "No rm -rf, force-push, dd, chmod -R 777, or mass delete present anywhere in the file. Re-walked 2026-09-24: This edit adds prose only: a second example of a `checks` entry (a read-only consistency script the repository ships). No new command the skill runs."
       },
       {
         "n": 5,
