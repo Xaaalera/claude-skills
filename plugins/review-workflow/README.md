@@ -42,5 +42,11 @@ looping and hands the remainder to a human. `failedLenses` names every lens belo
 caller wiring against this script directly (not through `/review`) MUST pass `attempt` and honour
 `capReached`, or the convergence cap silently degrades to the per-hash `round` clock.
 
+A run can refuse with all three refusal signals empty — `failedLenses: []`, `refusedCriterion: null`,
+`failedGates: []` — yet `attest: false`. That is the zero-lens case: `config.agents` was empty or
+every lens was disabled, so nothing judged the diff and the script will not attest an unreviewed
+change. `report` names it (`NO ENABLED LENS`); a caller reading only the structured fields must treat
+`attest: false` itself as the verdict, never infer a pass from the empty signals.
+
 It never attests, never commits, and never writes a file. `/review` is the only step in the system
 that persists anything.
