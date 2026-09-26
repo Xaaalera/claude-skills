@@ -66,7 +66,7 @@ with the org plugins enabled has them; a project-local hyphen-id skill is NOT sa
 | React | `frontend-react:component-structure`, `frontend-react:hooks-registry`, `frontend-react:storybook-stories` → craft |
 | Salesforce / Apex | `tests:apex` → tests · `salesforce:security_review-rules` → security |
 | i18n | `i18n:ui-strings` → craft |
-| always | `meta:solid` → craft · `meta:ockham` → craft |
+| always | `meta:solid` → craft · `meta:ockham` → craft · `no-code-prose:policy` → craft |
 
 After wiring from the answers, REMIND the adopter to add their PROJECT-LOCAL skills (their own
 `.claude/skills/`, hyphen ids) on top — those encode repo-specific rules a generic map can't know.
@@ -173,4 +173,7 @@ plugin update is still a separate step and still comes first.
 3. The pre-push hook is wired and a push with no valid attestation is actually rejected — installed is
    not the same as working; prove it once.
 4. The secret-scan / CI gate is wired where the repo runs CI.
-5. Any line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.
+5. If the repo has its own deterministic oracle (`eval-gate`, a typecheck, the test suite), it is
+   wired into the top-level `gates` array so a failing run refuses attestation — or `gates` is
+   deliberately omitted because the repo has none.
+6. Any line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

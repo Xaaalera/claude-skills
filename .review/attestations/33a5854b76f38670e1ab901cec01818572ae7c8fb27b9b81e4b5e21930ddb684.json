@@ -1,0 +1,256 @@
+{
+  "diffHash": "33a5854b76f38670e1ab901cec01818572ae7c8fb27b9b81e4b5e21930ddb684",
+  "commitSha": "f5cc1cf43636916a4c0580268beedaf7abdba30c",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/meta/skills/new-skill/metadata.yaml",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/review-workflow/README.md",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/rubric.json",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged",
+          "reason": ""
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged",
+          "reason": ""
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Every paired artifact in this diff was verified in sync: catalog.json regenerated clean, the security-scan hash and rubric addition match the SKILL.md they describe, and the new README paragraph matches the code it documents."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "declined",
+          "reason": "A hook shell script's own logic, not a SKILL.md or a skill sidecar declaring a contract/acceptance file — its correctness is code quality, judged elsewhere."
+        },
+        {
+          "path": "plugins/meta/skills/new-skill/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review-workflow/README.md",
+          "disposition": "declined",
+          "reason": "plugins/review-workflow has no skills/ directory (only workflow.js, its plugin.json and this README) — it is not a SKILL.md or sidecar for any skill, so it carries no declaration for me to judge."
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "declined",
+          "reason": "Not the evals/rubric.json contract/acceptance file my Subject names — result.json is a security-scan output, and whether its scan is fresh/accurate is the security-scan lens's ground, not mine."
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "declined",
+          "reason": "Machine-generated build artifact (python3 scripts/gen_catalog.py, confirmed PASS in machine-verified facts), not a hand-authored declaration — it mirrors the metadata.yaml sources I already judged."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Every SKILL.md and sidecar touched in this diff declares itself correctly — new-skill's metadata now matches its own body (evals/rubric.json + cerberus:security-scan dependency), setup's SKILL.md keeps one Contract and one Before-you-finish with the new gates line reflected in rubric.json's acceptance half, and plugin-sync's metadata now names its one actual subprocess."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/new-skill/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review-workflow/README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "All eight files use generic, invented identifiers (hooks, skill metadata, eval fixtures, catalog entries) with no real employer, client, person, org, ticket, or path disclosed."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged",
+          "reason": "prose-only note-string edit and one glob added to in_scope; no new command runs"
+        },
+        {
+          "path": "plugins/meta/skills/new-skill/metadata.yaml",
+          "disposition": "judged",
+          "reason": "purpose/needs text edit only"
+        },
+        {
+          "path": "plugins/review-workflow/README.md",
+          "disposition": "judged",
+          "reason": "documentation prose addition only"
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged",
+          "reason": "documentation prose addition only, no commands"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged",
+          "reason": "eval-fixture data (checklist notes/hash), not executable"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/rubric.json",
+          "disposition": "judged",
+          "reason": "eval-fixture data, one added rubric line"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged",
+          "reason": "notes text describing an existing local read-only git rev-parse call; verified against SKILL.md, matches reality, introduces no new subprocess"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged",
+          "reason": "generated catalog mirror of the new-skill and plugin-sync metadata text edits"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "All eight changed files are prose, metadata, or eval-fixture edits with no reachable prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, or privilege escalation."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-09-26T08:10:49.791Z"
+}
