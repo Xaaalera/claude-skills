@@ -1,0 +1,460 @@
+{
+  "diffHash": "6ae3cc3abea842bed730156b4ed37512f2945fa69fea42d4b033bdf0d5e2dada",
+  "commitSha": "b3d3320cc090d774fcb4a371a71bf9ff3133d3ed",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "declined",
+          "reason": "New registry entry for the no-code-prose plugin; not a paired-code file under any pairedDocs entry, and its description matches plugins/no-code-prose/.claude-plugin/plugin.json verbatim — confirmed by running scripts/check_marketplace_sync.py myself: 'marketplace sync OK — 24 plugins, all registered, all descriptions agree'."
+        },
+        {
+          "path": ".github/workflows/meta-tests.yml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats.jsonl",
+          "disposition": "declined",
+          "reason": "Machine-appended review-run log (append-only JSONL of past lens scores); not documentation and not paired to any code change."
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "docs/mechanisms/skill-eval.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "Version bump only (2.7.1→2.7.2) accompanying the score-description.py fix; no separate doc obligation of its own."
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/evals/result.json",
+          "disposition": "declined",
+          "reason": "Re-run eval data (timestamps/hashes/notes refreshed to describe the carry-forward fix); a data artifact, not code against a documented contract."
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/scripts/score-description.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/tests/save-result.test.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "New plugin scaffold; no prior doc pairing exists to have gone stale."
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/SKILL.md",
+          "disposition": "declined",
+          "reason": "New skill file being introduced, not a code change against an existing paired doc."
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/result.json",
+          "disposition": "declined",
+          "reason": "New eval artifact for the new skill; nothing paired to it."
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/rubric.json",
+          "disposition": "declined",
+          "reason": "New eval artifact for the new skill; nothing paired to it."
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/metadata.yaml",
+          "disposition": "declined",
+          "reason": "New sidecar for the new skill; nothing paired to it."
+        },
+        {
+          "path": "plugins/review/agents/review-craft.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "declined",
+          "reason": "Generated file (scout-publish.yml regenerates it post-merge, per check_marketplace_sync.py's own docstring); not hand-maintained pairing."
+        },
+        {
+          "path": "scripts/check_marketplace_sync.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.test.py",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "GG chat — both pairedDocs code hits (score-description.py's carry-forward fix, validate_security.py's artefact exclusion) land with docs/mechanisms/skill-eval.md updated in the same diff, and I re-ran both pinning tests myself (14/14 and 7/7 green) plus check_marketplace_sync.py (all descriptions agree) — clean 10/10, no notes."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 9,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 1,
+        "advisory": 0
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "minor",
+          "why_this_severity": "Q1: mine — the Subject names 'a description that routes correctly' as judged ground, and my config's `skills` list includes meta:skill-eval/meta:new-skill, whose house rule ('no should-NOT-trigger query fired; one that did is a real defect — narrow the description') this change does not honor. Q3: writable scenario given below, not advisory. Q4: the skill is brand new in this diff, so the defect is introduced here, not already-there. Q6: the consequence (an unwanted Skill-tool activation) leaves the file — it reaches every session in any repo that installs the plugin. Q7: destination is outside the project — an installable marketplace package other repositories consume — which lands at blocker. Q9: a safe workaround exists (a maintainer can narrow the description later with no data loss, and I read scripts/eval-gate.sh myself and confirmed no automated gate is red over this — it checks only staleness/shape, never per-case pass/fail) — drop one step to major. Q10: I read the shipped evals/result.json rows and the description directly rather than re-running the measurement myself, and I did not verify whether the misfire actually changes the agent's final output or merely loads guidance the agent then correctly ignores — that residual uncertainty keeps confidence low and drops one further step, to minor.",
+          "where": "plugins/no-code-prose/skills/policy/SKILL.md (description frontmatter's 'Do NOT use for writing the document itself... an ADR...' clause) and plugins/no-code-prose/skills/policy/evals/result.json (trigger.results)",
+          "occurrences": 2,
+          "problem": "The skill's own shipped measurement records two of its thirteen trigger cases failing, and the skill ships in this diff anyway with neither the description narrowed nor a re-measurement taken — contrary to the mandatory completion gate in meta:new-skill/meta:skill-eval ('no should-NOT-trigger query fired... narrow the description and return to 1').",
+          "scenario": "A user on a repo with no-code-prose:policy installed asks Claude to 'write the ADR for our decision to match ledger entries by external reference instead of row id.' Per the skill's own shipped measurement, this exact should-NOT-trigger query fires the Skill tool 2 times out of 2 (pass: false) — loading comment-policy guidance for a task the skill's own description explicitly excludes. The mirror-image miss also ships unaddressed: 'Leave a note in the code that this endpoint is deprecated...' (should_trigger: true) fires 0 of 2 runs (pass: false).",
+          "confidence": "low",
+          "evidence": "plugins/no-code-prose/skills/policy/evals/result.json: rows for 'Write the ADR for our decision...' (should_trigger:false, triggers:2, runs:2, pass:false) and 'Leave a note in the code that this endpoint is deprecated...' (should_trigger:true, triggers:0, runs:2, pass:false), best_score '11/13'. plugins/no-code-prose/skills/policy/SKILL.md description: '...Do NOT use for writing the document itself once the decision to move an explanation out of the code is made — an ADR...'. meta:skill-eval SKILL.md, 'Before you finish' #3 and 'Reading the result': a should-NOT-trigger firing 'is a real failure... narrow the description'. I additionally read scripts/eval-gate.sh in full and confirmed it gates only on staleness (queryset/description hash) and structural shape, never on individual trigger-case pass/fail, so no automated check was red over this.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "declined",
+          "reason": "Hand-maintained marketplace index entry, not a skill's own body/description/evals/metadata.yaml. I ran `python3 scripts/check_marketplace_sync.py` myself: it passed and confirmed the new no-code-prose entry's description agrees verbatim with plugins/no-code-prose/.claude-plugin/plugin.json — index agreement is a deterministic check per my Subject's Not-mine list, not my judgment to make."
+        },
+        {
+          "path": ".github/workflows/meta-tests.yml",
+          "disposition": "declined",
+          "reason": "CI wiring that runs a bundled test script — not a SKILL.md or its sidecars."
+        },
+        {
+          "path": ".review/lens-stats.jsonl",
+          "disposition": "declined",
+          "reason": "Review-process telemetry, not a skill's own declaration file."
+        },
+        {
+          "path": "README.md",
+          "disposition": "declined",
+          "reason": "Hand-maintained plugin index entry; index agreement with what ships is a deterministic check, not a judgment (Subject's Not-mine #6)."
+        },
+        {
+          "path": "docs/mechanisms/skill-eval.md",
+          "disposition": "declined",
+          "reason": "A mechanism doc explaining the save_result carry-forward fix and the material-hash artefact exclusion — not a skill's own SKILL.md/sidecar declaration."
+        },
+        {
+          "path": "plugins/meta/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "Version-bump wiring accompanying the score-description.py fix — release wiring is explicitly Not-mine (#7)."
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/scripts/score-description.py",
+          "disposition": "declined",
+          "reason": "A bundled scripts/*.py file — ordinary code quality (the save_result carry-forward fix), judged as code, not as a declaration (Subject's Not-mine #3)."
+        },
+        {
+          "path": "plugins/meta/tests/save-result.test.py",
+          "disposition": "declined",
+          "reason": "Ordinary test code for a bundled script, not a skill's own SKILL.md/sidecar declaration."
+        },
+        {
+          "path": "plugins/no-code-prose/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "Plugin-level packaging/authorship manifest, not one of the skill's own files (body headings, description frontmatter, evals/, metadata.yaml); its description matches the skill's own verbatim, confirmed by check_marketplace_sync.py."
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/agents/review-craft.md",
+          "disposition": "declined",
+          "reason": "A reviewer-agent contract file (Subject/Duty/Mine format for the separate craft lens), not a SKILL.md or its sidecars — outside my Subject's definition of 'a skill.'"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "declined",
+          "reason": "Machine-generated from every skill's metadata.yaml by scripts/gen_catalog.py; the machine-verified fact 'catalog-compiles — PASS' (re-running that exact generator over this change set) is authoritative for this round rather than my re-deriving it."
+        },
+        {
+          "path": "scripts/check_marketplace_sync.py",
+          "disposition": "declined",
+          "reason": "Deterministic gate script (now also checking description drift) — ordinary code, not a skill declaration."
+        },
+        {
+          "path": "scripts/validate_security.py",
+          "disposition": "declined",
+          "reason": "Deterministic gate script for the material-hash walk (build-artefact exclusion) — ordinary code, not a skill declaration."
+        },
+        {
+          "path": "scripts/validate_security.test.py",
+          "disposition": "declined",
+          "reason": "Ordinary test code for a gate script, not a skill's own SKILL.md/sidecar."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": true,
+      "oneLine": "no-code-prose:policy ships fully structured (one ## Contract, no When-to-Activate, matching metadata.yaml, valid six-item acceptance rubric) with a single low-confidence minor: its own shipped eval shows two of thirteen trigger cases failing — including the exact ADR-writing case its description carves out — unaddressed before shipping."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q4 of the walk: already there. The identical real name and real work-email domain (Roman Maslennikov / rmaslennikov@aquivalabs.com) already appears verbatim in at least nine other tracked plugins/*/.claude-plugin/plugin.json files on origin/main (plugins/critique, plugins/docs, plugins/frontend-css, plugins/meta, plugins/plan-gate, plugins/review-workflow, plugins/review, plugins/skillcraft, plugins/tests) before this diff. This is this personal marketplace's own established, repo-wide self-attribution convention, not new exposure introduced by this change, so it is capped at advisory and never fails the gate.",
+          "where": "plugins/no-code-prose/.claude-plugin/plugin.json (new file, author block)",
+          "occurrences": 1,
+          "problem": "A new plugin's author block names a real person and a real work-email domain on this public marketplace.",
+          "scenario": null,
+          "confidence": "high",
+          "evidence": "git show origin/main:.claude-plugin/marketplace.json and grep over origin/main:plugins/*/.claude-plugin/plugin.json both show \"Roman Maslennikov\" / \"rmaslennikov@aquivalabs.com\" already committed at 9+ existing plugin.json files before this diff. The new .claude-plugin/marketplace.json listing entry for no-code-prose itself uses the pseudonym (author.name: \"Xaaalera\"), matching this repo's other Xaaalera-authored entries — only the plugin's own plugin.json carries the real identity, exactly as its siblings already do. Not a new pattern; the same fact was already public in this same repository.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "judged"
+        },
+        {
+          "path": ".github/workflows/meta-tests.yml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats.jsonl",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "docs/mechanisms/skill-eval.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/scripts/score-description.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/tests/save-result.test.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/agents/review-craft.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/check_marketplace_sync.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.test.py",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No real class/object/namespace/secret/ticket leaks found across all 19 changed files; the only real-identity string (the new plugin's author name/email) reproduces this personal marketplace's own pre-existing, repo-wide public-attribution convention verbatim, so it is advisory only — clean pass at 10/10."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "judged"
+        },
+        {
+          "path": ".github/workflows/meta-tests.yml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats.jsonl",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "docs/mechanisms/skill-eval.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/skills/skill-eval/scripts/score-description.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/meta/tests/save-result.test.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/no-code-prose/skills/policy/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/agents/review-craft.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/check_marketplace_sync.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.py",
+          "disposition": "judged"
+        },
+        {
+          "path": "scripts/validate_security.test.py",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Walked all 19 changed files against the eight-point checklist — no prompt injection, no exfiltration, no secrets, no destructive commands, no obfuscation, no unexpected external fetches, no credential-store reads, no privilege escalation; the new no-code-prose skill is inert Markdown, the new/edited scripts (score-description.py's dict-merge fix, validate_security.py's artefact-hash exclusion, the two new test files, check_marketplace_sync.py's description-drift check) are all local, readable, non-destructive Python, and the new meta-tests.yml workflow only checks out the repo and runs a local test script — clean PASS 10/10."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-09-26T01:55:38.836Z"
+}
