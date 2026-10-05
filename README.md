@@ -118,7 +118,7 @@ Install as `<plugin>@xaaalera`; invoke skills as `<plugin>:<skill>`. Skill links
 | `jira` | Short, essence-first Jira comments. | [comment-style](#comment-style) |
 | `meta` | Design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | `no-code-prose` | A comment is never an essay — one language-agnostic rule for what may live in one, judged by the craft review lens. | [policy](#policy) |
-| `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
+| `review` | Stack-agnostic pre-push review framework — reviewer agents, `/review`, secret-scan + attestation gate. | [review](#review) · [setup](#setup) (+ `/scavenge`, `review-scavenger` agent) |
 | `review-workflow` | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | `salesforce` | LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 | `skillcraft` | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
@@ -253,6 +253,7 @@ replace the jargon, and it reads a third to two-thirds shorter.
   nowhere else** — that list moved four times in one night, and every copy of it went stale.
 
 ### review &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="review"></a>**review** — The gate is the `/review` COMMAND, not a skill; reaching for it as one silently runs a different reviewer that cannot attest. Routes back to the command and names the tell.
 - <a id="setup"></a>**setup** — Install and target the stack-agnostic pre-push review framework in a repo:
   reviewer agents (security, architecture, conventions, tests, docs), the `/review` orchestrator, and a
   secret-scan + attestation git/CI gate, all driven by a per-project `.claude/review.config.json`.
