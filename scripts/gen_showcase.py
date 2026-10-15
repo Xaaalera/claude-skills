@@ -9,17 +9,19 @@ own file tree and evals/result.json, emits a multi-page static site under showca
     showcase/skill/cicero.html          curated page for the CICERO plugin (no SKILL.md)
     showcase/assets/base.css            shared styles
     showcase/assets/dots.js             the interactive point-field background
+    showcase/assets/video/<slug>.mp4    optional demo film; a page shows it when the file exists
 
 Deliberately shows only REAL, curated data — purpose, when-it-fires, side effects, deps,
 the file bundle (names only), and the measured trigger/effect/security metrics from
 evals/result.json. The SKILL.md BODY is NOT embedded: bodies can carry real identifiers,
 and this page is public, so each page links to the body on GitHub instead of copying it.
 """
-import json, os, math, html as _html
+import json, os, math, hashlib, html as _html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG = os.path.join(ROOT, "plugins/scout/skills/scout/catalog.json")
 OUTDIR = os.path.join(ROOT, "showcase")
+ASSET_V = "dev"  # set by build() from the asset contents
 
 # --- repo identity (transformed per mirror) ---
 REPO = "https://github.com/Xaaalera/claude-skills"
@@ -162,24 +164,24 @@ def head(title, rel=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="{rel}assets/base.css">
+<link rel="stylesheet" href="{rel}assets/base.css?v={ASSET_V}">
 </head><body>
 <canvas id="dots" aria-hidden="true"></canvas>"""
 
-FOOT = f"""<script src="__REL__assets/dots.js"></script>"""
+FOOT = """<script src="__REL__assets/dots.js?v=__V__"></script>"""
 
 # ---------- featured cards (server-rendered) ----------
 def hero_card(s):
     ident = s["id"]
     if ident == "cicero":
         c = CURATED["cicero"]
-        return f"""<a class="hero-card" style="--dc:var(--t-git)" href="skill/cicero.html">
+        return f"""<a class="hero-card" style="--dc:var(--t-git)" href="skill/cicero.html"{demo_attr('cicero')}>
   <div class="hero-glyph">✎</div>
   <div class="hero-id">cicero</div>
   <div class="hero-tag">{esc(TAGLINE['cicero'])}</div>
   <div class="hero-foot"><span class="hero-kind">{esc(c['kind'])}</span><span class="hero-go">explore →</span></div>
 </a>"""
-    return f"""<a class="hero-card" style="--dc:var(--dc-{esc(s['plugin'])})" href="skill/{esc(s['slug'])}.html">
+    return f"""<a class="hero-card" style="--dc:var(--dc-{esc(s['plugin'])})" href="skill/{esc(s['slug'])}.html"{demo_attr(s['slug'])}>
   <div class="hero-glyph">◉</div>
   <div class="hero-id"><span class="ns">{esc(s['id'].split(':')[0])}:</span>{esc(s['id'].split(':')[1])}</div>
   <div class="hero-tag">{esc(TAGLINE.get(s['id'], s['purpose']))}</div>
@@ -188,7 +190,7 @@ def hero_card(s):
 
 def flagship_card(s):
     ns, nm = s["id"].split(":",1)
-    return f"""<a class="flag-card" style="--dc:var(--dc-{esc(s['plugin'])})" href="skill/{esc(s['slug'])}.html">
+    return f"""<a class="flag-card" style="--dc:var(--dc-{esc(s['plugin'])})" href="skill/{esc(s['slug'])}.html"{demo_attr(s['slug'])}>
   <div class="flag-id"><span class="ns">{esc(ns)}:</span>{esc(nm)}</div>
   <div class="flag-tag">{esc(TAGLINE.get(s['id'], s['purpose']))}</div>
   <div class="flag-foot">{metric_chips(s)}</div>
@@ -244,6 +246,18 @@ def needs_block(s):
         out.append(f'<a class="dep" href="{esc(slug)}.html">{esc(n)}</a>')
     return "".join(out)
 
+def has_demo(slug):
+    return os.path.exists(os.path.join(OUTDIR,"assets","video",f"{slug}.mp4"))
+
+def demo_attr(slug):
+    """data-demo on a card makes the index play the skill's film while the card is hovered."""
+    return f' data-demo="{esc(slug)}"' if has_demo(slug) else ""
+
+def demo_block(slug):
+    """A looping, muted demo film when showcase/assets/video/<slug>.mp4 exists; else nothing."""
+    if not has_demo(slug): return ""
+    return f"""<section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/{esc(slug)}.mp4" autoplay muted loop playsinline preload="metadata"></video></section>"""
+
 def skill_page(s):
     ns, nm = s["id"].split(":",1)
     src=f"{REPO}/tree/main/plugins/{ns}/skills/{nm}"
@@ -262,6 +276,7 @@ def skill_page(s):
       <a class="srclink ghost" href="{md}" target="_blank" rel="noopener">SKILL.md</a></div>
   </header>
   <div class="p-body">
+    {demo_block(s['slug'])}
     <section class="p-sec"><h3>fires when</h3><div class="when">{esc(s['activates'])}</div></section>
     {f'<section class="p-sec"><h3>best for</h3><div class="when">{esc(s["best"])}</div></section>' if s['best'] else ''}
     {measure_block(s)}
@@ -274,7 +289,7 @@ def skill_page(s):
     <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="{md}" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · {len(s['tree'])} files in the bundle.</div></section>
   </div>
 </div>
-{FOOT.replace('__REL__','../')}
+{FOOT.replace('__REL__','../').replace('__V__',ASSET_V)}
 </body></html>"""
     return body
 
@@ -295,12 +310,13 @@ def cicero_page():
       <a class="srclink ghost" href="{style}" target="_blank" rel="noopener">output-style</a></div>
   </header>
   <div class="p-body">
+    {demo_block(c['slug'])}
     <section class="p-sec"><h3>what it is</h3><div class="when">Not a skill you invoke — an <b>output style</b> applied at the system-prompt level, plus a SessionStart hook that shows a banner and picks the conversation language. It governs how every reply is shaped: result first, plain words, one recommended option, push back with reasons, honesty about verification, stay in scope.</div></section>
     <section class="p-sec"><h3>the floor</h3><div class="when">Four rules are invariants that hold even when a user asks otherwise: honesty about verification (and never ending a turn on a promise), no flattery, own a mistake once and hold the position under pressure, and push back before acting. Every other rule is a user-overridable default.</div></section>
     <section class="p-sec"><h3>ships as</h3><div class="kv"><span class="lab">kind</span><code>output-style + hooks</code></div></section>
   </div>
 </div>
-{FOOT.replace('__REL__','../')}
+{FOOT.replace('__REL__','../').replace('__V__',ASSET_V)}
 </body></html>"""
     return body
 
@@ -317,7 +333,7 @@ def index_page(skills, doms, pal):
     gdata=[{"id":s["id"],"plugin":s["plugin"],"slug":s["slug"],"version":s["version"],
             "purpose":s["purpose"],"activates":s["activates"],"best":s["best"],
             "needs":s["needs"],"tags":s["tags"],
-            "category":s.get("category"),
+            "category":s.get("category"),"demo":has_demo(s["slug"]),
             "trig":(s["trig"]["score"] if s["trig"] else None),"trigAcc":(s["trig"]["acc"] if s["trig"] else None),
             "effect":(s["effect"]["qi"] if s["effect"] else None),
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
@@ -353,7 +369,7 @@ def index_page(skills, doms, pal):
 """
     h+='<script id="data" type="application/json">'+payload+'</script>\n'
     h+="<script>\n"+INDEX_JS+"\n</script>\n"
-    h+=FOOT.replace('__REL__','')+"\n</body></html>"
+    h+=FOOT.replace('__REL__','').replace('__V__',ASSET_V)+"\n</body></html>"
     return h
 
 INDEX_JS = r"""
@@ -361,6 +377,32 @@ const D=JSON.parse(document.getElementById('data').textContent);
 const PAL=D.palette, SK=D.skills, DOMS=D.domains, CATS=D.categories, CATLAB=D.catLabels;
 const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const st={q:'',cat:null};
+// Hover a card that has a film: one shared popover plays it large beside the card; leave: hide.
+const calm=matchMedia('(prefers-reduced-motion: reduce)');
+const pop=document.createElement('div');pop.className='demo-pop';pop.hidden=true;
+const pv=document.createElement('video');pv.muted=true;pv.loop=true;pv.playsInline=true;pv.preload='auto';
+pop.appendChild(pv);document.body.appendChild(pop);
+let popFor=null,popTimer=0;
+function placePop(el){const r=el.getBoundingClientRect(),m=12,vw=innerWidth,vh=innerHeight;
+  const w=Math.min(560,vw-2*m),h=w*9/16;
+  const left=Math.max(m,Math.min(r.left+r.width/2-w/2,vw-w-m));
+  const below=vh-r.bottom,above=r.top;
+  const top=below>=h+m||below>=above?Math.min(r.bottom+m,vh-h-m):Math.max(m,r.top-h-m);
+  Object.assign(pop.style,{left:left+'px',top:top+'px',width:w+'px',height:h+'px'});}
+function showPop(el){if(calm.matches)return;
+  // the slug comes from the DOM: accept only a plain file stem, and encode it into the URL
+  const slug=el.dataset.demo||'';if(!/^[A-Za-z0-9_-]+$/.test(slug))return;popFor=el;
+  const src='assets/video/'+encodeURIComponent(slug)+'.mp4';
+  if(!pv.src.endsWith(src))pv.src=src;
+  placePop(el);pv.currentTime=0;pv.play().catch(()=>{});pop.hidden=false;
+  requestAnimationFrame(()=>pop.classList.add('on'));}
+function hidePop(){clearTimeout(popTimer);popFor=null;pop.classList.remove('on');pop.hidden=true;pv.pause();}
+addEventListener('scroll',()=>{if(popFor)hidePop();},{passive:true});
+function wireDemo(el){
+  // a short hover intent, so sweeping the pointer across the grid does not flash films
+  el.addEventListener('pointerenter',()=>{clearTimeout(popTimer);popTimer=setTimeout(()=>showPop(el),300);});
+  el.addEventListener('pointerleave',()=>{clearTimeout(popTimer);if(popFor===el)hidePop();});}
+document.querySelectorAll('.hero-card[data-demo],.flag-card[data-demo]').forEach(wireDemo);
 document.getElementById('doms').textContent=DOMS.length;
 const df=document.getElementById('df');
 CATS.forEach(c=>{const n=SK.filter(s=>s.category===c).length;const b=document.createElement('button');
@@ -380,6 +422,7 @@ function match(s){if(st.cat&&s.category!==st.cat)return false;
   if(st.q){const h=(s.id+' '+s.purpose+' '+s.activates+' '+s.best).toLowerCase();if(!h.includes(st.q))return false;}return true;}
 function card(s){const[ns,nm]=s.id.split(':');const a=document.createElement('a');a.className='card';a.href='skill/'+s.slug+'.html';
   a.style.setProperty('--dc',PAL[s.plugin]);
+  if(s.demo){a.dataset.demo=s.slug;wireDemo(a);}
   a.innerHTML=`<div class="head"><span class="id"><span class="ns">${ns}:</span>${nm||''}</span><span class="ver">v${s.version}</span></div>
     <div class="body"><div class="purpose">${esc(s.purpose)}</div>${chips(s)}
     <div class="meta">${tagB(s.tags)}<span class="sep"></span>${s.needs.length?`<span class="needs"><b>needs</b> ${s.needs.length}</span>`:''}</div></div>`;
@@ -398,6 +441,10 @@ def build():
     os.makedirs(os.path.join(OUTDIR,"assets"), exist_ok=True)
     # domain palette as CSS vars for server-rendered cards
     dcvars="".join(f"--dc-{d}:{pal[d]};" for d in doms)
+    # A content hash on the asset links: a cached old base.css must never style a new page.
+    global ASSET_V
+    css=BASE_CSS.replace("__DCVARS__",dcvars)
+    ASSET_V=hashlib.sha1((css+DOTS_JS).encode()).hexdigest()[:10]
     open(os.path.join(OUTDIR,"assets","base.css"),"w").write(BASE_CSS.replace("__DCVARS__",dcvars))
     open(os.path.join(OUTDIR,"assets","dots.js"),"w").write(DOTS_JS)
     open(os.path.join(OUTDIR,"index.html"),"w").write(index_page(skills,doms,pal))
@@ -472,6 +519,11 @@ h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800;margin:0;letter-spacing:-.
 .card{background:var(--panel);border:1px solid var(--line-2);border-radius:.75rem;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;color:inherit}
 .card:hover{box-shadow:0 2px 5px rgba(20,28,45,.08),0 12px 30px rgba(20,28,45,.14);transform:translateY(-2px)}
 .card{transition:transform .16s,box-shadow .16s}
+.demo-pop{position:fixed;z-index:50;border-radius:14px;overflow:hidden;background:#101217;pointer-events:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.35),0 30px 80px rgba(0,0,0,.35);border:1px solid rgba(189,151,232,.35);
+  opacity:0;transform:scale(.97);transition:opacity .16s,transform .16s}
+.demo-pop.on{opacity:1;transform:none}
+.demo-pop video{display:block;width:100%;height:100%;object-fit:cover}
 .head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.6rem .95rem;background:var(--dc,var(--accent))}
 .id{font-family:"JetBrains Mono",monospace;font-size:.92rem;font-weight:600;color:#fff;word-break:break-word}.id .ns{color:rgba(255,255,255,.72)}
 .ver{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:rgba(255,255,255,.72);white-space:nowrap;font-weight:500}
@@ -505,6 +557,7 @@ footer code{font-family:"JetBrains Mono",monospace;color:var(--muted)}
 .srclink{display:inline-flex;align-items:center;gap:.4rem;font-family:"JetBrains Mono",monospace;font-size:.78rem;font-weight:600;color:#fff;background:var(--accent);padding:.5rem .8rem;border-radius:.5rem}
 .srclink:hover{filter:brightness(1.08)}.srclink.ghost{color:var(--accent);background:transparent;border:1px solid var(--accent)}
 .p-body{display:grid;gap:1.3rem}
+.demo{display:block;width:100%;aspect-ratio:16/9;border-radius:10px;background:#101217;box-shadow:var(--shadow)}
 .p-sec>h3{font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--hd);margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid color-mix(in srgb,var(--hd) 30%,transparent)}
 .when{font-size:.92rem;color:var(--ink);border-left:2px solid color-mix(in srgb,var(--hd) 45%,transparent);padding-left:.75rem}
 .kv{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
