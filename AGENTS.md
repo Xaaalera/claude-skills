@@ -11,6 +11,7 @@ single source of truth for these skills.
 - **One problem per change.** A focused edit, not a grab-bag.
 - **Prove the problem first.** Don't restructure tested skill content without evidence it improves behavior.
 - **English only** in all artifacts (skills, docs, commit messages). Conversation language is the author's choice.
+- **New scripts are Node.** Any new script or tool is an ESM `.mjs` file on Node's built-in `node:` modules, with no npm dependencies unless the task needs one. The Python and shell scripts already in `scripts/` stay as they are; port one only as its own change.
 - **No `Co-Authored-By: Claude` / Anthropic attribution** trailers in commits or PR bodies.
 - **`README.md` is hand-maintained** — update its "Skills" section by hand when you add/rename a skill.
 - **Every `plugin.json` carries `name`, `description`, `version` (semver), `keywords`, `author`.**
